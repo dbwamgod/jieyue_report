@@ -1,0 +1,23 @@
+﻿已把localhost 改成 0.0.0.0
+
+
+
+18911709127  大区
+
+18618288825  全国
+
+==============================================================
+全国简报  nationwide
+大区简报  regionEcharts
+
+模板设置 
+消息模板 msgTemplate
+脱敏规则 desensitization
+
+消息调度 
+预警消息调度  yjMsgTemplate
+
+任务列表
+手动预警任务 taskHand
+自动预警任务 taskAuto
+普通消息任务 customTemplate

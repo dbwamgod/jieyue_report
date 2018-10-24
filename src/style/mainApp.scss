@@ -1,0 +1,235 @@
+.fl{
+    float: left;
+  }
+  .fr{
+    float: right;
+  }
+  /*快报*/
+  ul,li{list-style:none;display:block;}
+  #scrollBox{width:100%;overflow:hidden;}
+  #scrollBox #con1,#con2{width:100%;float:left;}
+  #scrollBox li{height:50px;line-height:50px;}
+  #scrollBoxA{width:100%;overflow:hidden;}
+  #scrollBoxA #con1A,#con2A{width:100%;float:left;}
+  #scrollBoxA li{height:50px;line-height:50px;}
+
+  #mainApp .flipVerticalA{
+    width: 30px;
+    height: 12px;
+    position: absolute;
+    bottom: 292px;
+    left: 50%;
+    margin-left: -15px;
+    text-align: center;
+    cursor: pointer;
+  }
+  #mainApp .flipVerticalB{
+    width: 50px;
+    height: 20px;
+    line-height: 20px;
+    background: red;
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    margin-left: -25px;
+    text-align: center;
+    cursor: pointer;
+  }
+  #scrollBox .scrollBoxSpan{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    width: 60%;
+    float: left;
+  }
+  #scrollBoxA .scrollBoxSpan{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    width: 60%;
+    float: left;
+  }
+
+
+  #calender{
+    overflow:auto ;
+    width: 90%;
+    margin-left: 33px;
+   }
+  #celender_head{
+    height: 40px;
+    width: 100%;
+    cursor: pointer;
+  }
+  .celender_head{
+    line-height: 40px;
+    text-align: center;
+    height: 40px;
+  }
+  #left{
+    height: 40px;
+    width: 40px;
+    float: left;
+    margin-left: 25%;
+  }
+  #celender_head_inner{
+    height: 40px;
+    width: 98px;
+    float: left;
+    margin-left: 60px;
+    line-height:40px
+  }
+  #right{
+    height: 40px;
+    width: 40px;
+    float: left;
+    margin-left: 60px;
+  }
+  #right p{
+    color: white;
+    font-size: 10px;
+    text-align: center;
+  }
+  #calender_body td{
+    width: 28px;
+    text-align: center;
+    line-height: 28px;
+  }
+  #calender_body td span:hover{
+    color: white;
+    background: #5594eb;
+    width: 28px;
+    height: 28px;
+    display: inline-block;
+    border-radius: 50%;
+   }
+  #calender_body td.now {
+     color: white;
+   }
+  #calender_body td.now span{
+    color: white;
+    background: #5594eb;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: inline-block;
+  }
+  #calender_body td .hongdian{
+    position: absolute;background-color: red;width: 4px;height: 4px;
+    display: inline-block;border-radius: 50%;margin-left: -2px;bottom: 3px;left: 50%;
+  }
+  .last_month {
+    color:lightgray;
+  }
+  .next_month{
+    color:lightgray;
+  }
+  #calender_foot {
+    background-color: rgb(248, 248, 248);
+    text-align: center;
+    line-height: 37px;
+    width: 89%;
+    margin: 0 auto;
+  }
+  #calender_foot p{
+    color: #707070;
+    font-size: 10px;
+  }
+  #mainApp .el-button--text {
+    color: #707070;
+    background: 0 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  #mainApp .headline{
+    width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+  #mainApp .headlineLi:hover{
+    background: #f3fbff;
+  }
+  #mainApp .el-dialog__header{
+    background-color: #8a3284 !important;
+    padding: 0 !important;
+  }
+  #mainApp .el-input {
+    position: relative;
+    font-size: 14px;
+    display: inline-block;
+    width: 86%;
+    background: #fff;
+   
+    text-align: left;
+  }
+  #mainApp .el-input__inner {
+    -webkit-appearance: none;
+    background-image: none;
+    border-radius: 0px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #CCCCCC;
+    display: inline-block;
+    font-size: inherit;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 15px;
+    width: 200px!important;
+    background: white;
+    border: 1px solid;
+    margin: 5px;
+  }
+  #mainApp .valueDate .el-input {
+    position: relative;
+    font-size: 14px;
+    display: inline-block;
+    width: 86%!important;
+    background: #fff;
+  }
+  #mainApp .valueDate .el-input__inner {
+    -webkit-appearance: none;
+    background-image: none;
+    border-radius: 0px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #CCCCCC;
+    display: inline-block;
+    font-size: inherit;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 38px;
+    width: 200px!important;
+    background: white;
+    border: 1px solid;
+
+  }
+  #mainApp .valueDate .demonstration{
+    float: left;
+  }
+  #mainApp .valueDate .el-input__suffix{
+    width: 20px;
+    left: 154px;
+  }
+  @media screen and (min-width:1350px) and (max-width:1540px){
+    #mainApp .valueDate .el-input__inner{
+      margin: 6px;
+    }
+    #mainApp .valueDate .el-input__icon {
+      margin-left: 7px;
+    }
+  }
+  @media screen and (min-width:1540px) and (max-width:1920px){
+    #mainApp .valueDate .el-input__inner{
+      margin: 4px;
+    }
+    #mainApp .valueDate .el-input__icon {
+      margin-left: 8px;
+    }
+  }
