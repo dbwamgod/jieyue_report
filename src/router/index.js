@@ -9,6 +9,7 @@ import regionEcharts from '../view/message/regionEcharts';
 import mainApp from '../view/message/mainApp'
 import demo from '../view/message/demo'
 import demo1 from '../view/message/demo1'
+import demo2 from '../view/message/demo2'
 
 
 import Login from '../view/login';
@@ -84,7 +85,7 @@ export default new Router({
         },
         {
           path: 'demo2',
-          component: demo1,
+          component: demo2,
           name: 'demo2',
           meta: {
             title: 'demo2'
