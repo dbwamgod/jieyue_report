@@ -255,9 +255,6 @@
     margin-top: 80px;
     border: 1px solid #d9d9d9;
   }
-  .spread4 .payment3 .stroe1Chart1{
-    /*border: 1px solid #d9d9d9;*/
-  }
 
   .boxsStyle{
     background: #fff;
