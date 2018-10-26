@@ -84,6 +84,7 @@
             localStorage.removeItem("userName");
             localStorage.removeItem("userid");
             localStorage.removeItem("password");
+            localStorage.removeItem("editableTabs2");
             this.$router.push({name: "Login"});
           },
         }

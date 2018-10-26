@@ -1,6 +1,6 @@
 <template>
   <div id="asideList" style="width:100%;height:100%;user-select:none;">
-    <el-row style="width:100%;display: -webkit-box;display: flex;margin-top:50px;">
+    <el-row style="width:100%;display: -webkit-box;display: flex;margin-top:50px;"> 
 
         <!--侧边栏-->
         <el-col :span="2" style="height:100%;position: fixed;z-index: 100;-box-flex:-webkit 1;flex:1;" :style="defaultActives == 1?'margin-top:0px':'margin-top:180px' ">
@@ -78,7 +78,7 @@
 
             </el-tabs>
         </div>
-        <router-view style="margin: 16px;"></router-view>
+        <router-view style="margin: 16px; padding:0 20px;"></router-view>
       </el-col>
     </el-row>
 
@@ -137,6 +137,7 @@
       }
     },
     created(){
+      this.$store.commit('SAVE_EDITABLETABS2',JSON.parse(localStorage.getItem('editableTabs2')));
       this.aside();
     },
     beforeUpdate(){
@@ -158,7 +159,7 @@
           this.ArrayData=[
             {name:'今天1',id:1,url:'demo',children:[{name:'今天1',id:4,url:'demo'}]},
             {name:'今天2',id:2,url:'demo1',children:[{name:'今天2-1',id:5,url:'demo1'}]},
-            {name:'今天3',id:3,url:'demo2'}
+            {name:'今天3',id:3,url:'demo2',children:[{name:'报表系统',id:12,url:'reportIndex'}]}
           ]
           let serchData = res.data.data;
           serchData.forEach((seriesA)=>{

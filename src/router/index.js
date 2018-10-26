@@ -9,6 +9,8 @@ import regionEcharts from '../view/message/regionEcharts';
 import mainApp from '../view/message/mainApp'
 import demo from '../view/message/demo'
 import demo1 from '../view/message/demo1'
+import reportIndex from '../view/reportTemplate/reportIndex'
+
 
 
 import Login from '../view/login';
@@ -88,6 +90,15 @@ export default new Router({
           name: 'demo2',
           meta: {
             title: 'demo2'
+          }
+        },
+        {
+          path: 'reportIndex',
+          component: reportIndex,
+          name: 'reportIndex',
+          meta: {
+            title: '报表系统',
+            key: '2-1',
           }
         },
       ]
