@@ -92,6 +92,7 @@ export default {
       this.ruleForm2 = localStorage.getItem("password");
     }
 
+<<<<<<< HEAD
     if (
       localStorage.getItem("xiaohong") == null ||
       localStorage.getItem("xiaohong") == false
@@ -116,6 +117,34 @@ export default {
       this.$router.push({
         name: "Login"
       });
+=======
+      if (
+        localStorage.getItem("xiaohong") == null ||
+        localStorage.getItem("xiaohong") == false
+      ) {
+        this.lockScr = false;
+        this.ArrayData = true;
+      } else {
+        this.lockScr = true;
+        this.ArrayData = false;
+      }
+    },
+    components: {
+      asides,
+      bottoms
+    },
+    methods: {
+      ...mapActions(["stateRouter", "saveData"]),
+      outLogin() {
+        localStorage.removeItem("userName");
+        localStorage.removeItem("userid");
+        localStorage.removeItem("password");
+        localStorage.removeItem("editableTabs2");
+        this.$router.push({
+          name: "Login"
+        });
+      }
+>>>>>>> 095f29b1b20fe82a19150e77119bdf98cca97592
     }
   }
 };

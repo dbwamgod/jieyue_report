@@ -15,6 +15,7 @@ export default {
     state.val=params
   },
   [types.SAVE_EDITABLETABS2](state,res){
-    state.editableTabs2 = res
+    state.editableTabs2 = res;
+    localStorage.setItem('editableTabs2', JSON.stringify(state.editableTabs2));
   },
 }

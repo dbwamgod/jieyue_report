@@ -9,7 +9,12 @@ import saas from '@/view/saasHT';
 import mainApp from '../view/message/mainApp'
 import demo from '../view/message/demo'
 import demo1 from '../view/message/demo1'
+<<<<<<< HEAD
+import reportIndex from '../view/reportTemplate/reportIndex'
+
+=======
 import demo2 from '../view/message/demo2'
+>>>>>>> eba3e2d27d03f0899f755041530afe49b6416ee7
 
 
 import Login from '../view/login';
@@ -89,6 +94,15 @@ export default new Router({
           name: 'demo2',
           meta: {
             title: 'demo2'
+          }
+        },
+        {
+          path: 'reportIndex',
+          component: reportIndex,
+          name: 'reportIndex',
+          meta: {
+            title: '报表系统',
+            key: '2-1',
           }
         },
       ]
