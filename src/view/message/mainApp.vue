@@ -145,7 +145,6 @@
 
   </div>
 </template>
-
 <script>
 import api from "../../api";
 export default {
@@ -296,7 +295,6 @@ export default {
       this.setCalender(new Date(calender__Date));
     },
     setCalender(dateNow) {
-      console.log(dateNow);
       //显示日历部分
       var firstday;
       var today = dateNow;
@@ -326,7 +324,6 @@ export default {
         date.now = false;
         date.hongdian = false;
         this.datas.push(date);
-        // this.dateData.firstline.push(date);
       }
       //temp存放换行前上一个数据
       //下一行第一个数字
@@ -466,18 +463,7 @@ export default {
 };
 </script>
 
-<style>
-/* #mainApp .flipVerticalA {
-  width: 30px;
-  height: 12px;
-  position: absolute;
-  bottom: 292px;
-  left: 50%;
-  margin-left: -15px;
-  text-align: center;
-  cursor: pointer;
-} */
-
+<style scoped>
 #calender {
   overflow: auto;
   width: 90%;
