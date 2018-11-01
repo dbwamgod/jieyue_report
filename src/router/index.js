@@ -13,6 +13,7 @@ import reportIndex from '../view/reportTemplate/reportIndex'
 
 import demo2 from '../view/message/demo2'
 
+
 import Login from '../view/login';
 
 //const Login = r => require.ensure([], () => r(require('@/view/login')), 'Login');
