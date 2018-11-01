@@ -1,11 +1,6 @@
 <template>
   <div id="asideList" style="width:100%;height:100%;user-select:none;">
-<<<<<<< HEAD
     <el-row style="width:100%;display: -webkit-box;display: flex;margin-top:50px;">
-=======
-    <el-row style="width:100%;display: -webkit-box;display: flex;margin-top:50px;"> 
-
->>>>>>> 095f29b1b20fe82a19150e77119bdf98cca97592
       <!--侧边栏-->
       <el-col :span="2" style="height:100%;position: fixed;z-index: 100;-box-flex:-webkit 1;flex:1;" class="aside">
         <!--搜索框和收藏-->
@@ -69,14 +64,13 @@
             <el-tab-pane v-for="option in $store.state.editableTabs2" :label="option.title" :name="option.content" :key="option.name"></el-tab-pane>
           </el-tabs>
         </div>
-        <router-view style="margin: 16px; padding:0 20px;"></router-view>
+        <router-view style="margin: 16px;"></router-view>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-<<<<<<< HEAD
 import { mapState, mapActions, mapGetters } from "vuex";
 import api from "../api";
 export default {
@@ -114,63 +108,6 @@ export default {
   },
   watch: {
     state_router() {
-=======
-  import {mapState,mapActions,mapGetters} from 'vuex'
-  import api from '../api'
-  export default {
-    data() {
-      return {
-        pageShowUrl:'',
-        pageShowtop:0,
-        pageShowleft:0,
-        pageShow:false,
-        fullscreen:false,
-        defaultActive:'',
-        defaultActives:1,
-        hackReset:true,
-        abc: null,
-        ArrayData: null,
-        vl:true,
-        hl:true,
-        timeout:  null,
-        stateList:"",
-        serchDatalist:[],
-        editableTabsValue2: '1',
-        editableTabs2: [],
-        tabIndex: 1,
-        tabName:[],
-        indexCode:0,
-        cid:"",
-        aUrl:"",
-        tags:"",
-        ths:'198',
-        fanhuishouye:require('../assets/images/icon-fanhuishouye.png'),//小房子 icon-shouqizuocedaohang
-        shouqizuocedaohang:require('../assets/images/icon-shouqizuocedaohang.png'),// icon-sousuo.png
-      }
-    },
-    props: {
-      listArr: Array,
-      statrA:String,
-      required: true
-    },
-    computed:{
-      ...mapState(['state_router']),
-      ...mapGetters(['val']),
-    },
-    watch:{
-      state_router(){
-        this.defaultActive = this.state_router;
-      },
-      CollectionNameLis:function () {
-        this.CollectionNameLislength = this.CollectionNameLis.length;
-      }
-    },
-    created(){
-      this.$store.commit('SAVE_EDITABLETABS2',JSON.parse(localStorage.getItem('editableTabs2')));
-      this.aside();
-    },
-    beforeUpdate(){
->>>>>>> 095f29b1b20fe82a19150e77119bdf98cca97592
       this.defaultActive = this.state_router;
     },
     CollectionNameLis: function() {
@@ -256,8 +193,7 @@ export default {
             {
               name: "今天3",
               id: 3,
-              url: "demo2",
-              children:[{name:'报表系统',id:12,url:'reportIndex'}]
+              url: "demo2"
             }
           ];
           // let serchData = res.data.data;
