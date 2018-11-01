@@ -45,7 +45,8 @@
 
                     <span :style="[Memo_b.indexOf(item1.Memo_a) > -1? {color:'red'}: '' ] ">{{item1.num}}</span>
 
-                    <div :style=" hongdianA?'hongdian':'hongdianB'"></div>
+                    <span :style=" [Memo_b.indexOf(item1.Memo_a) > -1? {background:'red'}: '' ]" style="width:3px;height:3px;position: absolute;left: 48%;bottom: 0;"></span>
+                    <!-- <div :style=" hongdianA?'hongdian':'hongdianB'"></div> -->
                   </td>
                 </tr>
               </table>
@@ -75,10 +76,7 @@
                 <el-input placeholder="请输入内容" v-model="inputTitle" clearable></el-input>
 
               </div>
-
-
               <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="textarea"></el-input>
-
               <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="dialogVisibleTextarea">确 定</el-button>

@@ -90,7 +90,6 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, fo
     }
     .el-table th{
         background-color: #D8E2F1 !important;
-      /* text-align: center; */
     }
     .el-dialog__header{
         background-color: #D8E2F1!important;
