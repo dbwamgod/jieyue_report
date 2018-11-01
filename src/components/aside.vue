@@ -125,11 +125,7 @@
     },
     CollectionNameLis: function() {
       this.CollectionNameLislength = this.CollectionNameLis.length;
-    }
-  },
-  created() {
-    this.aside();
-  },
+    },
   beforeUpdate() {
     this.defaultActive = this.state_router;
   },
@@ -143,7 +139,7 @@
     },
     aside(event) {
       this.$http
-        .get(api.pdng())
+        .get(api.pdng()) 
         .then(res => {
           // this.ArrayData = res.data.data;
           this.ArrayData = [

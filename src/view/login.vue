@@ -109,6 +109,7 @@
         var phone = this.phonenumber.replace(/\s/ig, '');
         if (!this.btndefault) {
           //TODO 调登录接口
+          this.$router.push({path:"/saas/message/mainApp"});
           axios.post(api.login(),
             {
               phone: phone,
