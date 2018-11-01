@@ -1,16 +1,16 @@
 <template>
   <div id="asideList" style="width:100%;height:100%;user-select:none;">
     <el-row style="width:100%;display: -webkit-box;display: flex;margin-top:50px;">
-
       <!--侧边栏-->
-      <el-col :span="2" style="height:100%;position: fixed;z-index: 100;-box-flex:-webkit 1;flex:1;" :style="defaultActives == 1?'margin-top:0px':'margin-top:180px' " class="aside">
+      <el-col :span="2" style="height:100%;position: fixed;z-index: 100;-box-flex:-webkit 1;flex:1;" class="aside">
         <!--搜索框和收藏-->
         <div style="height: 100%;" v-show="val">
           <el-menu :router="true" :default-active="defaultActive+''" :unique-opened="true" style="height:100%;" :style="{width:ths+'px'}"
             class="zyside">
             <!--第一层-->
+            
             <el-submenu v-for="(item,index) in this.ArrayData" :index="item.id +''" :unique-opened="true" :key="index">
-              <template slot="title"><i :class=[item.icon]></i>{{item.name}}</template>
+              <template slot="title"><i :class=[item.icon]></i>{{item.name}}111</template>
               <!--第二层-->
               <el-submenu v-for="(itema,index) in item.children" :index="itema.id +''" v-if="itema.children != undefined"
                 :key="index">
@@ -26,36 +26,41 @@
             </el-submenu>
           </el-menu>
         </div>
+        <div v-show="!val" style="width:50px;height:100%;background:#3c404c;">
+          <ul>
+            <li v-for="(icons,index) in icon" :key="index">{{icons.name}}</li>
+          </ul>
+        </div>
 
       </el-col>
 
       <!--页面的内容-->
       <el-col :span="22" style="-webkit-box-flex: 1;width:87%;height:100%;flex:1;position: relative;background: #f1f2f6"
-        :style="{ marginLeft:this.val?ths+'px':'0px'}" :class="{ ml:vl }">
+        :style="{ marginLeft:this.val?ths+'px':'50px'}">
 
         <div style="width: 2px;height: 100%;background:rgba(0,0,0,.1);position: absolute;" id="DetectionHeight"></div>
 
-        <div style="cursor: pointer;z-index:999" @click="hideV" :class="{hv:hl,hh:!hl}" :style="{left:ths-15+'px'}"
-          v-if="val">
+        <div style="cursor: pointer;z-index:999" @click="hideV" :class="{hv:hl,hh:!hl}" :style="{left:ths-2+'px'}" v-if="val">
           <img :src="shouqizuocedaohang" alt="">
-        </div>
+        </div> 
 
-        <div style="z-index: 999;cursor: pointer" @click="hideV" :class="{hv:hl,hh:!hl}" :style="{ left:this.val?ths+'px':'0px'}"
+         <div style="z-index: 999;cursor: pointer" @click="hideV" :class="{hv:hl,hh:!hl}" :style="{ left:this.val?ths+'px':'49px'}"
           v-else>
           <img :src="shouqizuocedaohang" alt="">
-        </div>
+        </div> 
+
         <!--整体导航-->
         <div style="margin: 16px;" class="OverallNavigation">
           <!--图标-->
 
-          <span class="el-dropdown-link" style="float: left;padding:3px 16px;height: 26px;display: inline-block;background: #3C404C;border-radius: 4px 4px 0 0;"
+          <!-- <span class="el-dropdown-link" style="float: left;padding:3px 16px;height: 26px;display: inline-block;background: #3C404C;border-radius: 4px 4px 0 0;"
             @click="buttonMainD">
             <img :src="fanhuishouye" alt="" style="width: 20px;height: 20px">
-          </span>
+          </span> -->
 
           <!--触发器-->
           <el-tabs id="editableTabs" v-model="editableTabsValue2" type="card" @tab-click="tabsn" closable @tab-remove="removeTab"
-            style="z-index: 999;margin-left: 52px;height: 32px;background: #ffffff;">
+            style="z-index: 999;height: 32px;background: #ffffff;" v-show="Deletenavigationbar">
             <el-tab-pane v-for="option in $store.state.editableTabs2" :label="option.title" :name="option.content" :key="option.name"></el-tab-pane>
           </el-tabs>
         </div>
@@ -77,7 +82,6 @@ export default {
       pageShow: false,
       fullscreen: false,
       defaultActive: "",
-      defaultActives: 1,
       hackReset: true,
       abc: null,
       ArrayData: null,
@@ -93,7 +97,9 @@ export default {
       indexCode: 0,
       ths: "198",
       fanhuishouye: require("../assets/images/icon-fanhuishouye.png"), //小房子 icon-shouqizuocedaohang
-      shouqizuocedaohang: require("../assets/images/icon-shouqizuocedaohang.png") // icon-sousuo.png
+      shouqizuocedaohang: require("../assets/images/icon-shouqizuocedaohang.png"), // icon-sousuo.png
+      icon: [{ name: 1 }, { name: 1 }, { name: 1 }, { name: 1 }, { name: 1 }],
+      Deletenavigationbar: false
     };
   },
   computed: {
@@ -123,6 +129,38 @@ export default {
       });
     },
     aside(event) {
+      this.ArrayData = [
+        {
+          name: "今天1",
+          id: 1,
+          url: "demo",
+          children: [
+            {
+              name: "今天1",
+              id: 4,
+              url: "demo"
+            }
+          ]
+        },
+        {
+          name: "今天2",
+          id: 2,
+          url: "demo1",
+          children: [
+            {
+              name: "今天2-1",
+              id: 5,
+              url: "demo1"
+            }
+          ]
+        },
+        {
+          name: "今天3",
+          id: 3,
+          url: "demo2"
+        }
+      ];
+
       this.$http
         .get(api.pdng())
         .then(res => {
@@ -158,24 +196,24 @@ export default {
               url: "demo2"
             }
           ];
-          let serchData = res.data.data;
-          serchData.forEach(seriesA => {
-            if (seriesA.children) {
-              seriesA.children.forEach(seriesB => {
-                if (seriesB.children) {
-                  seriesB.children.forEach(seriesC => {
-                    this.serchDatalist.push({
-                      value: seriesC.name,
-                      url: seriesC.url,
-                      index: seriesC.id
-                    });
-                  });
-                }
-              });
-            }
-            // 刷新之后跳转主页
-            // this.$router.push(name="mainApp")
-          });
+          // let serchData = res.data.data;
+          // serchData.forEach(seriesA => {
+          //   if (seriesA.children) {
+          //     seriesA.children.forEach(seriesB => {
+          //       if (seriesB.children) {
+          //         seriesB.children.forEach(seriesC => {
+          //           this.serchDatalist.push({
+          //             value: seriesC.name,
+          //             url: seriesC.url,
+          //             index: seriesC.id
+          //           });
+          //         });
+          //       }
+          //     });
+          //   }
+          //   // 刷新之后跳转主页
+          //   // this.$router.push(name="mainApp")
+          // });
           this.restaurants = this.loadAll();
         })
         .catch(() => {});
@@ -192,10 +230,8 @@ export default {
     hideV() {
       if (this.vl) {
         this.saveData(false);
-        this.defaultActives = 0;
       } else {
         this.saveData(true);
-        this.defaultActives = 1;
       }
       this.vl = !this.vl;
       this.hl = !this.hl;
@@ -217,12 +253,11 @@ export default {
           this.editableTabsValue2 = newTabName;
 
           this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
-          console.log(this.$store.state.editableTabs2);
+          this.Deletenavigationbar = true;
         }
       }
     }, //点击侧边栏 添加在导航栏上
     removeTab(targetName) {
-      // console.log(this.$store.state.editableTabs2);
       let tabs = this.$store.state.editableTabs2;
       let activeName = this.editableTabsValue2;
       if (activeName === targetName) {
@@ -237,6 +272,7 @@ export default {
       }
       this.editableTabsValue2 = activeName;
       if (this.$store.state.editableTabs2.length == 1) {
+        this.Deletenavigationbar = false;
         this.editableTabs2 = tabs.filter(tab => tab.content !== targetName);
         this.tabName = [];
         this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
@@ -260,18 +296,14 @@ export default {
 };
 </script>
 <style>
-#asideList .ml {
-  margin-left: 198px;
-}
-
 #asideList .hv {
   position: fixed;
-  top: 400px;
+  top: 66px;
 }
 
 #asideList .hh {
   position: fixed;
-  top: 400px;
+  top: 66px;
 }
 
 #asideList .el-submenu .el-menu-item {
@@ -314,6 +346,7 @@ export default {
 #asideList .zyside {
   background: #3c404c;
 }
+
 #asideList .el-icon-close:before {
   display: block !important;
 }

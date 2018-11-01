@@ -4,8 +4,8 @@ import login from '@/view/login';
 import saas from '@/view/saasHT';
 
 
-import nationwide from '../view/message/nationwideEcharts';
-import regionEcharts from '../view/message/regionEcharts';
+// import nationwide from '../view/message/nationwideEcharts';
+// import regionEcharts from '../view/message/regionEcharts';
 import mainApp from '../view/message/mainApp'
 import demo from '../view/message/demo'
 import demo1 from '../view/message/demo1'
@@ -39,26 +39,26 @@ export default new Router({
         title: 'SAASBI'
       },
       children: [
-        {
-          path: 'nationwide',
-          component: nationwide,
-          name: '全国简报',
-          ind:1,
-          meta: {
-            title: '全国简报',
-            ind:1,
-          }
-        },
-        {
-          path: 'regionEcharts',
-          component: regionEcharts,
-          name: '大区简报',
-          ind:2,
-          meta: {
-            title: '大区简报',
-            ind:2,
-          }
-        },
+        // {
+        //   path: 'nationwide',
+        //   component: nationwide,
+        //   name: '全国简报',
+        //   ind:1,
+        //   meta: {
+        //     title: '全国简报',
+        //     ind:1,
+        //   }
+        // },
+        // {
+        //   path: 'regionEcharts',
+        //   component: regionEcharts,
+        //   name: '大区简报',
+        //   ind:2,
+        //   meta: {
+        //     title: '大区简报',
+        //     ind:2,
+        //   }
+        // },
         {
           path: 'mainApp',
           component: mainApp,
