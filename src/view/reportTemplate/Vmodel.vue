@@ -79,8 +79,8 @@ export default {
       let bkey = b.map(r => r.id);
       let keySet = Array.from(...new Set().add(Object.assign(akey, bkey)));
       let aaIsType = [];
-      let aa =[];
-       a.forEach((item, index, row) => {
+      let aa = [];
+      a.forEach((item, index, row) => {
         if (aaIsType.indexOf(item.id) === -1) {
           b.map(r => {
             if (r.id === item.id) {
@@ -91,8 +91,10 @@ export default {
           aa.push(item);
         }
       });
+      // console.log(aa);
       keySet.map(r => {
         if (!aa.filter(item => item.id === r)[0]) {
+          console.log(b.filter(item => item.id === r)[0]);
           aa.push(b.filter(item => item.id === r)[0]);
         }
       });
