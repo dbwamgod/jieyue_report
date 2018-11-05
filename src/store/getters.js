@@ -1,3 +1,4 @@
 export default {
-  val:state => state.val
+  val: state => state.val,
+  hideheaderaside: state => state.hideheaderaside
 }

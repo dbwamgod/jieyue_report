@@ -1,10 +1,11 @@
 <template>
   <div id="mainApp">
-
     <div>
       <el-row>
         <el-col :span="24">
-          <div class="grid-content bg-purple-dark" style="width:100%;height:300px;background:red;"></div>
+          <div class="grid-content bg-purple-dark" style="width:100%;height:300px;background:red;">
+            <div style="width:90px;height:90px;background:pink;" @click="handleFullScreen"></div>
+          </div>
         </el-col>
       </el-row>
       <el-row>
@@ -145,6 +146,7 @@
 </template>
 <script>
 import api from "../../api";
+import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -203,10 +205,42 @@ export default {
       activeName: "first"
     };
   },
+  computed: {
+    ...mapGetters(["hideheaderaside"])
+  },
   mounted() {
     this.setCalender(new Date());
   },
   methods: {
+    ...mapActions(["saveDatal"]),
+    handleFullScreen() {
+      let element = document.documentElement;
+      if (this.fullscreen) {
+        this.saveDatal(true);
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitCancelFullScreen) {
+          document.webkitCancelFullScreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      } else {
+        this.saveDatal(false);
+        if (element.requestFullscreen) {
+          element.requestFullscreen();
+        } else if (element.webkitRequestFullScreen) {
+          element.webkitRequestFullScreen();
+        } else if (element.mozRequestFullScreen) {
+          element.mozRequestFullScreen();
+        } else if (element.msRequestFullscreen) {
+          // IE11
+          element.msRequestFullscreen();
+        }
+      }
+      this.fullscreen = !this.fullscreen;
+    }, //图标--全屏显示
     datasTime() {
       let date = new Date();
       let preDate = new Date(date.getTime());

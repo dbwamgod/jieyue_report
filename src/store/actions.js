@@ -12,6 +12,9 @@ export default {
   async saveData({commit},params){
     commit(types.SAVE_DATA,{params})
   },
+  async saveDatal({commit},params){
+    commit(types.SAVE_DATAL,{params})
+  },
  saveEditableTabs2({commit},params){
     commit(types.SAVE_EDITABLETABS2,{params})
   },

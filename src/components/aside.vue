@@ -1,8 +1,8 @@
 <template>
   <div id="asideList" style="width:100%;height:100%;user-select:none;">
-    <el-row style="width:100%;display: -webkit-box;display: flex;margin-top:50px;">
+    <el-row style="width:100%;display: -webkit-box;display: flex;margin-top:50px;" :style="{marginTop:this.hideheaderaside?50+'px':'0'}">
       <!--侧边栏-->
-      <el-col :span="2" style="height:100%;position: fixed;z-index: 100;-box-flex:-webkit 1;flex:1;" class="aside">
+      <el-col :span="2" style="height:100%;position: fixed;z-index: 100;-box-flex:-webkit 1;flex:1;" class="aside" v-show="this.hideheaderaside">
         <!--搜索框和收藏-->
         <div style="height: 100%;" v-show="val">
           <el-menu :router="true" :default-active="defaultActive+''" :unique-opened="true" style="height:100%;" :style="{width:ths+'px'}"
@@ -35,37 +35,39 @@
       </el-col>
 
       <!--页面的内容-->
-      <el-col :span="22" style="-webkit-box-flex: 1;width:87%;height:100%;flex:1;position: relative;background: #f1f2f6"
-        :style="{ marginLeft:this.val?ths+'px':'50px'}">
+      <!-- <div v-show="this.hideheaderaside" style="width:100%;height:100%;"> -->
+        <el-col :span="22" style="-webkit-box-flex: 1;width:87%;height:100%;flex:1;position: relative;background: #f1f2f6"
+          :style="{ marginLeft:this.hideheaderaside?ths+'px':'0px'} ">
 
-        <div style="width: 2px;height: 100%;background:rgba(0,0,0,.1);position: absolute;" id="DetectionHeight"></div>
+          <div style="width: 2px;height: 100%;background:rgba(0,0,0,.1);position: absolute;" id="DetectionHeight"></div>
 
-        <div style="cursor: pointer;z-index:999" @click="hideV" :class="{hv:hl,hh:!hl}" :style="{left:ths-2+'px'}" v-if="val">
-          <img :src="shouqizuocedaohang" alt="">
-        </div> 
+          <div style="cursor: pointer;z-index:999" @click="hideV" v-show="this.hideheaderaside" :class="{hv:hl,hh:!hl}" :style="{left:ths-2+'px'}" v-if="val">
+            <img :src="shouqizuocedaohang" alt="">
+          </div> 
 
-         <div style="z-index: 999;cursor: pointer" @click="hideV" :class="{hv:hl,hh:!hl}" :style="{ left:this.val?ths+'px':'49px'}"
-          v-else>
-          <img :src="shouqizuocedaohang" alt="">
-        </div> 
+          <div style="z-index: 999;cursor: pointer" @click="hideV" v-show="this.hideheaderaside" :class="{hv:hl,hh:!hl}" :style="{ left:this.val?ths+'px':'49px'}"
+            v-else>
+            <img :src="shouqizuocedaohang" alt="">
+          </div> 
 
-        <!--整体导航-->
-        <div style="margin: 16px;" class="OverallNavigation">
-          <!--图标-->
+          <!--整体导航-->
+          <div style="margin: 16px;" class="OverallNavigation">
+            <!--图标-->
 
-          <!-- <span class="el-dropdown-link" style="float: left;padding:3px 16px;height: 26px;display: inline-block;background: #3C404C;border-radius: 4px 4px 0 0;"
-            @click="buttonMainD">
-            <img :src="fanhuishouye" alt="" style="width: 20px;height: 20px">
-          </span> -->
+            <!-- <span class="el-dropdown-link" style="float: left;padding:3px 16px;height: 26px;display: inline-block;background: #3C404C;border-radius: 4px 4px 0 0;"
+              @click="buttonMainD">
+              <img :src="fanhuishouye" alt="" style="width: 20px;height: 20px">
+            </span> -->
 
-          <!--触发器-->
-          <el-tabs id="editableTabs" v-model="editableTabsValue2" type="card" @tab-click="tabsn" closable @tab-remove="removeTab"
-            style="z-index: 999;height: 32px;background: #ffffff;" v-show="Deletenavigationbar">
-            <el-tab-pane v-for="option in $store.state.editableTabs2" :label="option.title" :name="option.content" :key="option.name"></el-tab-pane>
-          </el-tabs>
-        </div>
-        <router-view style="margin: 16px;"></router-view>
-      </el-col>
+            <!--触发器-->
+            <el-tabs id="editableTabs" v-model="editableTabsValue2" type="card" @tab-click="tabsn" closable @tab-remove="removeTab"
+              style="z-index: 999;height: 32px;background: #ffffff;" v-show="Deletenavigationbar">
+              <el-tab-pane v-for="option in $store.state.editableTabs2" :label="option.title" :name="option.content" :key="option.name"></el-tab-pane>
+            </el-tabs>
+          </div>
+          <router-view style="margin: 16px;"></router-view>
+        </el-col>
+      <!-- </div> -->
     </el-row>
   </div>
 </template>
@@ -104,7 +106,7 @@ export default {
   },
   computed: {
     ...mapState(["state_router"]),
-    ...mapGetters(["val"])
+    ...mapGetters(["val", "hideheaderaside"])
   },
   watch: {
     state_router() {
@@ -112,13 +114,17 @@ export default {
     },
     CollectionNameLis: function() {
       this.CollectionNameLislength = this.CollectionNameLis.length;
-    },},
+    }
+  },
   beforeUpdate() {
     this.defaultActive = this.state_router;
   },
   mounted() {},
+  created() {
+    this.aside();
+  },
   methods: {
-    ...mapActions(["stateRouter", "saveData"]),
+    ...mapActions(["stateRouter", "saveData", "saveDatal"]),
     tabsn(tab, event) {
       this.$router.push({
         path: tab.name
@@ -156,9 +162,8 @@ export default {
           url: "demo2"
         }
       ];
-
       this.$http
-        .get(api.pdng()) 
+        .get(api.pdng())
         .then(res => {
           // this.ArrayData = res.data.data;
           this.ArrayData = [
@@ -289,7 +294,7 @@ export default {
       this.$router.push((name = "mainApp"));
     } //图标--回主页
   }
-}
+};
 </script>
 <style>
 #asideList .hv {
