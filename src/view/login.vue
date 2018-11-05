@@ -58,31 +58,41 @@ export default {
   },
   computed: {},
   created: function() {
-    // if(sessionStorage.getItem("userPhone")){
-    //   var numbers = sessionStorage.getItem("userPhone");
-    //   var pre = numbers.substring(0, 3);
-    //   var last = numbers.substring(3, 7);
-    //   var lasts = numbers.substring(7, 11);
-    //   numbers = pre + ' ' + last +' '+ lasts;
-    //   this.phonenumber=numbers;
-    // }
-    // let phone=this.phonenumber.replace(/\s/ig,'');
-    // if((/^1[345678]\d{9}$/.test(phone))&&this.password.length>=6&&this.password.length<=20&&this.phonenumber.length==13){
-    //   this.btndefault=false
-    // }else{
-    //   this.btndefault=true
-    // }
+    if (sessionStorage.getItem("userPhone")) {
+      var numbers = sessionStorage.getItem("userPhone");
+      var pre = numbers.substring(0, 3);
+      var last = numbers.substring(3, 7);
+      var lasts = numbers.substring(7, 11);
+      numbers = pre + " " + last + " " + lasts;
+      this.phonenumber = numbers;
+    }
+    let phone = this.phonenumber.replace(/\s/gi, "");
+    if (
+      /^1[345678]\d{9}$/.test(phone) &&
+      this.password.length >= 6 &&
+      this.password.length <= 20 &&
+      this.phonenumber.length == 13
+    ) {
+      this.btndefault = false;
+    } else {
+      this.btndefault = true;
+    }
   },
   mounted() {
     var box = document.getElementById("canvasName");
     loginBg.bg(box);
-    // let phone=this.phonenumber.replace(/\s/ig,'');
+    let phone = this.phonenumber.replace(/\s/gi, "");
 
-    // if((/^1[345678]\d{9}$/.test(phone))&&this.password.length>=6&&this.password.length<=20&&this.phonenumber.length==13){
-    //   this.btndefault=false
-    // }else{
-    //   this.btndefault=true
-    // }
+    if (
+      /^1[345678]\d{9}$/.test(phone) &&
+      this.password.length >= 6 &&
+      this.password.length <= 20 &&
+      this.phonenumber.length == 13
+    ) {
+      this.btndefault = false;
+    } else {
+      this.btndefault = true;
+    }
   },
   destroyed() {
     clearInterval(this.animateTimer);
@@ -93,63 +103,66 @@ export default {
       let phonenumber = this.phonenumber;
       let pwd = this.password;
 
-      // if (!phonenumber) {
-      //   Toast({
-      //     message: '请输入手机号',
-      //     position: 'middle',
-      //     duration: 2000
-      //   })
-      //   return;
-      // }
-      // if (!pwd) {
-      //   Toast({
-      //     message: '请输入密码',
-      //     position: 'middle',
-      //     duration: 2000
-      //   });
-      //   return;
-      // }
-      //   var phone = this.phonenumber.replace(/\s/ig, '');
-      //   if (!this.btndefault) {
-      //     //TODO 调登录接口
-      //     axios.post(api.login(),
-      //       {
-      //         phone: phone,
-      //         pwd: md5(vm.password),
-      //         flag: vm.flag,
-      //         type:1
-      //       }).then((res) => {
-      //       if (res.data.code == 200) {
-      //         Toast({message: '登录成功', duration: 1000})
-      //         let token = res.data.data.token;
-      //         localStorage.removeItem("userid");
-      //         localStorage.setItem("userName",res.data.data.userName);
-      //         localStorage.setItem("userid",token);
-      //         sessionStorage.setItem("userPhone",phone);
-      //         var storage=localStorage;
-      //         var Authorization = storage.getItem("userid");
-      //         axios.defaults.headers.common['Authorization'] = Authorization;
-      this.$router.push({ path: "/saas/message/mainApp" });
-      //       }
-      //       else if (res.data.code == 407) { //被踢出登录，返回登录页
-      //         this.$router.push('/Login');
-      //         if (window.webkit) {
-      //           window.webkit.messageHandlers.deleteUserId.postMessage({type: '2', userId: ''})
-      //         }
-      //       }
-      //       else {
-      //         this.$message({
-      //           message: res.data.msg,
-      //           duration:'1500',
-      //           type: 'warning'
-      //         });
-      //       }
-
-      //     }).catch(function (err) {
-      //       // 请求失败
-      //       console.log("请求失败")
-      //     })
-      //   }
+      if (!phonenumber) {
+        Toast({
+          message: "请输入手机号",
+          position: "middle",
+          duration: 2000
+        });
+        return;
+      }
+      if (!pwd) {
+        Toast({
+          message: "请输入密码",
+          position: "middle",
+          duration: 2000
+        });
+        return;
+      }
+      var phone = this.phonenumber.replace(/\s/gi, "");
+      if (!this.btndefault) {
+        //TODO 调登录接口
+        axios
+          .post(api.login(), {
+            phone: phone,
+            pwd: md5(vm.password),
+            flag: vm.flag,
+            type: 1
+          })
+          .then(res => {
+            if (res.data.code == 200) {
+              Toast({ message: "登录成功", duration: 1000 });
+              let token = res.data.data.token;
+              localStorage.removeItem("userid");
+              localStorage.setItem("userName", res.data.data.userName);
+              localStorage.setItem("userid", token);
+              sessionStorage.setItem("userPhone", phone);
+              var storage = localStorage;
+              var Authorization = storage.getItem("userid");
+              axios.defaults.headers.common["Authorization"] = Authorization;
+              this.$router.push({ path: "/saas/message/mainApp" });
+            } else if (res.data.code == 407) {
+              //被踢出登录，返回登录页
+              this.$router.push("/Login");
+              if (window.webkit) {
+                window.webkit.messageHandlers.deleteUserId.postMessage({
+                  type: "2",
+                  userId: ""
+                });
+              }
+            } else {
+              this.$message({
+                message: res.data.msg,
+                duration: "1500",
+                type: "warning"
+              });
+            }
+          })
+          .catch(function(err) {
+            // 请求失败
+            console.log("请求失败");
+          });
+      }
     }
   },
 

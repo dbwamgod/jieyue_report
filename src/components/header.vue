@@ -3,7 +3,7 @@
   <div style="width: 100%;height:100%;" class="xiaoheader" id="xiaoheader">
 
     <div v-show="ArrayData">
-      <div class="zyheader" style="line-height:50px;height:50px;width:100%;padding:0px;position: fixed;top: 0;z-index: 999;">
+      <div class="zyheader" style="line-height:50px;height:50px;width:100%;padding:0px;position: fixed;top: 0;z-index: 999;" v-show="this.hideheaderaside">
         <div class="fl logo1" v-show="val" style="cursor: pointer;line-height:50px;height:50px;width: 198px;">
           <img :src="pclogo" alt="logo图标" style="height: 31px;width: 103px;margin-top: 9px;">
         </div>
@@ -82,7 +82,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["val"])
+    ...mapGetters(["val", "hideheaderaside"])
   },
   created: function() {
     if (localStorage.getItem("userName")) {
@@ -106,7 +106,7 @@ export default {
     asides
   },
   methods: {
-    ...mapActions(["stateRouter", "saveData"]),
+    ...mapActions(["stateRouter", "saveData", "saveDatal"]),
     outLogin() {
       localStorage.removeItem("userName");
       localStorage.removeItem("userid");
