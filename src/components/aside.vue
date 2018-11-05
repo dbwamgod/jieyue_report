@@ -113,6 +113,7 @@ export default {
     CollectionNameLis: function() {
       this.CollectionNameLislength = this.CollectionNameLis.length;
     },
+  },
   beforeUpdate() {
     this.defaultActive = this.state_router;
   },
@@ -289,7 +290,7 @@ export default {
       this.$router.push((name = "mainApp"));
     } //图标--回主页
   }
-};
+}
 </script>
 <style>
 #asideList .hv {
