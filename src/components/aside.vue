@@ -194,7 +194,14 @@ export default {
             {
               name: "今天3",
               id: 3,
-              url: "demo2"
+              url: "demo2",
+              children:[
+                {
+                  name:'报表系统',
+                  id:12,
+                  url:'reportIndex'
+                }
+              ]
             }
           ];
           // let serchData = res.data.data;
@@ -294,7 +301,7 @@ export default {
       this.$router.push((name = "mainApp"));
     } //图标--回主页
   }
-};
+}
 </script>
 <style>
 #asideList .marginLeft0 {
