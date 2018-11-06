@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="24">
           <div class="grid-content bg-purple-dark" style="width:100%;height:300px;background:red;">
-            <div style="width:90px;height:90px;background:pink;" @click="handleFullScreen"></div>
+            <div style="width:90px;height:90px;background:pink;float:right;" @click="handleFullScreen"></div>
           </div>
         </el-col>
       </el-row>

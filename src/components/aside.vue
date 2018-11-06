@@ -37,8 +37,8 @@
       <!--页面的内容-->
       <!-- <div v-show="this.hideheaderaside" style="width:100%;height:100%;"> -->
         <el-col :span="22" style="-webkit-box-flex: 1;width:87%;height:100%;flex:1;position: relative;background: #f1f2f6"
-          :style="{ marginLeft:this.hideheaderaside?ths+'px':'0px'} ">
-
+          :style="this.hideheaderaside?(this.val?{marginLeft:'198px'}:{marginLeft:'50px'}) :({marginLeft:0+'px'})">
+          {{this.val?0:1}}          {{this.hideheaderaside?0:1}}
           <div style="width: 2px;height: 100%;background:rgba(0,0,0,.1);position: absolute;" id="DetectionHeight"></div>
 
           <div style="cursor: pointer;z-index:999" @click="hideV" v-show="this.hideheaderaside" :class="{hv:hl,hh:!hl}" :style="{left:ths-2+'px'}" v-if="val">
@@ -297,6 +297,12 @@ export default {
 };
 </script>
 <style>
+#asideList .marginLeft0 {
+  margin-left: 0px;
+}
+#asideList .marginLeft1 {
+  margin-left: 198px;
+}
 #asideList .hv {
   position: fixed;
   top: 66px;
