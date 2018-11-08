@@ -15,7 +15,7 @@
     <div>
    
     </div>
-    <Vmodel v-model="pare" :value='typeValue'> </Vmodel>
+    <!-- <Vmodel v-model="pare" :value='typeValue'> </Vmodel> -->
     {{pare}}
   </div>
 </template>
