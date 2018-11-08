@@ -45,7 +45,7 @@
                 <el-table :data="tableData" style="width: 100%" stripe>
 
                   <el-table-column prop="address" :label="'内容'"></el-table-column>
-                  <el-table-column prop="date" label="发布时间" sortable></el-table-column>
+                  <el-table-column prop="date" label="发布时间" sortable align='right'></el-table-column>
 
                 </el-table>
                 <div style="color:#BDBDBD;line-height:40px;"><span style="margin-left: 36px;">共12条信息</span></div>
@@ -498,7 +498,7 @@ export default {
       console.log(tab, event);
     },
     Diurnalinterface(){
-      
+
     }//日期接口
   }
 };

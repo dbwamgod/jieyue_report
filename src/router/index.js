@@ -100,6 +100,7 @@ export default new Router({
           meta: {
             title: '报表系统',
             key: '2-1',
+            isShowTabs:true,
           }
         },
       ]

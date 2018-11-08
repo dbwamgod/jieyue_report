@@ -15,7 +15,7 @@
     <div>
    
     </div>
-    <Vmodel v-model="pare" :value='typeValue'> </Vmodel>
+    <!-- <Vmodel v-model="pare" :value='typeValue'> </Vmodel> -->
     {{pare}}
   </div>
 </template>
@@ -53,22 +53,17 @@ export default {
     Vmodel
   },
   created() {
-    console.log(this.$router, this.$route);
   },
   methods: {
     handClick() {
-      // console.log('screen',this.screenList);
-      // console.log(this.form);
       let screenListKey = this.screenList.map(r => {
         return r.key;
       });
-      console.log(screenListKey);
       for (let item in this.form) {
         if (screenListKey.indexOf(item) == -1) {
           delete this.form[item];
         }
       }
-      console.log(this.form);
     },
     handChange(data) {
       this.screenList = data.map(r => {
@@ -82,7 +77,6 @@ export default {
         });
         return info;
       });
-      console.log(this.screenList);
     },
     inpoutChange() {}
   }
