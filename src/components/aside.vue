@@ -100,7 +100,7 @@ export default {
       fanhuishouye: require("../assets/images/icon-fanhuishouye.png"), //小房子 icon-shouqizuocedaohang
       shouqizuocedaohang: require("../assets/images/icon-shouqizuocedaohang.png"), // icon-sousuo.png
       icon: [{ name: 1 }, { name: 1 }, { name: 1 }, { name: 1 }, { name: 1 }],
-      Deletenavigationbar: false
+      Deletenavigationbar: ""
     };
   },
   computed: {
@@ -121,9 +121,16 @@ export default {
   mounted() {},
   created() {
     this.aside();
+    this.Navigationstate();
   },
   methods: {
     ...mapActions(["stateRouter", "saveData", "saveDatal"]),
+    Navigationstate() {
+      this.Deletenavigationbar = localStorage.getItem("Deletenavigationbar");
+      localStorage.getItem("editableTabs2");
+      this.editableTabs2 = JSON.parse(localStorage.getItem("editableTabs2"))
+      this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
+    },//刷新之前保存导航栏
     tabsn(tab, event) {
       this.$router.push({
         path: tab.name
@@ -150,42 +157,6 @@ export default {
         .then(res => {
           // this.ArrayData = res.data.data;
           // console.log(this.ArrayData)
-          // this.ArrayData = [
-          //   {
-          //     name: "今天1",
-          //     id: 1,
-          //     url: "demo",
-          //     children: [
-          //       {
-          //         name: "今天1",
-          //         id: 4,
-          //         url: "demo"
-          //       }
-          //     ]
-          //   },
-          //   {
-          //     name: "今天2",
-          //     id: 2,
-          //     url: "demo1",
-          //     children: [
-          //       {
-          //         name: "今天2-1",
-          //         id: 5,
-          //         url: "demo1"
-          //       }
-          //     ]
-          //   },
-          //   {
-          //     name: "今天3",
-          //     id: 3,
-          //     url: "demo2",
-          //     children:[
-          //       {
-          //         name:'报表系统',
-          //         id:12,
-          //         url:'reportIndex'
-          //       }
-          //     ]
           //   }
           // ];
           // let serchData = res.data.data;
@@ -243,9 +214,10 @@ export default {
           });
           this.tabName.push(c);
           this.editableTabsValue2 = newTabName;
-
+          // console.log(this.editableTabs2)
           this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
           this.Deletenavigationbar = true;
+          localStorage.setItem("Deletenavigationbar", "true");
         }
       }
     }, //点击侧边栏 添加在导航栏上

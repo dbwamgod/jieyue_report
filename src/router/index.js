@@ -11,7 +11,7 @@ import demo from '../view/message/demo'
 import demo1 from '../view/message/demo1'
 import reportIndex from '../view/reportTemplate/reportIndex'
 
-import demo2 from '../view/message/demo2'
+import Messagenotification from '../view/message/Messagenotification'
 
 
 import Login from '../view/login';
@@ -86,11 +86,11 @@ export default new Router({
           }
         },
         {
-          path: 'demo2',
-          component: demo2,
-          name: 'demo2',
+          path: 'Messagenotification',
+          component: Messagenotification,
+          name: 'Messagenotification',
           meta: {
-            title: 'demo2'
+            title: 'Messagenotification'
           }
         },
         {
