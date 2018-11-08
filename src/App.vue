@@ -88,9 +88,6 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, fo
         width: 100%;
         height: 100%;
     }
-    .el-table th{
-        background-color: #D8E2F1 !important;
-    }
     .el-dialog__header{
         background-color: #D8E2F1!important;
         padding: 15px 20px 15px !important;

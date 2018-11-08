@@ -3,70 +3,61 @@
     <div>
       <el-row>
         <el-col :span="24">
-          <div class="grid-content bg-purple-dark" style="width:100%;height:300px;background:red;">
-            <div style="width:90px;height:90px;background:pink;" @click="handleFullScreen"></div>
+          <div class="grid-content bg-purple-dark" style="width:100%;height:359px;background:#EDEDED;">
+
+            <div class="Agencytask">
+              <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tab-pane label="待处理" name="first">
+                  <div style="background:white;height:317px;">
+                    <div style="margin:0px auto;background:red;width:200px;height:200px;"></div>
+                  </div>
+                  <!-- <el-table :data="tableData" style="width: 100%"> -->
+
+                  <!-- <el-table-column prop="address" :label="'共'+total+'条信息'"></el-table-column>
+                    <el-table-column prop="date" label="发布时间" sortable></el-table-column> -->
+
+                  <!-- </el-table> -->
+                </el-tab-pane>
+                <el-tab-pane label="已处理" name="second">
+                  <div style="background:white;height:317px;">
+                    <div style="margin:0px auto;background:red;width:200px;height:200px;"></div>
+                  </div>
+                </el-tab-pane>
+              </el-tabs>
+              <div class="Agencytaskshu"></div>
+              <div class="Agencytaskmore" @click="MoreManagementTasks">更多</div>
+            </div>
+            <!-- <div style="width:90px;height:90px;background:pink;float:right;" @click="handleFullScreen"></div> -->
           </div>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row style="margin-top:20px;">
+        <!-- 消息 -->
         <el-col :span="12">
-          <div class="grid-content bg-purple" style="width:100%;height:300px;background:pink;" >2</div>
-        </el-col>
-        <el-col :span="12">
-          <div class="grid-content bg-purple-light" style="width:100%;height:300px;background:blue;" >3</div>
-        </el-col>
-      </el-row>
-    </div>
-
-    <!-- 日期记事本功能 -->
-    <el-row v-show="flipVerticalShowA">
-      <el-col :span="12">
-        <div style="height: 270px;background-color: rgb(255,255,255);border-right: 1px solid #CBCBCB;padding-top: 17px;">
-          <div id="calender">
-            <div id="celender_head">
-              <div id="left" class="celender_head" @click="left()">
-                <img :src="rilizuojiantou" alt="">
-              </div>
-              <div id="celender_head_inner" class="celender_head">
-                <p style="font-size: 18px;">{{header}}</p>
-              </div>
-              <div id="right" class="celender_head" @click="right()">
-                <img :src="riliyoujiantou" alt="">
-              </div>
+          <div class="grid-content bg-purple" style="width:100%;height:465px;background:#EDEDED;border-radius: 10px;">
+            <div style="line-height:50px;padding:0 20px;">
+              <span><img :src="xiaoxitongzhi" alt="" style="vertical-align: sub;;margin-right:10px;"></span><span style="font-size:18px;">消息通知</span>
+              <span style="float:right;font-size:12px;color:#4DA1FC;">更多...</span>
             </div>
-            <div id="calender_body">
-              <table width="100%">
-                <tr class='head' style="color: #707070">
-                  <td v-for="(head,index) in heads" :key='index'>{{head}}</td>
-                </tr>
-                <tr v-for="(item,index) in show" :key='index'>
-                  <td :class="{now: item1.now, last_month:item1.attr == 'last_month',next_month:item1.attr == 'next_month'}"
-                    v-for="(item1,index) in item " @click="showDate(item1,$event);" style="height: 28px;width: 28px;position: relative"
-                    :key='index'>
+            <div style="background:white;height:408px;">
+              <el-table :data="tableData" style="width: 100%" stripe>
 
-                    <span :style="[Memo_b.indexOf(item1.Memo_a) > -1? {color:'red'}: '' ] ">{{item1.num}}</span>
+                <el-table-column prop="address" :label="'内容'"></el-table-column>
+                <el-table-column prop="date" label="发布时间" sortable></el-table-column>
 
-                    <span :style=" [Memo_b.indexOf(item1.Memo_a) > -1? {background:'red'}: '' ]" style="width:3px;height:3px;position: absolute;left: 48%;bottom: 0;"></span>
-                    <!-- <div :style=" hongdianA?'hongdian':'hongdianB'"></div> -->
-                  </td>
-                </tr>
-              </table>
-            </div>
-            <div id="calender_foot">
-              <p @click="backToday">回到今天</p>
+              </el-table>
+              <div style="color:#BDBDBD;line-height:40px;"><span style="margin-left: 36px;">共12条信息</span></div>
             </div>
           </div>
-        </div>
-      </el-col>
-      <!--添加记事本区域的内容-->
-      <el-col :span="12" class="AddNotepad">
-        <div style="height: 287px;background-color: rgb(255,255,255);">
-          <div style="line-height: 50px;text-align: center;border-bottom: 1px solid #E1E1E1;">
-
-            <span style="font-size: 18px;color: #333744;margin-right: 7px;">记事本</span>
-
-            <el-button type="text" @click="dialogVisible = true"><img :src="xinjianjishiben" alt="" style="vertical-align: sub;"></el-button>
-            <el-dialog title="添加内容" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+        </el-col>
+        <!-- 日历 -->
+        <el-col :span="12">
+          <div class="grid-content bg-purple" style="width:100%;height:465px;background:#EDEDED;border-radius: 10px;">
+            <!-- 头部 -->
+            <div style="line-height:50px;padding:0 20px;">
+              <span><img :src="xiaoxitongzhi" alt="" style="vertical-align: sub;;margin-right:10px;"></span><span style="font-size:18px;">我的日程</span>
+              <span style="float:right;font-size:12px;color:#4DA1FC;"> <el-button type="text" @click="dialogVisible = true">更多...</el-button></span>
+              <el-dialog title="添加内容" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 
               <div class="demo-input-suffix">
                 <div class="block valueDate">
@@ -83,64 +74,67 @@
                 <el-button type="primary" @click="dialogVisibleTextarea">确 定</el-button>
               </span>
             </el-dialog>
+            </div>
+            <!-- 日历部分 -->
+            <div style="background:white;height: 409px;">
+              <div style="height: 270px;background-color: rgb(255,255,255);border-right: 1px solid #CBCBCB;padding-top: 17px;">
+                <div id="calender">
+                  <div id="celender_head">
+                    <div id="left" class="celender_head" @click="left()">
+                      <img :src="rilizuojiantou" alt="">
+                    </div>
+                    <div id="celender_head_inner" class="celender_head">
+                      <p style="font-size: 18px;">{{header}}</p>
+                    </div>
+                    <div id="right" class="celender_head" @click="right()">
+                      <img :src="riliyoujiantou" alt="">
+                    </div>
+                  </div>
+                  <div id="calender_body">
+                    <table width="100%">
+                      <tr class='head' style="color: #707070">
+                        <td v-for="(head,index) in heads" :key='index'>{{head}}</td>
+                      </tr>
+                      <tr v-for="(item,index) in show" :key='index'>
+                        <td :class="{now: item1.now, last_month:item1.attr == 'last_month',next_month:item1.attr == 'next_month'}"
+                          v-for="(item1,index) in item " @click="showDate(item1,$event);" style="height: 28px;width: 28px;position: relative"
+                          :key='index'>
 
+                          <span>{{item1.num}}</span>
+                          <!-- <span :style="[Memo_b.indexOf(item1.Memo_a) > -1? {color:'red'}: '' ] ">{{item1.num}}</span> -->
+                          <span :style=" [Memo_b.indexOf(item1.Memo_a) > -1? {background:'red'}: '' ]" style="width:3px;height:3px;position: absolute;left: 48%;bottom: 0;"></span>
+                          <!-- <div :style=" hongdianA?'hongdian':'hongdianB'"></div> -->
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div id="calender_foot">
+                    <p @click="backToday">回到今天</p>
+                  </div>
+                </div>
+              </div>
+               <!-- 显示日历内容 -->
+               <div style="background:white;">
+                <div style="float:left;">
+                  <ul>
+                    <li class="headlineLi" style="padding-left: 23px;padding-right: 29px;line-height: 48px;height: 48px;"
+                      v-for="(item,index) in headlines" @click="headlineLiC(index)" :key='index'>
+                      <div class="headline" style="font-size: 16px;color: #333744;width: 100%;">{{item.name}}111</div>
+                    </li>
+                  </ul>
+                </div>
+                <div style="float:left">
+                  b
+                </div>
+            </div>
+            </div>
           </div>
-          <el-row>
-            <el-col :span="12" style="border-right: 1px solid #E1E1E1; ">
-              <div style="overflow-y: auto;height: 232px;">
-                <ul>
-                  <li class="headlineLi" style="padding-left: 23px;padding-right: 29px;line-height: 48px;height: 48px;"
-                    v-for="(item,index) in headlines" @click="headlineLiC(index)" :key='index'>
-                    <div class="headline" style="font-size: 16px;color: #333744;width: 100%;">{{item.name}}</div>
-                  </li>
-                </ul>
-              </div>
-            </el-col>
-            <el-col :span="12">
-              <div style="overflow-y: auto;height: 232px;">
-                b
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-      </el-col>
-    </el-row>
-    <div id="app" class="box">
-      <ul class="tabs clearfix">
-        <li v-for="(tab,index) in tabsName" :key="index">
-          <a href="#" class="tab-link" @click="tabsSwitch(index)" v-bind:class="{active:tab.isActive}">{{tab.name}}</a>
-        </li>
-        <li style="float:right;color:blue;margin-top: 20px;" @click="MoreManagementTasks">更多</li>
-      </ul>
-
-
-      <div class="cards" style="width: 100%;">
-        <div class="tab-card" style="display: block;">
-          <el-table :data="tableData" style="width: 100%">
-
-            <el-table-column prop="address" :label="'共'+total+'条信息'"></el-table-column>
-            <el-table-column prop="date" label="发布时间" sortable></el-table-column>
-
-          </el-table>
-        </div>
-        <div class="tab-card">欢迎来到CSS模块</div>
-      </div>
+        </el-col>
+      </el-row>
     </div>
-    <div class="Agencytask">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="待处理" name="first">
-          <el-table :data="tableData" style="width: 100%">
 
-            <el-table-column prop="address" :label="'共'+total+'条信息'"></el-table-column>
-            <el-table-column prop="date" label="发布时间" sortable></el-table-column>
+    <!-- 日期记事本功能 -->
 
-          </el-table>
-        </el-tab-pane>
-        <el-tab-pane label="已处理" name="second">配置管理</el-tab-pane>
-      </el-tabs>
-      <div class="Agencytaskshu">10</div>
-      <div class="Agencytaskmore" @click="MoreManagementTasks">更多</div>
-    </div>
 
   </div>
 </template>
@@ -153,7 +147,8 @@ export default {
       flipVerticalShowA: true,
       rilizuojiantou: require("../../assets/images/icon-rilizuojiantou.png"),
       riliyoujiantou: require("../../assets/images/icon-riliyoujiantou.png"),
-      xinjianjishiben: require("../../assets/images/icon-xinjianjishiben.png"),
+      xinjianjishiben: require("../../assets/images/icon-xinjianjishiben.png"), //icon-xiaoxitongzhi
+      xiaoxitongzhi: require("../../assets/images/icon-xiaoxitongzhi.png"),
       body: "",
       header: "",
       currentYear: "",
@@ -420,7 +415,7 @@ export default {
       });
       this.textarea = "";
       this.inputTitle = "";
-
+      // console.log(this.valueDate)
       //先获取日期 然后转一手 之后 赋值给Memo_b
       if (this.valueDate) {
         var firstday;
@@ -434,6 +429,7 @@ export default {
         this.currentDay = dd; //30
         firstday = yy + "-" + mm + "-" + dd; //2018-3-1
         this.Memo_b.push(firstday);
+        console.log(firstday);
       }
     }, //控制点击确定之后状态
     headlineLiC(index) {
@@ -495,7 +491,91 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+#mainApp .is-active {
+  background-color: #8bd0ff;
+}
+
+/* 消息功能区 */
+.grid-content th.el-table_22_column_43.is-leaf {
+  text-align: center;
+}
+
+.grid-content th.el-table_1_column_2.is-leaf.is-sortable {
+  text-align: right;
+}
+
+.grid-content td.el-table_1_column_2 {
+  text-align: right;
+}
+
+/* 任务功能区 */
+#mainApp .Agencytaskshu {
+  padding: 5px;
+  background-color: red;
+  position: absolute;
+  top: 8px;
+  left: 86px;
+  border-radius: 50%;
+  z-index: 999;
+}
+
+#mainApp .Agencytask .el-tabs__item {
+  padding: 10px 10px !important;
+  height: 31px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  line-height: 12px;
+  display: inline-block;
+  list-style: none;
+  font-size: 16px;
+  font-weight: inherit;
+  color: #838383;
+  position: relative;
+  margin-left: 10px;
+}
+
+#mainApp .Agencytask .el-tabs__item.is-active {
+  color: #008fff;
+  background: white;
+  border-radius: 10px 10px 0 0;
+}
+
+#mainApp .Agencytask .el-tabs__nav-scroll {
+  overflow: hidden;
+  padding: 10px 0 0 17px;
+}
+
+#mainApp .Agencytask .el-tabs__active-bar {
+  width: 0 !important;
+}
+
+#mainApp .Agencytask .el-tabs__header {
+  padding: 0;
+  position: relative;
+  margin: 0;
+}
+
+#mainApp .Agencytask .el-tabs__nav-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  z-index: 1;
+}
+
+#mainApp #tab-first {
+  border: 1px solid #d5d5d5;
+  border-radius: 10px 10px 0 0;
+  border-bottom: 0;
+}
+#mainApp #tab-second {
+  border: 1px solid #d5d5d5;
+  border-radius: 10px 10px 0 0;
+  border-bottom: 0;
+}
+
 #calender {
   overflow: auto;
   width: 90%;
@@ -663,6 +743,7 @@ export default {
   width: 20px;
   left: 154px;
 }
+
 #mainApp .box {
   width: 100%;
   height: 100%;
@@ -720,14 +801,5 @@ export default {
   position: absolute;
   top: 6px;
   right: 10px;
-}
-
-#mainApp .Agencytaskshu {
-  padding: 2px;
-  background-color: red;
-  position: absolute;
-  top: -1px;
-  left: 46px;
-  border-radius: 50%;
 }
 </style>

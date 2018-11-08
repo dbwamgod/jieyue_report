@@ -3,14 +3,14 @@
     <el-row style="width:100%;display: -webkit-box;display: flex;margin-top:50px;" :style="{marginTop:this.hideheaderaside?50+'px':'0'}">
       <!--侧边栏-->
       <el-col :span="2" style="height:100%;position: fixed;z-index: 100;-box-flex:-webkit 1;flex:1;" class="aside" v-show="this.hideheaderaside">
+                <!-- <div class="baobiaogongneng"></div> -->
         <!--搜索框和收藏-->
         <div style="height: 100%;" v-show="val">
           <el-menu :router="true" :default-active="defaultActive+''" :unique-opened="true" style="height:100%;" :style="{width:ths+'px'}"
             class="zyside">
             <!--第一层-->
-            
             <el-submenu v-for="(item,index) in this.ArrayData" :index="item.id +''" :unique-opened="true" :key="index">
-              <template slot="title"><i :class=[item.icon]></i>{{item.name}}111</template>
+              <template slot="title"><i :class=[item.icon]></i> {{item.name}}</template>
               <!--第二层-->
               <el-submenu v-for="(itema,index) in item.children" :index="itema.id +''" v-if="itema.children != undefined"
                 :key="index">
@@ -28,7 +28,7 @@
         </div>
         <div v-show="!val" style="width:50px;height:100%;background:#3c404c;">
           <ul>
-            <li v-for="(icons,index) in icon" :key="index">{{icons.name}}</li>
+            <li v-for="(item,index) in this.ArrayData" :key="index" style="padding-top:12px;"><i :class=[item.icon]></i></li>
           </ul>
         </div>
 
@@ -37,15 +37,14 @@
       <!--页面的内容-->
       <!-- <div v-show="this.hideheaderaside" style="width:100%;height:100%;"> -->
         <el-col :span="22" style="-webkit-box-flex: 1;width:87%;height:100%;flex:1;position: relative;background: #f1f2f6"
-          :style="{ marginLeft:this.hideheaderaside?ths+'px':'0px'} ">
-
+          :style="this.hideheaderaside?(this.val?{marginLeft:'160px'}:{marginLeft:'50px'}) :({marginLeft:0+'px'})">
           <div style="width: 2px;height: 100%;background:rgba(0,0,0,.1);position: absolute;" id="DetectionHeight"></div>
 
-          <div style="cursor: pointer;z-index:999" @click="hideV" v-show="this.hideheaderaside" :class="{hv:hl,hh:!hl}" :style="{left:ths-2+'px'}" v-if="val">
+          <div style="cursor: pointer;z-index:999" @click="hideV" v-show="this.hideheaderaside" :class="{hv:hl,hh:!hl}" :style="{left:ths+'px'}" v-if="val">
             <img :src="shouqizuocedaohang" alt="">
           </div> 
 
-          <div style="z-index: 999;cursor: pointer" @click="hideV" v-show="this.hideheaderaside" :class="{hv:hl,hh:!hl}" :style="{ left:this.val?ths+'px':'49px'}"
+          <div style="z-index: 999;cursor: pointer" @click="hideV" v-show="this.hideheaderaside" :class="{hv:hl,hh:!hl}" :style="{ left:this.val?ths+'px':'50px'}"
             v-else>
             <img :src="shouqizuocedaohang" alt="">
           </div> 
@@ -65,7 +64,7 @@
               <el-tab-pane v-for="option in $store.state.editableTabs2" :label="option.title" :name="option.content" :key="option.name"></el-tab-pane>
             </el-tabs>
           </div>
-          <router-view style="margin: 16px;"></router-view>
+          <router-view style="margin: 16px 30px;"></router-view>
         </el-col>
       <!-- </div> -->
     </el-row>
@@ -97,7 +96,7 @@ export default {
       tabIndex: 1,
       tabName: [],
       indexCode: 0,
-      ths: "198",
+      ths: "160",
       fanhuishouye: require("../assets/images/icon-fanhuishouye.png"), //小房子 icon-shouqizuocedaohang
       shouqizuocedaohang: require("../assets/images/icon-shouqizuocedaohang.png"), // icon-sousuo.png
       icon: [{ name: 1 }, { name: 1 }, { name: 1 }, { name: 1 }, { name: 1 }],
@@ -130,80 +129,65 @@ export default {
         path: tab.name
       });
     },
-    aside(event) {
+    aside() {
       this.ArrayData = [
         {
-          name: "今天1",
+          name: "菜单报表管理",
           id: 1,
           url: "demo",
+          icon: "baobiaogongneng",
           children: [
             {
-              name: "今天1",
+              name: "菜单借款明细表",
               id: 4,
-              url: "demo"
+              url: "reportIndex"
             }
           ]
-        },
-        {
-          name: "今天2",
-          id: 2,
-          url: "demo1",
-          children: [
-            {
-              name: "今天2-1",
-              id: 5,
-              url: "demo1"
-            }
-          ]
-        },
-        {
-          name: "今天3",
-          id: 3,
-          url: "demo2"
         }
       ];
       this.$http
         .get(api.pdng())
         .then(res => {
           // this.ArrayData = res.data.data;
-          this.ArrayData = [
-            {
-              name: "今天1",
-              id: 1,
-              url: "demo",
-              children: [
-                {
-                  name: "今天1",
-                  id: 4,
-                  url: "demo"
-                }
-              ]
-            },
-            {
-              name: "今天2",
-              id: 2,
-              url: "demo1",
-              children: [
-                {
-                  name: "今天2-1",
-                  id: 5,
-                  url: "demo1"
-                }
-              ]
-            },
-            {
-              name: "今天3",
-              id: 3,
-              url: "demo2",
-              children:[
-                {
-                  name:'报表系统',
-                  id:12,
-                  url:'reportIndex'
-                }
-              ]
-            }
-          ];
+          // console.log(this.ArrayData)
+          // this.ArrayData = [
+          //   {
+          //     name: "今天1",
+          //     id: 1,
+          //     url: "demo",
+          //     children: [
+          //       {
+          //         name: "今天1",
+          //         id: 4,
+          //         url: "demo"
+          //       }
+          //     ]
+          //   },
+          //   {
+          //     name: "今天2",
+          //     id: 2,
+          //     url: "demo1",
+          //     children: [
+          //       {
+          //         name: "今天2-1",
+          //         id: 5,
+          //         url: "demo1"
+          //       }
+          //     ]
+          //   },
+          //   {
+          //     name: "今天3",
+          //     id: 3,
+          //     url: "demo2",
+          //     children:[
+          //       {
+          //         name:'报表系统',
+          //         id:12,
+          //         url:'reportIndex'
+          //       }
+          //     ]
+          //   }
+          // ];
           // let serchData = res.data.data;
           // serchData.forEach(seriesA => {
           //   if (seriesA.children) {
@@ -301,9 +285,15 @@ export default {
       this.$router.push((name = "mainApp"));
     } //图标--回主页
   }
-}
+};
 </script>
 <style>
+#asideList .marginLeft0 {
+  margin-left: 0px;
+}
+#asideList .marginLeft1 {
+  margin-left: 160px;
+}
 #asideList .hv {
   position: fixed;
   top: 66px;
@@ -330,17 +320,47 @@ export default {
   box-sizing: border-box;
   font-weight: 400;
   font-family: "Microsoft YaHei";
-  padding-left: 20px;
+  padding-left: 10px !important;
+}
+#asideList .aside .el-submenu__icon-arrow {
+  position: absolute;
+  top: 54%;
+  right: 11px;
+  margin-top: -7px;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: -webkit-transform 0.3s;
+  transition: transform 0.3s;
+  transition: transform 0.3s, -webkit-transform 0.3s;
+  font-size: 12px;
 }
 
 #asideList .aside .el-submenu__title:hover {
-  background-color: #295a94 !important;
+  background-color: #1d62ac !important;
 }
 
 #asideList .aside .el-menu-item:focus,
 #asideList .aside .el-menu-item:hover {
-  background-color: #295a94 !important;
+  background-color: #1d62ac !important;
 }
+
+/* #asideList .is-active > .activeAfter {
+  width: 0;
+  height: 0;
+  border: 4px solid transparent;
+  border-left: 4px solid #8bd0ff;
+  position: absolute;
+  left: 4px;
+  top: calc(50% - 4px);
+} */
+
+/* #asideList .is-active::before {
+  content: "";
+  background-color: #8bd0ff;
+  width: 4px;
+  height: 40px;
+  position: absolute;
+  left: 0;
+} */
 
 #asideList .el-menu {
   position: relative;
@@ -376,19 +396,13 @@ export default {
   margin-left: 1px;
 }
 
-#asideList .el-tabs__item.is-active {
-  color: black;
+#asideList #editableTabs {
+  width: 100%;
 }
-
-@media screen and (min-width: 1024px) and (max-width: 1360px) {
-  #asideList #editableTabs {
-    width: 96%;
-  }
-}
-
-@media screen and (min-width: 1740px) and (max-width: 1920px) {
-  #asideList #editableTabs {
-    width: 96%;
-  }
+.baobiaogongneng {
+  width: 18px;
+  height: 18px;
+  background: url(../assets/images/icon-baobiaogongneng.png) no-repeat;
+  display: inline-block;
 }
 </style>
