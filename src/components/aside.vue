@@ -97,7 +97,7 @@ export default {
       fanhuishouye: require("../assets/images/icon-fanhuishouye.png"), //小房子 icon-shouqizuocedaohang
       shouqizuocedaohang: require("../assets/images/icon-shouqizuocedaohang.png"), // icon-sousuo.png
       icon: [{ name: 1 }, { name: 1 }, { name: 1 }, { name: 1 }, { name: 1 }],
-      Deletenavigationbar: !!this.$route.meta.isShowTabs
+      Deletenavigationbar: !!localStorage.getItem("Deletenavigationbar")
     };
   },
   computed: {
@@ -127,11 +127,10 @@ export default {
   methods: {
     ...mapActions(["stateRouter", "saveData", "saveDatal"]),
     Navigationstate() {
-      this.Deletenavigationbar = localStorage.getItem("Deletenavigationbar");
-      localStorage.getItem("editableTabs2");
-      this.editableTabs2 = JSON.parse(localStorage.getItem("editableTabs2"))
+      this.editableTabs2 =
+        JSON.parse(localStorage.getItem("editableTabs2")) || [];
       this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
-    },//刷新之前保存导航栏
+    }, //刷新之前保存导航栏
     tabsn(tab, event) {
       this.$router.push({
         path: tab.name
@@ -206,17 +205,41 @@ export default {
       var index = str.lastIndexOf("/");
       let d = str.substring(index + 1, str.length);
       if (d) {
-        if (this.tabName.indexOf(c) == -1) {
-          let newTabName = ++this.tabIndex + "";
-          this.editableTabs2.push({
-            title: b,
-            name: c,
-            content: d
-          });
-          this.tabName.push(c);
-          this.editableTabsValue2 = newTabName;
-          // console.log(this.editableTabs2)
-          this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
+        if (JSON.parse(localStorage.getItem("Savearray"))) {
+          if (JSON.parse(localStorage.getItem("Savearray")).indexOf(c) == -1) {
+            let newTabName = ++this.tabIndex + "";
+            this.editableTabs2.push({
+              title: b,
+              name: c,
+              content: d
+            });
+            this.tabName.push(c);
+            console.log(this.tabName.indexOf(c));
+            this.editableTabsValue2 = newTabName;
+            localStorage.setItem("Deletenavigationbar", "true");
+            this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
+            this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
+            console.log(
+              JSON.parse(localStorage.getItem("Savearray")).indexOf(c)
+            );
+          } else {
+            this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
+          }
+        } else {
+          if (this.tabName.indexOf(c) == -1) {
+            let newTabName = ++this.tabIndex + "";
+            this.editableTabs2.push({
+              title: b,
+              name: c,
+              content: d
+            });
+            this.tabName.push(c);
+            console.log(this.tabName.indexOf(c));
+            this.editableTabsValue2 = newTabName;
+            localStorage.setItem("Deletenavigationbar", "true");
+            this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
+            this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
+          }
         }
       }
     }, //点击侧边栏 添加在导航栏上
@@ -234,15 +257,21 @@ export default {
         });
       }
       this.editableTabsValue2 = activeName;
+      console.log(this.$store.state.editableTabs2.length);
       if (this.$store.state.editableTabs2.length == 1) {
         this.editableTabs2 = tabs.filter(tab => tab.content !== targetName);
         this.tabName = [];
         this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
+        if (localStorage.removeItem("Deletenavigationbar")) {
+          localStorage.removeItem("Deletenavigationbar");
+        }
+        this.$store.commit("SAVE_EDITABLETABS3", []);
         return this.$router.push((name = "mainApp"));
       } else {
         this.editableTabs2 = tabs.filter(tab => tab.content !== targetName);
         //遍历editableTabs2 找到id 添加进去
         this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
+
         this.tabName = this.editableTabs2.map(r => r.name);
         let pathInfo = this.editableTabs2[this.editableTabs2.length - 1]
           .content;
@@ -378,8 +407,8 @@ export default {
 #editableTabs > .el-tabs__header {
   border: none;
 }
-#editableTabs >.el-tabs__header .el-tabs__nav{
-   border-radius: 15px 15px 0 0;
+#editableTabs > .el-tabs__header .el-tabs__nav {
+  border-radius: 15px 15px 0 0;
 }
 #editableTabs > .el-tabs__header .el-tabs__item.is-active {
   border-bottom-color: transparent;
@@ -391,10 +420,10 @@ export default {
   font-size: 16px;
   border-radius: 15px 15px 0 0;
 }
-#editableTabs>.el-tabs__header .el-tabs__item .el-icon-close{
-  width:22px;
+#editableTabs > .el-tabs__header .el-tabs__item .el-icon-close {
+  width: 22px;
   font-size: 20px;
-  height:22px;
+  height: 22px;
   line-height: 22px;
 }
 </style>

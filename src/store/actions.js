@@ -18,6 +18,9 @@ export default {
  saveEditableTabs2({commit},params){
     commit(types.SAVE_EDITABLETABS2,{params})
   },
+  saveEditableTabs3({commit},params){
+    commit(types.SAVE_EDITABLETABS3,{params})
+  },
   
 }
 
