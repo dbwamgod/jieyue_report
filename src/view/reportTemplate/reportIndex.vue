@@ -14,13 +14,15 @@
         </div>
         <div class="screen-right">
           <div class="screen-right-item">
-
+            <img :src="require('@/assets/images/collectionIconhide.png')" alt="" v-if="false">
+            <img :src="require('@/assets/images/collectionIcon.png')" alt="">
           </div>
           <div class="screen-right-item">
-
+            <img :src="require('@/assets/images/downloadIcon.png')" alt="">
           </div>
           <div class="screen-right-item">
-
+            <img :src="require('@/assets/images/quanping.png')" alt="">
+            <img :src="require('@/assets/images/biaoshouqi.png')" alt="" v-if="false">
           </div>
 
         </div>
@@ -52,7 +54,7 @@
     <div class="report-content-table">
 
       <el-table :data="tableData" style="width: 100%">
-        <el-table-column label="序号" type="index" width="50">
+        <el-table-column label="序号" type="index" width="60" align="center">
         </el-table-column>
         <el-table-column prop="date" label="日期" width="180">
         </el-table-column>
@@ -86,7 +88,7 @@
       <div class="wordDialog-header">
         <span>选中状态：</span>
         <el-input placeholder="请输入中文" v-model="wordDialogScreen" style="width:280px;">
-          <img slot="suffix" class="el-input__icon el-icon-date" :src="require('@/assets/images/Signout.png')" alt="">
+          <img slot="suffix" class="el-input__icon el-icon-date" style="width:20px; height:20px; margin-top: 9px;" :src="require('@/assets/images/sousuo.png')" alt="">
         </el-input>
       </div>
       <div style="padding-left:74px;padding-right:15px;box-sizing:border-box;margin-top:10px;">
@@ -99,14 +101,14 @@
           </div>
           <div class="wordDialog-content-check">
             <el-checkbox-group v-model="checkListWord">
-              <el-checkbox v-for="(data, index) in checkListWordShow" :label="data.name" :key="index" style="margin-left:14px;"></el-checkbox>
+              <el-checkbox v-for="(data, index) in checkListWordShowF" :label="data.name" :key="index" style="margin-left:14px;"></el-checkbox>
             </el-checkbox-group>
           </div>
         </div>
       </div>
       <div style="padding-left:74px;padding-right:15px;box-sizing:border-box;margin-top:10px;" v-if="!!checkListWord.length">
         <div class="wordDialog-content" style="height:190px;padding-left:13px;padding-top:15px;box-sizing:border-box;">
-          <el-row >
+          <el-row>
             <el-col :span="3">
               已选字段
             </el-col>
@@ -141,6 +143,7 @@
 </template>
  <script>
 import Vmodel from "@/view/reportTemplate/Vmodel";
+import api from '@/api'
 export default {
   name: "reportIndex",
   data() {
@@ -152,10 +155,9 @@ export default {
       wordDialogScreen: "",
       checkedAllScreen: false,
       form: {},
-      screenList: [],
-      checkList: [],
-      checkListWord: [],
-      wordShowList: [],
+      screenList: [],//筛选条件页面展示集合
+      checkList: [],//弹框筛选条件集合
+      checkListWord: [],//弹框已选字段展示
       checkListWordShow: [
         { name: "1" },
         { name: "2" },
@@ -192,7 +194,14 @@ export default {
   components: {
     Vmodel
   },
-  created() {},
+  created() {
+    this.init()
+  },
+  computed:{
+    checkListWordShowF() {
+       return this.wordDialogScreen ? this.checkListWordShow.filter(r=>r.name===this.wordDialogScreen): this.checkListWordShow
+    }
+  },
   watch: {
     checkListWord(newData) {
       if (newData.length === this.checkListWordShow.length) {
@@ -203,6 +212,14 @@ export default {
     }
   },
   methods: {
+    init() {
+       this.$http.post(api.reportRptFrame(),{
+         masterNo:'06',
+         reportCode:'ASP10021'
+       }).then(res=>{
+         console.log(res)
+         })
+    },
     handClick() {
       this.screenList = this.checkList.map(r => {
         let info = {};
@@ -226,6 +243,7 @@ export default {
       this.dialogVisible = false;
     },
     handClickWord() {
+      console.log('checkListWord', this.checkListWord)
       this.dialogVisibleWord = false;
     },
     handSubmit() {
@@ -255,8 +273,8 @@ export default {
       }
     },
     handClickremove(data) {
-      let index =this.checkListWord.indexOf(data);
-      this.checkListWord.splice(index,1)
+      let index = this.checkListWord.indexOf(data);
+      this.checkListWord.splice(index, 1);
     }
   }
 };
@@ -357,8 +375,8 @@ export default {
     .wordDialog-selected {
       display: inline-block;
       position: relative;
-      width:100px;
-      height:34px;
+      width: 100px;
+      height: 34px;
       line-height: 34px;
       text-align: center;
       border: 1px solid #3a96f2;
@@ -366,12 +384,12 @@ export default {
       color: #008fff;
       letter-spacing: -0.34px;
       margin: 0 20px 20px 0;
-      .wordDialog-selected-delete{
+      .wordDialog-selected-delete {
         position: absolute;
-        top:-8px;
-        right:-8px;
+        top: -8px;
+        right: -8px;
         font-size: 16px;
-        color: #A2A2A2;
+        color: #a2a2a2;
         z-index: 2;
         background: #fff;
         cursor: pointer;
