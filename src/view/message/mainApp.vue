@@ -34,50 +34,59 @@
       <el-row style="margin-top:20px;">
         <!-- 消息 -->
         <el-col :span="12">
-          <div class="grid-content bg-purple" style="width:100%;height:465px;background:#EDEDED;border-radius: 10px;">
-            <div style="line-height:50px;padding:0 20px;">
-              <span><img :src="xiaoxitongzhi" alt="" style="vertical-align: sub;;margin-right:10px;"></span><span style="font-size:18px;">消息通知</span>
-              <span style="float:right;font-size:12px;color:#4DA1FC;">更多...</span>
-            </div>
-            <div style="background:white;height:408px;">
-              <el-table :data="tableData" style="width: 100%" stripe>
+          <div class="grid-content bg-purple" style="padding-right: 7px;">
+            <div style="background:#EDEDED;width:100%;height:465px;border-radius: 10px;">
+              <div style="line-height:50px;padding:0 20px;">
+                <span><img :src="xiaoxitongzhi" alt="" style="vertical-align: sub;;margin-right:10px;"></span><span
+                  style="font-size:18px;font-weight: 700;">消息通知</span>
+                <span style="float:right;font-size:12px;color:#4DA1FC;" @click="MoreManagementTasks">更多...</span>
+              </div>
+              <div style="background:white;height:408px;">
+                <el-table :data="tableData" style="width: 100%" stripe>
 
-                <el-table-column prop="address" :label="'内容'"></el-table-column>
-                <el-table-column prop="date" label="发布时间" sortable></el-table-column>
+                  <el-table-column prop="address" :label="'内容'"></el-table-column>
+                  <el-table-column prop="date" label="发布时间" sortable align='right'></el-table-column>
 
-              </el-table>
-              <div style="color:#BDBDBD;line-height:40px;"><span style="margin-left: 36px;">共12条信息</span></div>
+                </el-table>
+                <div style="color:#BDBDBD;line-height:40px;"><span style="margin-left: 36px;">共12条信息</span></div>
+              </div>
             </div>
+
           </div>
         </el-col>
         <!-- 日历 -->
         <el-col :span="12">
-          <div class="grid-content bg-purple" style="width:100%;height:465px;background:#EDEDED;border-radius: 10px;">
+          <div class="grid-content bg-purple" style="width:100%;height:465px;background:#EDEDED;border-radius: 10px;margin-left: 7px;">
             <!-- 头部 -->
-            <div style="line-height:50px;padding:0 20px;">
-              <span><img :src="xiaoxitongzhi" alt="" style="vertical-align: sub;;margin-right:10px;"></span><span style="font-size:18px;">我的日程</span>
-              <span style="float:right;font-size:12px;color:#4DA1FC;"> <el-button type="text" @click="dialogVisible = true">更多...</el-button></span>
-              <el-dialog title="添加内容" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-
-              <div class="demo-input-suffix">
-                <div class="block valueDate">
-                  <div class="demonstration">时间：</div>
-                  <el-date-picker v-model="valueDate" type="date" placeholder="选择日期"></el-date-picker>
-                </div>
-                <div style="float: left">标题：</div>
-                <el-input placeholder="请输入内容" v-model="inputTitle" clearable></el-input>
-
-              </div>
-              <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="textarea"></el-input>
-              <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisibleTextarea">确 定</el-button>
+            <div style="line-height:50px;padding:0 20px;position: relative;">
+              <span><img :src="xiaoxitongzhi" alt="" style="vertical-align: sub;;margin-right:10px;"></span><span style="font-size:18px;font-weight: 700;">我的日程</span>
+              <span style="float:right;font-size:12px;color:#4DA1FC;">
+                <el-button type="text" @click="dialogVisible = true">更多...</el-button>
               </span>
-            </el-dialog>
+              <el-dialog title="新建事件" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+                <div style="position: absolute;top: 1px;right: 30px;width: 30px;height: 30px;color: #ccc;font-size: 20px;"
+                  @click="dialogVisible = false">X</div>
+                <div class="demo-input-suffix">
+                  <div class="block valueDate">
+                    <div class="demonstration">日期：</div>
+                    <!-- <el-date-picker v-model="valueDate" type="date" placeholder="选择日期"></el-date-picker> -->
+                    <el-date-picker v-model="valueDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
+                  </div>
+                  <div style="float: left">标题：</div>
+                  <el-input placeholder="字数不能超过20个字符" v-model="inputTitle" clearable></el-input>
+                  <div style="float: left">标题：</div>
+                  <el-input type="textarea" :rows="2" placeholder="字数不能超过100个字符" v-model="textarea"></el-input>
+                </div>
+
+                <span slot="footer" class="dialog-footer">
+                  <el-button @click="dialogVisible = false">取 消</el-button>
+                  <el-button type="primary" @click="dialogVisibleTextarea">保存</el-button>
+                </span>
+              </el-dialog>
             </div>
             <!-- 日历部分 -->
-            <div style="background:white;height: 409px;">
-              <div style="height: 270px;background-color: rgb(255,255,255);border-right: 1px solid #CBCBCB;padding-top: 17px;">
+            <div style="background:white;height: 409px;padding: 0 15px;">
+              <div style="height: 270px;background-color: rgb(255,255,255);padding-top: 17px;">
                 <div id="calender">
                   <div id="celender_head">
                     <div id="left" class="celender_head" @click="left()">
@@ -113,29 +122,30 @@
                   </div>
                 </div>
               </div>
-               <!-- 显示日历内容 -->
-               <div style="background:white;">
-                <div style="float:left;">
+              <!-- 显示日历内容 -->
+              <div style="padding-top: 12px;border-top: 1px solid #ccc;">
+                <div>
                   <ul>
-                    <li class="headlineLi" style="padding-left: 23px;padding-right: 29px;line-height: 48px;height: 48px;"
+                    <!-- <li class="headlineLi" style="padding-left: 23px;padding-right: 29px;line-height: 48px;height: 48px;"
                       v-for="(item,index) in headlines" @click="headlineLiC(index)" :key='index'>
                       <div class="headline" style="font-size: 16px;color: #333744;width: 100%;">{{item.name}}111</div>
-                    </li>
+                    </li> -->
+                    <li style="list-style: inside;"><span>借款明细表增加保险费用金</span><span style="float:right;">2018.10.31
+                        12:18</span></li>
+                    <li style="list-style: inside;"><span>借款明细表增加保险费用金</span><span style="float:right;">2018.10.31
+                        12:18</span></li>
+
                   </ul>
                 </div>
-                <div style="float:left">
+                <!-- <div style="float:left">
                   b
-                </div>
-            </div>
+                </div> -->
+              </div>
             </div>
           </div>
         </el-col>
       </el-row>
     </div>
-
-    <!-- 日期记事本功能 -->
-
-
   </div>
 </template>
 <script>
@@ -465,28 +475,31 @@ export default {
     },
     MoreManagementTasks() {
       this.$router.push({
-        path: "demo2"
+        path: "Messagenotification"
       });
-      this.editableTabs2 = this.$store.state.editableTabs2;
-      this.editableTabs2.push({
-        title: "待办任务",
-        name: 6,
-        content: "demo2"
-      });
-      var arr = this.$store.state.editableTabs2;
-      var result = [];
-      var obj = {};
-      for (var i = 0; i < arr.length; i++) {
-        if (!obj[arr[i].name]) {
-          result.push(arr[i]);
-          obj[arr[i].name] = true;
-        }
-      }
-      this.$store.commit("SAVE_EDITABLETABS2", result);
+      // this.editableTabs2 = this.$store.state.editableTabs2;
+      // this.editableTabs2.push({
+      //   title: "消息",
+      //   name: 6,
+      //   content: "demo2"
+      // });
+      // var arr = this.$store.state.editableTabs2;
+      // var result = [];
+      // var obj = {};
+      // for (var i = 0; i < arr.length; i++) {
+      //   if (!obj[arr[i].name]) {
+      //     result.push(arr[i]);
+      //     obj[arr[i].name] = true;
+      //   }
+      // }
+      // this.$store.commit("SAVE_EDITABLETABS2", result);
     },
     handleClick(tab, event) {
       console.log(tab, event);
-    }
+    },
+    Diurnalinterface(){
+
+    }//日期接口
   }
 };
 </script>
@@ -494,6 +507,48 @@ export default {
 <style>
 #mainApp .is-active {
   background-color: #8bd0ff;
+}
+
+/* 日期功能区 */
+.grid-content .el-dialog__header {
+  background-color: #ededed !important;
+  padding: 0px 23px 0px !important;
+}
+
+.grid-content .el-dialog {
+  position: relative;
+  margin: 0 auto 50px;
+  background: #fff;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  width: 60% !important;
+}
+
+.grid-content .el-input {
+  position: relative;
+  font-size: 14px;
+  display: inline-block;
+  width: 90%;
+}
+
+.grid-content .el-textarea {
+  display: inline-block;
+  width: 90%;
+  vertical-align: bottom;
+  font-size: 14px;
+}
+
+.grid-content .el-dialog__footer {
+  padding: 10px 56px 20px;
+  text-align: right;
+  box-sizing: border-box;
+  border-top: 1px solid #cdc;
+}
+
+.grid-content textarea {
+  height: 200px;
 }
 
 /* 消息功能区 */
@@ -508,6 +563,7 @@ export default {
 .grid-content td.el-table_1_column_2 {
   text-align: right;
 }
+
 
 /* 任务功能区 */
 #mainApp .Agencytaskshu {
@@ -570,6 +626,7 @@ export default {
   border-radius: 10px 10px 0 0;
   border-bottom: 0;
 }
+
 #mainApp #tab-second {
   border: 1px solid #d5d5d5;
   border-radius: 10px 10px 0 0;
@@ -579,7 +636,7 @@ export default {
 #calender {
   overflow: auto;
   width: 90%;
-  margin-left: 33px;
+  margin-left: 20px;
 }
 
 #celender_head {
@@ -598,7 +655,7 @@ export default {
   height: 40px;
   width: 40px;
   float: left;
-  margin-left: 25%;
+  margin-left: 15%;
 }
 
 #celender_head_inner {
@@ -729,7 +786,7 @@ export default {
   font-size: inherit;
   height: 30px;
   line-height: 30px;
-  padding: 0 38px;
+  padding: 0 28px;
   width: 200px !important;
   background: white;
   border: 1px solid;
