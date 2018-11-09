@@ -48,7 +48,7 @@
         </div>
 
         <!--整体导航-->
-        <div style="margin: 16px;" class="OverallNavigation">
+        <div style="margin:21px 0 0 32px;" class="OverallNavigation">
           <!--图标-->
 
           <!-- <span class="el-dropdown-link" style="float: left;padding:3px 16px;height: 26px;display: inline-block;background: #3C404C;border-radius: 4px 4px 0 0;"
@@ -61,7 +61,7 @@
             <el-tab-pane v-for="option in $store.state.editableTabs2" :label="option.title" :name="option.content" :key="option.name"></el-tab-pane>
           </el-tabs>
         </div>
-        <router-view style="margin: 16px 30px;"></router-view>
+        <router-view style="margin: 0px 34px;"></router-view>
       </el-col>
       <!-- </div> -->
     </el-row>

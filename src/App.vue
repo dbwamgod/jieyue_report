@@ -24,13 +24,11 @@ export default {
 
   },
   created:function(){
-    Array.prototype.remove = function(val) {
-
+    Array.prototype.remove = function(val,key) {
       for( let i=0;i<this.length;i++) {
-        if (this[i]['id'] === val['id'] || this[i] == val) {
+        if (this[i][key] === val[key] || this[i] == val) {
           this.splice(i, 1);
         }
-
       }
     };
     Array.prototype.removeRepet = function() {
@@ -69,7 +67,7 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, fo
         font-size: 14px;
         font-family: "微软雅黑";
         overflow: auto;
-        background: #fff;
+        background:rgb(241, 242, 246);
     }
     .fl{
     	float:left;
@@ -80,6 +78,8 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, fo
     .abs{
     	position:absolute;
     }
+     .clearfloat:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+   .clearfloat{zoom:1}
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -89,8 +89,13 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, fo
         height: 100%;
     }
     .el-dialog__header{
-        background-color: #D8E2F1!important;
-        padding: 15px 20px 15px !important;
+        background-color: #EDEDED!important;
+        padding: 8px 15px  !important;
+    }
+    .el-dialog__header .el-dialog__title{
+        font-size: 16px;
+        color: #333744;
+        font-weight: 700;
     }
     .el-table thead{
         color: #0a2e5c!important;
@@ -165,6 +170,23 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, fo
       display: none!important;
     }
     .el-dialog__close{
-      display: none!important;
+      /* display: none!important; */
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .el-dialog__headerbtn{
+      top:11px;
+    }
+     .el-table td div{
+    	white-space: nowrap;
+    	overflow: hidden;
+    	text-overflow: ellipsis
+    }
+     .el-table__header th, .el-table__header tr {
+			background-color: #EDEDED !important;
+		}
+    .el-table{
+        color: #2D323A!important;
+        font-size:14px;
     }
 </style>
