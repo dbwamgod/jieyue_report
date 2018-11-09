@@ -18,9 +18,9 @@
           </div>
         </div>
         <div class='fr' style="border: 1px solid #14171A;height: 48px;"></div>
-        <div class='fr userOut' style="width:60px;margin: 0 10px;position: relative;" @click="Collection()">
+        <div class='fr userOut' style="width:60px;position: relative;" @click="Collection()">
           <span class="el-dropdown-link" style="color: rgba(135,157,227,0.40);font-size: 15px;">
-            收藏
+            <img :src="shoucang" alt="" style="margin-top: 16px;">
           </span>
           <div class="triangle_border_up" v-show="Collectiondisplay"><span></span></div>
           <div style="width:244px;background:white;position: absolute;top: 60px;right: -13px;border-radius: 7px;padding:10px;text-align: initial;"
@@ -35,9 +35,9 @@
           </div>
         </div>
         <div class='fr' style="border: 1px solid #14171A;height: 48px;"></div>
-        <div class='fr userOut' style="width:60px;margin: 0 10px;" @click="HomePage">
+        <div class='fr userOut' style="width:60px;" @click="HomePage">
           <span class="el-dropdown-link" style="color: rgba(135,157,227,0.40);font-size: 15px;">
-            回到主页
+            <img :src="fanhuishouye" alt="" style="margin-top: 15px;">
           </span>
         </div>
         <div class='fr' style="border: 1px solid #14171A;height: 48px;"></div>
@@ -82,7 +82,9 @@ export default {
       arr: [],
       pclogo: require("../assets/images/pclogo.png"),
       Signout: require("../assets/images/Signout.png"),
-      user: require("../assets/images/user.png")
+      user: require("../assets/images/user.png"),
+      shoucang:require("../assets/images/shoucang.png"),
+      fanhuishouye:require("../assets/images/icon-fanhuishouye.png")
     };
   },
   computed: {

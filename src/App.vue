@@ -7,21 +7,17 @@
 </template>
 
 <script>
-
 export default {
-  provide (){
+  provide() {
     return {
-      reload : this.reload
-    }
+      reload: this.reload
+    };
   },
-  name: 'App',
-  data(){
+  name: "App",
+  data() {
     return {
-      bock:true,
-    }
-  },
-  computed:{
-
+      bock: true
+    };
   },
   created:function(){
     Array.prototype.remove = function(val,key) {
@@ -32,26 +28,26 @@ export default {
       }
     };
     Array.prototype.removeRepet = function() {
-      let arr=this
-      let unique={};
-      arr.forEach((item)=>{
-       unique[JSON.stringify(item)]=item
-     });
+      let arr = this;
+      let unique = {};
+      arr.forEach(item => {
+        unique[JSON.stringify(item)] = item;
+      });
       arr = Object.keys(unique).map(data => {
-       return JSON.parse(data)
-     })
+        return JSON.parse(data);
+      });
       return arr;
-    }
+    };
   },
-  methods:{
-    reload (){
+  methods: {
+    reload() {
       this.bock = false;
-      this.$nextTick(function (){
-        this.bock = true ;
-      })
+      this.$nextTick(function() {
+        this.bock = true;
+      });
     }
   }
-}
+};
 </script>
 
 <style>

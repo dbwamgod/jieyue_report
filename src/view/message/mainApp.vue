@@ -72,15 +72,18 @@
                     <!-- <el-date-picker v-model="valueDate" type="date" placeholder="选择日期"></el-date-picker> -->
                     <el-date-picker v-model="valueDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
                   </div>
-                  <div style="float: left">标题：</div>
+                  <div>
+                     <div style="float: left">标题：</div>
                   <el-input placeholder="字数不能超过20个字符" v-model="inputTitle" clearable></el-input>
-                  <div style="float: left">标题：</div>
+                  </div>
+                 
+                  <div style="float: left">内容：</div>
                   <el-input type="textarea" :rows="2" placeholder="字数不能超过100个字符" v-model="textarea"></el-input>
                 </div>
 
                 <span slot="footer" class="dialog-footer">
                   <el-button @click="dialogVisible = false">取 消</el-button>
-                  <el-button type="primary" @click="dialogVisibleTextarea">保存</el-button>
+                  <el-button type="primary" @click="dialogVisibleTextarea();Diurnalinterface()">保存</el-button>
                 </span>
               </el-dialog>
             </div>
@@ -104,15 +107,19 @@
                       <tr class='head' style="color: #707070">
                         <td v-for="(head,index) in heads" :key='index'>{{head}}</td>
                       </tr>
-                      <tr v-for="(item,index) in show" :key='index'>
+                      <tr v-for="(item,index) in this.show" :key='index'>
                         <td :class="{now: item1.now, last_month:item1.attr == 'last_month',next_month:item1.attr == 'next_month'}"
                           v-for="(item1,index) in item " @click="showDate(item1,$event);" style="height: 28px;width: 28px;position: relative"
                           :key='index'>
 
                           <span>{{item1.num}}</span>
                           <!-- <span :style="[Memo_b.indexOf(item1.Memo_a) > -1? {color:'red'}: '' ] ">{{item1.num}}</span> -->
-                          <span :style=" [Memo_b.indexOf(item1.Memo_a) > -1? {background:'red'}: '' ]" style="width:3px;height:3px;position: absolute;left: 48%;bottom: 0;"></span>
-                          <!-- <div :style=" hongdianA?'hongdian':'hongdianB'"></div> -->
+                          <!-- <span :style=" [Memo_c.indexOf(item1.Memo_a) > -1? {background:'red'}: '' ]" 
+                            style="width:3px;height:3px;position: absolute;left: 48%;bottom: 0;" ></span> -->
+                              <span :style=" [Memo_c.indexOf(item1.Memo_a) > -1? {background:'red'}: '' ]"  
+                            style="width:3px;height:3px;position: absolute;left: 48%;bottom: 0;" ></span>
+                          <!-- {{Memo_b}}
+                          {{item1.Memo_a}} -->
                         </td>
                       </tr>
                     </table>
@@ -175,7 +182,24 @@ export default {
       hongdianA: false,
       headlines: [],
       valueDate: "",
-      Memo_b: [],
+      Memo_b: [
+        { a: "2018-11-01", b: "" },
+        { a: "2018-11-02", b: "" },
+        { a: "2018-11-03", b: "" },
+        { a: "2018-11-04", b: "" },
+        { a: "2018-11-05", b: "" },
+        { a: "2018-11-06", b: "" },
+        { a: "2018-11-07", b: "" },
+        { a: "2018-11-08", b: "" },
+        { a: "2018-11-09", b: "234" },
+        { a: "2018-11-10", b: "234" },
+        { a: "2018-11-11", b: "234" },
+        { a: "2018-11-12", b: "234" },
+        { a: "2018-11-13", b: "23424" }
+      ],
+      Memo_c: [],
+      Memo_d:[],
+      firstday1: "",
       tabsName: [
         {
           name: "待处理",
@@ -215,6 +239,9 @@ export default {
   },
   mounted() {
     this.setCalender(new Date());
+  },
+  created() {
+    this.Queryriqi();
   },
   methods: {
     ...mapActions(["saveDatal"]),
@@ -403,6 +430,7 @@ export default {
         }
         this.show.push(line);
       }
+      console.log(this.show);
     },
     showDate(index, e) {
       this.setCalender(new Date());
@@ -414,6 +442,8 @@ export default {
         this.currentMonth = this.currentMonth + 1;
       }
       this.currentDay = index.num;
+      console.log(index);
+      console.log(this.currentDay);
     }, //点击日期获取年月日--切換內容
     dialogVisibleTextarea(e) {
       this.setCalender(new Date());
@@ -423,23 +453,26 @@ export default {
       this.headlines.push({
         name: this.inputTitle
       });
-      this.textarea = "";
-      this.inputTitle = "";
-      // console.log(this.valueDate)
+
       //先获取日期 然后转一手 之后 赋值给Memo_b
       if (this.valueDate) {
-        var firstday;
-        var Memo_c;
-        var today = this.valueDate;
-        var yy = today.getFullYear();
-        this.currentYear = yy;
-        var mm = today.getMonth() + 1; //today=2;mm=3
-        this.currentMonth = mm - 1; //this.curr=2
-        var dd = today.getDate();
-        this.currentDay = dd; //30
-        firstday = yy + "-" + mm + "-" + dd; //2018-3-1
-        this.Memo_b.push(firstday);
-        console.log(firstday);
+        var d = new Date(this.valueDate);
+        this.firstday1 =
+          d.getFullYear() +
+          "-" +
+          (d.getMonth() + 1) +
+          "-" +
+          d.getDate() +
+          " " +
+          (d.getHours() > 9 ? d.getHours() : "0" + d.getHours()) +
+          ":" +
+          (d.getMinutes() > 9 ? d.getMinutes() : "0" + d.getMinutes()) +
+          ":" +
+          (d.getSeconds() > 9 ? d.getSeconds() : "0" + d.getSeconds());
+          var firstday = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+        // this.Memo_b.push(firstday);
+      } else {
+        this.firstday1 = "";
       }
     }, //控制点击确定之后状态
     headlineLiC(index) {
@@ -497,9 +530,50 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event);
     },
-    Diurnalinterface(){
-
-    }//日期接口
+    Diurnalinterface() {
+      // console.log(this.textarea);
+      // console.log(this.inputTitle);
+      // console.log(this.firstday);
+      this.$http
+        .post(api.notepadadd(), {
+          content: this.textarea,
+          eventData: this.firstday1,
+          masterNo: "01",
+          title: this.inputTitle
+        })
+        .then(res => {
+          this.ArrayData = res.data.data;
+        })
+        .catch(() => {});
+      this.textarea = "";
+      this.inputTitle = "";
+    }, //日期保存数据接口
+    Queryriqi() {
+      this.Memo_b.forEach(r => {
+        if (r.b) {
+          this.Memo_c.push(r.a);
+          // this.Memo_d.push(r.b);
+          // this.Memo_c.push({
+          //   data:r.a,
+          //   content:r.b
+          // })
+        }
+      });
+      console.log(this.Memo_c);
+      // this.$http
+      //   .post(api.notepadlist(), {
+      //     form: {},
+      //     pageIndex: 3,
+      //     pageSize: 2,
+      //     sort: "",
+      //     order: ""
+      //   })
+      //   .then(res => {
+      //     this.ArrayData = res.data.data;
+      //     console.log(this.ArrayData);
+      //   })
+      //   .catch(() => {});
+    }
   }
 };
 </script>
@@ -564,20 +638,19 @@ export default {
   text-align: right;
 }
 
-
 /* 任务功能区 */
 #mainApp .Agencytaskshu {
   padding: 5px;
   background-color: red;
   position: absolute;
   top: 8px;
-  left: 86px;
+  left: 103px;
   border-radius: 50%;
   z-index: 999;
 }
 
 #mainApp .Agencytask .el-tabs__item {
-  padding: 10px 10px !important;
+  padding: 10px 17px !important;
   height: 31px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
