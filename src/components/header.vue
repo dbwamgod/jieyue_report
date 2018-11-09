@@ -22,17 +22,8 @@
           <span class="el-dropdown-link" style="color: rgba(135,157,227,0.40);font-size: 15px;">
             <img :src="shoucang" alt="" style="margin-top: 16px;">
           </span>
-          <div class="triangle_border_up" v-show="Collectiondisplay"><span></span></div>
-          <div style="width:244px;background:white;position: absolute;top: 60px;right: -13px;border-radius: 7px;padding:10px;text-align: initial;"
-            v-show="Collectiondisplay">
-            <div>
-              <ul>
-                <li style="list-style: inside;color: black;"><span style="color:#707070;">借款明细表</span><span style="float:right;color:#707070;">2018.10.17</span></li>
-              </ul>
-            </div>
-            <div style="border:1px solid pink"></div>
-            <div style="margin-top:5px;"><span style="float:right;color:#4DA1FC;">更多...</span></div>
-          </div>
+          <div class="triangle_border_up" v-show="Collectiondisplay"></div>
+         
         </div>
         <div class='fr' style="border: 1px solid #14171A;height: 48px;"></div>
         <div class='fr userOut' style="width:60px;" @click="HomePage">
@@ -57,7 +48,19 @@
         </el-container>
       </div>
       <!-- 收藏功能 -->
-
+       <div style="width:244px;background:white;position: absolute;top: 60px;right: -13px;border-radius: 7px;padding:10px;text-align: initial;z-index: 999;"
+            v-show="Collectiondisplay">
+            <div>
+              <ul>
+                <li style="list-style: inside;color: black;" v-for="(item,index) in shoucangA" :key="index" @click="Collectionpage(item.url)">
+                  <span style="color:#707070;">{{item.name}}</span>
+                  <span style="float:right;color:#707070;">{{item.data}}</span>
+                  </li>
+              </ul>
+            </div>
+            <div style="border:1px solid pink"></div>
+            <div style="margin-top:5px;"><span style="float:right;color:#4DA1FC;">更多...</span></div>
+          </div>
     </div>
 
     <!--<ivd style="width: 100%;height: 40px;background:#1f283a;position: fixed;bottom: 0px;z-index: 999;">asdf</div>-->
@@ -83,8 +86,14 @@ export default {
       pclogo: require("../assets/images/pclogo.png"),
       Signout: require("../assets/images/Signout.png"),
       user: require("../assets/images/user.png"),
-      shoucang:require("../assets/images/shoucang.png"),
-      fanhuishouye:require("../assets/images/icon-fanhuishouye.png")
+      shoucang: require("../assets/images/shoucang.png"),
+      fanhuishouye: require("../assets/images/icon-fanhuishouye.png"),
+      shoucangA: [
+        { name: "借款明细表A", url: "reportIndex", data: "2018.10.16" },
+        { name: "借款明细表B", url: "demo", data: "2018.10.17" },
+        { name: "借款明细表C", url: "mainApp", data: "2018.10.18" }
+      ],
+      editableTabs2: []
     };
   },
   computed: {
@@ -136,6 +145,36 @@ export default {
     },
     Collection() {
       this.Collectiondisplay = !this.Collectiondisplay;
+    },
+    Collectionpage(url) {
+      console.log(url);
+      this.$router.push((name = url));
+      this.Collectiondisplay = !this.Collectiondisplay;
+      this.editableTabs2 = JSON.parse(localStorage.getItem("editableTabs2"));
+      console.log(this.editableTabs2.length)
+      if(this.editableTabs2.length== 0){
+        alert(2)
+        this.editableTabs2.push({
+                  title: "菜单借款明细表222",
+                  name: 4,
+                  content: "reportIndex"
+                });
+      }else{
+        alert(3)
+            this.editableTabs2.forEach((r) => {
+              alert(4)
+              if (r.content !== url) {
+                alert(5)
+                this.editableTabs2.push({
+                  title: "菜单借款明细表1111",
+                  name: 5,
+                  content: "demo"
+                });
+              }
+            });
+      }
+      console.log(this.editableTabs2);
+      this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
     }
   }
 };

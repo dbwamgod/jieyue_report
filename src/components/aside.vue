@@ -419,4 +419,13 @@ export default {
 #asideList .el-submenu .is-active {
   background: #2d65ad;
 }
+.el-submenu .is-active  .activeAfte{
+        width: 0;
+        height:0;
+        border:4px solid transparent;
+        border-left: 4px solid #8BD0FF;
+        position:absolute;
+        left:4px;
+        top:calc(50% - 4px);
+    }
 </style>

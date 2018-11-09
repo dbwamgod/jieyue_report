@@ -56,7 +56,7 @@
         </el-col>
         <!-- 日历 -->
         <el-col :span="12">
-          <div class="grid-content bg-purple" style="width:100%;height:465px;background:#EDEDED;border-radius: 10px;margin-left: 7px;">
+          <div class="grid-content bg-purple" style="width:100%;height:465px;background:#EDEDED;border-radius: 10px;margin-left: 7px;position: relative;">
             <!-- 头部 -->
             <div style="line-height:50px;padding:0 20px;position: relative;">
               <span><img :src="xiaoxitongzhi" alt="" style="vertical-align: sub;;margin-right:10px;"></span><span style="font-size:18px;font-weight: 700;">我的日程</span>
@@ -65,7 +65,7 @@
               </span>
               <el-dialog title="新建事件" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
                 <div style="position: absolute;top: 1px;right: 30px;width: 30px;height: 30px;color: #ccc;font-size: 20px;"
-                  @click="dialogVisible = false">X</div>
+                  @click="dialogVisible = false"></div>
                 <div class="demo-input-suffix">
                   <div class="block valueDate">
                     <div class="demonstration">日期：</div>
@@ -73,10 +73,10 @@
                     <el-date-picker v-model="valueDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
                   </div>
                   <div>
-                     <div style="float: left">标题：</div>
-                  <el-input placeholder="字数不能超过20个字符" v-model="inputTitle" clearable></el-input>
+                    <div style="float: left">标题：</div>
+                    <el-input placeholder="字数不能超过20个字符" v-model="inputTitle" clearable></el-input>
                   </div>
-                 
+
                   <div style="float: left">内容：</div>
                   <el-input type="textarea" :rows="2" placeholder="字数不能超过100个字符" v-model="textarea"></el-input>
                 </div>
@@ -96,7 +96,7 @@
                       <img :src="rilizuojiantou" alt="">
                     </div>
                     <div id="celender_head_inner" class="celender_head">
-                      <p style="font-size: 18px;">{{header}}</p>
+                      <p style="font-size: 18px;">{{dataheader}}</p>
                     </div>
                     <div id="right" class="celender_head" @click="right()">
                       <img :src="riliyoujiantou" alt="">
@@ -116,8 +116,7 @@
                           <!-- <span :style="[Memo_b.indexOf(item1.Memo_a) > -1? {color:'red'}: '' ] ">{{item1.num}}</span> -->
                           <!-- <span :style=" [Memo_c.indexOf(item1.Memo_a) > -1? {background:'red'}: '' ]" 
                             style="width:3px;height:3px;position: absolute;left: 48%;bottom: 0;" ></span> -->
-                              <span :style=" [Memo_c.indexOf(item1.Memo_a) > -1? {background:'red'}: '' ]"  
-                            style="width:3px;height:3px;position: absolute;left: 48%;bottom: 0;" ></span>
+                          <span :style=" [Memo_c.indexOf(item1.Memo_a) > -1? {background:'red'}: '' ]" style="width:3px;height:3px;position: absolute;left: 48%;bottom: 0;"></span>
                           <!-- {{Memo_b}}
                           {{item1.Memo_a}} -->
                         </td>
@@ -131,18 +130,20 @@
               </div>
               <!-- 显示日历内容 -->
               <div style="padding-top: 12px;border-top: 1px solid #ccc;">
-                <div>
-                  <ul>
+                <div style="height: 110px;overflow-y: auto;">
+                  <ul v-show="Memo_e.length>0">
                     <!-- <li class="headlineLi" style="padding-left: 23px;padding-right: 29px;line-height: 48px;height: 48px;"
                       v-for="(item,index) in headlines" @click="headlineLiC(index)" :key='index'>
                       <div class="headline" style="font-size: 16px;color: #333744;width: 100%;">{{item.name}}111</div>
                     </li> -->
-                    <li style="list-style: inside;"><span>借款明细表增加保险费用金</span><span style="float:right;">2018.10.31
-                        12:18</span></li>
-                    <li style="list-style: inside;"><span>借款明细表增加保险费用金</span><span style="float:right;">2018.10.31
-                        12:18</span></li>
-
+                    <li style="list-style: inside;"  v-for="(item,index) in this.Memo_e" :key="index">
+                      <span class="newslimit">{{item.content}}</span>
+                      <span style="float:right;">{{item.datas}}</span>
+                    </li>
                   </ul>
+                  <div v-show="Memo_e.length === 0">
+                    <span style="position: absolute;bottom: 13%;left: 43%;">暂无消息</span>
+                  </div>
                 </div>
                 <!-- <div style="float:left">
                   b
@@ -157,6 +158,7 @@
 </template>
 <script>
 import api from "../../api";
+let moment = require("moment");
 import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   data() {
@@ -167,7 +169,8 @@ export default {
       xinjianjishiben: require("../../assets/images/icon-xinjianjishiben.png"), //icon-xiaoxitongzhi
       xiaoxitongzhi: require("../../assets/images/icon-xiaoxitongzhi.png"),
       body: "",
-      header: "",
+      dataheader: "",
+      dataheaders: "",
       currentYear: "",
       currentMonth: "",
       currentDay: "",
@@ -182,23 +185,9 @@ export default {
       hongdianA: false,
       headlines: [],
       valueDate: "",
-      Memo_b: [
-        { a: "2018-11-01", b: "" },
-        { a: "2018-11-02", b: "" },
-        { a: "2018-11-03", b: "" },
-        { a: "2018-11-04", b: "" },
-        { a: "2018-11-05", b: "" },
-        { a: "2018-11-06", b: "" },
-        { a: "2018-11-07", b: "" },
-        { a: "2018-11-08", b: "" },
-        { a: "2018-11-09", b: "234" },
-        { a: "2018-11-10", b: "234" },
-        { a: "2018-11-11", b: "234" },
-        { a: "2018-11-12", b: "234" },
-        { a: "2018-11-13", b: "23424" }
-      ],
       Memo_c: [],
-      Memo_d:[],
+      Memo_d: [],
+      Memo_e: [],
       firstday1: "",
       tabsName: [
         {
@@ -231,16 +220,16 @@ export default {
       ],
       total: 12,
       editableTabs2: [],
-      activeName: "first"
+      activeName: "first",
+      currentdate: ""
     };
   },
   computed: {
     ...mapGetters(["hideheaderaside"])
   },
-  mounted() {
-    this.setCalender(new Date());
-  },
+  mounted() {},
   created() {
+    this.setCalender(new Date());
     this.Queryriqi();
   },
   methods: {
@@ -339,6 +328,8 @@ export default {
         this.currentYear = yy;
       }
       var calenderrDate = yy + "-" + mm + "-" + dd;
+      var calenderrDates = yy + "-" + (mm > 9 ? mm : "0" + mm);
+      this.dataheaders = calenderrDate;
       this.setCalender(new Date(calenderrDate));
     },
     right() {
@@ -356,6 +347,9 @@ export default {
         this.currentYear = yy;
       }
       var calender__Date = yy + "-" + mm + "-" + dd;
+      var calender__Dates = yy + "-" + (mm > 9 ? mm : "0" + mm);
+
+      this.dataheaders = calender__Dates;
       this.setCalender(new Date(calender__Date));
     },
     setCalender(dateNow) {
@@ -372,7 +366,8 @@ export default {
       //本月第一天是星期几,也表示前面有几个空的天数
       var firstday_day = new Date(firstday).getDay();
       //日历头
-      this.header = yy + "年" + mm + "月";
+      this.dataheader = yy + "年" + mm + "月";
+      this.dataheaders = yy + "-" + (mm > 9 ? mm : "0" + mm);
       var cur_days = this.getcurrentDates(today);
       //上一月有多少天
       var last_days = this.getlastDates(dateNow);
@@ -383,10 +378,10 @@ export default {
       for (var i = last_first_day; i <= last_days; i++) {
         var date = new Object();
         date.num = i;
-        date.Memo_a = yy + "-" + (mm == 1 ? 12 : mm - 1) + "-" + i;
+        date.Memo_a =
+          yy + "-" + (mm == 1 ? 12 : mm - 1) + "-" + (i > 9 ? i : "0" + i);
         date.attr = "last_month";
         date.now = false;
-        date.hongdian = false;
         this.datas.push(date);
       }
       //temp存放换行前上一个数据
@@ -396,7 +391,7 @@ export default {
       for (var i = 1; i <= cur_days; i++) {
         var date = new Object();
         date.num = i;
-        date.Memo_a = yy + "-" + mm + "-" + i;
+        date.Memo_a = yy + "-" + mm + "-" + (i > 9 ? i : "0" + i);
         date.attr = "this_month";
         if (
           i == this.currentDay &&
@@ -404,10 +399,8 @@ export default {
           this.currentYear == new Date().getFullYear()
         ) {
           date.now = true;
-          date.hongdian = true;
         } else {
           date.now = false;
-          date.hongdian = false;
         }
         this.datas.push(date);
       }
@@ -418,7 +411,8 @@ export default {
       ) {
         var date = new Object();
         date.num = i;
-        date.Memo_a = yy + "-" + (mm == 12 ? 1 : mm + 1) + "-" + i;
+        date.Memo_a =
+          yy + "-" + (mm == 12 ? 1 : mm + 1) + "-" + (i > 9 ? i : "0" + i);
         date.attr = "next_month";
         this.datas.push(date);
       }
@@ -430,7 +424,8 @@ export default {
         }
         this.show.push(line);
       }
-      console.log(this.show);
+
+      // console.log(this.show);
     },
     showDate(index, e) {
       this.setCalender(new Date());
@@ -442,8 +437,15 @@ export default {
         this.currentMonth = this.currentMonth + 1;
       }
       this.currentDay = index.num;
-      console.log(index);
-      console.log(this.currentDay);
+      this.Memo_e = [];
+      for (var i = 0; i < this.Memo_d.length; i++) {
+        if (index.Memo_a == this.Memo_d[i].data) {
+          this.Memo_e.push({
+            datas: this.Memo_d[i].datas,
+            content: this.Memo_d[i].content
+          });
+        }
+      }
     }, //点击日期获取年月日--切換內容
     dialogVisibleTextarea(e) {
       this.setCalender(new Date());
@@ -469,7 +471,8 @@ export default {
           (d.getMinutes() > 9 ? d.getMinutes() : "0" + d.getMinutes()) +
           ":" +
           (d.getSeconds() > 9 ? d.getSeconds() : "0" + d.getSeconds());
-          var firstday = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+        var firstday =
+          d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
         // this.Memo_b.push(firstday);
       } else {
         this.firstday1 = "";
@@ -549,32 +552,52 @@ export default {
       this.inputTitle = "";
     }, //日期保存数据接口
     Queryriqi() {
-      this.Memo_b.forEach(r => {
-        if (r.b) {
-          this.Memo_c.push(r.a);
-          // this.Memo_d.push(r.b);
-          // this.Memo_c.push({
-          //   data:r.a,
-          //   content:r.b
-          // })
-        }
-      });
-      console.log(this.Memo_c);
-      // this.$http
-      //   .post(api.notepadlist(), {
-      //     form: {},
-      //     pageIndex: 3,
-      //     pageSize: 2,
-      //     sort: "",
-      //     order: ""
-      //   })
-      //   .then(res => {
-      //     this.ArrayData = res.data.data;
-      //     console.log(this.ArrayData);
-      //   })
-      //   .catch(() => {});
+      this.$http
+        .post(api.notepadlist(), {
+          form: {
+            eventData: this.dataheaders,
+            formatter: "yyyy-MM-dd HH:mm:ss"
+          }
+        })
+        .then(res => {
+          this.ArrayData = res.data.data;
+          console.log(this.ArrayData)
+          this.ArrayData.forEach(r => {
+            if (r.eventData) {
+              this.Memo_c.push(r.eventData.substring(0, 10));
+              this.Memo_d.push({
+                data: r.eventData.substring(0, 10),
+                content: r.content,
+                datas: r.eventData
+              });
+            }
+          });
+          this.Memo_d.push({
+            data: "2029-09-09",
+            content: "11",
+            datas: "2019-09-09 00::00:00"
+          });
+          this.currentdate = moment().format("YYYY-MM-DD");
+
+          for (var i = 0; i < this.Memo_d.length; i++) {
+            if (this.currentdate == this.Memo_d[i].data) {
+              this.bbb = false;
+              this.Memo_e.push({
+                datas: this.Memo_d[i].datas,
+                content: this.Memo_d[i].content
+              });
+            }
+          }
+        })
+        .catch(() => {});
     }
-  }
+  },
+    watch: {
+    Memo_d: function (val, oldVal) {
+      console.log('new: %s, old: %s', val, oldVal)
+    },
+
+    }
 };
 </script>
 
@@ -582,7 +605,13 @@ export default {
 #mainApp .is-active {
   background-color: #8bd0ff;
 }
-
+.grid-content .newslimit {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 242px;
+  display: inline-block;
+}
 /* 日期功能区 */
 .grid-content .el-dialog__header {
   background-color: #ededed !important;
