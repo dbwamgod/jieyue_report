@@ -5,23 +5,24 @@ const _baseUrl = 'http://172.18.101.118:10000/'//开发库
 
 
 export default {
-    login(){//登录
+    //登录
+    login(){
       return _baseUrl +'mc-auth/auth/login'
     },
     /****简报***/
-    getnationwide(){//获取全国简报数据
-   		// return _baseUrl +'admin/briefing/list'
-      // return _baseUrl +'saasbi/manager/briefing/list'
-      return _baseUrl +'saasbi/report/briefing/list'
-    },
-    pdng(){//判断用户是全国还是大区 -- 侧边栏接口
+    pdng(){//判断用户是全国还是大区 -- 侧边栏接口  
       // return _baseUrl +'admin/menu/subject/list'
       // return _baseUrl +'saasbi/manager/menu/subject/list'
       return _baseUrl +'saasbi/report/menu/subject/list'
     },
-    xialak(){//获取大区数目
-      // return _baseUrl +'admin/org/child'
-      // return _baseUrl +'saasbi/manager/org/child'
-      return _baseUrl +'saasbi/report/org/child'
+    // 日历接口
+    // 添加接口  /notepad/list
+    notepadadd(){
+      return _baseUrl +'saasbi/report/notepad/add'
+    },
+    //查询接口
+    notepadlist(){
+      return _baseUrl +'saasbi/report/notepad/list'
     }
+ 
 }

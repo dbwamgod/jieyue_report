@@ -16,11 +16,17 @@
                 <!--第三层-->
                 <template slot="title" v-show='itema.name'>{{itema.name}}</template>
                 <el-menu-item-group v-for="(itemb,index) in itema.children" :index="itemb.id +''" :key="index">
-                  <el-menu-item :index="itemb.id+''" @click="gotoPath(itemb.url,itemb.id) ;addTab(editableTabsValue2,itemb.url,itemb.name,itemb.id)">{{itemb.name}}</el-menu-item>
+                  <el-menu-item :index="itemb.id+''" @click="gotoPath(itemb.url,itemb.id) ;addTab(editableTabsValue2,itemb.url,itemb.name,itemb.id)">
+                    <span class="activeAfte"></span>
+                    {{itemb.name}}
+                </el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <!--第二层-->
-              <el-menu-item v-if="itema.children == undefined " :index="itema.id+''" @click="gotoPath(itema.url,itema.id) ;addTab(editableTabsValue2,itema.url,itema.name,itema.id)" v-for="(itema,index) in item.children" :key="index">{{itema.name}}</el-menu-item>
+              <el-menu-item v-if="itema.children == undefined " :index="itema.id+''" @click="gotoPath(itema.url,itema.id) ;addTab(editableTabsValue2,itema.url,itema.name,itema.id)" v-for="(itema,index) in item.children" :key="index">
+                 <span class="activeAfte"></span>
+                {{itema.name}}
+              </el-menu-item>
             </el-submenu>
           </el-menu>
         </div>
@@ -107,6 +113,7 @@ export default {
   watch: {
     state_router() {
       this.defaultActive = this.state_router;
+      console.log(this.defaultActive);
     },
     CollectionNameLis: function() {
       this.CollectionNameLislength = this.CollectionNameLis.length;
@@ -185,6 +192,7 @@ export default {
       this.$router.push({
         path: address
       });
+      this.stateRouter(id);
       this.hackReset = false;
       this.$nextTick(() => {
         this.hackReset = true;
@@ -214,14 +222,10 @@ export default {
               content: d
             });
             this.tabName.push(c);
-            console.log(this.tabName.indexOf(c));
             this.editableTabsValue2 = newTabName;
             localStorage.setItem("Deletenavigationbar", "true");
             this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
             this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
-            console.log(
-              JSON.parse(localStorage.getItem("Savearray")).indexOf(c)
-            );
           } else {
             this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
           }
@@ -257,7 +261,6 @@ export default {
         });
       }
       this.editableTabsValue2 = activeName;
-      console.log(this.$store.state.editableTabs2.length);
       if (this.$store.state.editableTabs2.length == 1) {
         this.editableTabs2 = tabs.filter(tab => tab.content !== targetName);
         this.tabName = [];
@@ -271,7 +274,6 @@ export default {
         this.editableTabs2 = tabs.filter(tab => tab.content !== targetName);
         //遍历editableTabs2 找到id 添加进去
         this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
-
         this.tabName = this.editableTabs2.map(r => r.name);
         let pathInfo = this.editableTabs2[this.editableTabs2.length - 1]
           .content;
@@ -334,32 +336,13 @@ export default {
 }
 
 #asideList .aside .el-submenu__title:hover {
-  background-color: #1d62ac !important;
+  background-color: #3c404c !important;
 }
 
 #asideList .aside .el-menu-item:focus,
 #asideList .aside .el-menu-item:hover {
-  background-color: #1d62ac !important;
+  background-color: #2d65ad !important;
 }
-
-/* #asideList .is-active > .activeAfter {
-  width: 0;
-  height: 0;
-  border: 4px solid transparent;
-  border-left: 4px solid #8bd0ff;
-  position: absolute;
-  left: 4px;
-  top: calc(50% - 4px);
-} */
-
-/* #asideList .is-active::before {
-  content: "";
-  background-color: #8bd0ff;
-  width: 4px;
-  height: 40px;
-  position: absolute;
-  left: 0;
-} */
 
 #asideList .el-menu {
   position: relative;
@@ -425,5 +408,15 @@ export default {
   font-size: 20px;
   height: 22px;
   line-height: 22px;
+}
+#asideList .el-submenu .el-menu-item {
+  height: 50px;
+  line-height: 50px;
+  padding: 0 33px !important;
+  min-width: 200px;
+  /* background: #2d65ad; */
+}
+#asideList .el-submenu .is-active {
+  background: #2d65ad;
 }
 </style>
