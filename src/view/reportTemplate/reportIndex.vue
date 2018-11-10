@@ -30,7 +30,7 @@
         <el-row :gutter="10" style="padding-left:17px;border-size:border-box;">
           <el-col :span="20">
             <el-form :inline="true" :model="form" class="demo-form-inline">
-              <el-form-item v-for="(data, index) in screenList" :label="data.name">
+              <el-form-item v-for="(data, index) in screenList" :label="data.name" :key="index">
                 <el-input v-model="form[data.key]" placeholder="请输入内容" style="width:140px;" v-if="data.key=='input'" @change='inpoutChange'></el-input>
                 <el-date-picker v-model="form[data.key]" type="date" placeholder="选择日期" :value-format="'yyyy-MM-dd'" v-if="data.key=='date'" style="width:140px;">
                 </el-date-picker>
@@ -67,7 +67,7 @@
     <el-dialog title="筛选条件" :visible.sync="dialogVisible" width="850px" :before-close="handleClose">
       <div>
         <el-checkbox-group v-model="checkList">
-          <span v-for=" ( data, index) in checkboxList" style="display:inline-block;margin-right:30px; margin-bottom:20px; ">
+          <span v-for=" ( data, index) in checkboxList" style="display:inline-block;margin-right:30px; margin-bottom:20px;" :key="index">
             <el-checkbox :label="data.name" :key="index"></el-checkbox>
             <el-input placeholder="审批人" style="width:140px;margin-left:10px;" disabled v-if="data.key=='input'"></el-input>
             <el-date-picker type="date" placeholder="选择日期" disabled v-if="data.key=='date'" style="width:140px;margin-left:10px;">
@@ -111,7 +111,7 @@
               已选字段
             </el-col>
             <el-col :span="21">
-              <div class="wordDialog-selected" v-for="item in checkListWord">
+              <div class="wordDialog-selected" v-for="(item,index) in checkListWord" :key="index">
                 {{item}}
                 <i class="el-icon-error wordDialog-selected-delete" @click="handClickremove(item)"></i>
               </div>

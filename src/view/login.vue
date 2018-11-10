@@ -142,8 +142,10 @@ export default {
               axios.defaults.headers.common["Authorization"] = Authorization;
               this.$router.push({ path: "/saas/message/mainApp" });
               if (localStorage.removeItem("Deletenavigationbar")) {
-                localStorage.removeItem("Deletenavigationbar");
+                
+                localStorage.removeItem("Deletenavigationbar");  //editableTabs2
               }
+              // localStorage.setItem("editableTabs2",'');
             } else if (res.data.code == 407) {
               //被踢出登录，返回登录页
               this.$router.push("/Login");

@@ -22,7 +22,6 @@
           <span class="el-dropdown-link" style="color: rgba(135,157,227,0.40);font-size: 15px;">
             <img :src="shoucang" alt="" style="margin-top: 16px;">
           </span>
-          <div class="triangle_border_up" v-show="Collectiondisplay"></div>
          
         </div>
         <div class='fr' style="border: 1px solid #14171A;height: 48px;"></div>
@@ -48,11 +47,12 @@
         </el-container>
       </div>
       <!-- 收藏功能 -->
-       <div style="width:244px;background:white;position: absolute;top: 60px;right: -13px;border-radius: 7px;padding:10px;text-align: initial;z-index: 999;"
+       <div style="width:244px;background:white;position: absolute;top: 60px;right: 48px;border-radius: 7px;padding:10px;text-align: initial;z-index: 999;"
             v-show="Collectiondisplay">
+            <div class="triangle_border_up" v-show="Collectiondisplay"><span></span></div>
             <div>
               <ul>
-                <li style="list-style: inside;color: black;" v-for="(item,index) in shoucangA" :key="index" @click="Collectionpage(item.url)">
+                <li style="list-style: inside;color: black;" v-for="(item,index) in shoucangA" :key="index" @click="Collectionpage(item.url,item.name,item.id)">
                   <span style="color:#707070;">{{item.name}}</span>
                   <span style="float:right;color:#707070;">{{item.data}}</span>
                   </li>
@@ -71,7 +71,7 @@
 <script>
 import asides from "@/components/aside";
 // import bottoms from "@/components/footer";
-import { mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import api from "../api";
 export default {
   data() {
@@ -89,17 +89,24 @@ export default {
       shoucang: require("../assets/images/shoucang.png"),
       fanhuishouye: require("../assets/images/icon-fanhuishouye.png"),
       shoucangA: [
-        { name: "借款明细表A", url: "reportIndex", data: "2018.10.16" },
-        { name: "借款明细表B", url: "demo", data: "2018.10.17" },
-        { name: "借款明细表C", url: "mainApp", data: "2018.10.18" }
+        {
+          name: "菜单借款明细表",
+          url: "reportIndex",
+          data: "2018.10.16",
+          id: 4
+        },
+        { name: "菜单借款明细表A", url: "demo", data: "2018.10.17", id: 5 },
+        { name: "借款明细表C", url: "mainApp", data: "2018.10.18", id: 3 },
+        { name: "借款明细表D", url: "mainApp", data: "2018.10.18", id: 2 }
       ],
       editableTabs2: []
     };
   },
   computed: {
+    ...mapState(["state_router"]),
     ...mapGetters(["val", "hideheaderaside"])
   },
-  created: function() {
+  created() {
     if (localStorage.getItem("userName")) {
       this.name = localStorage.getItem("userName");
     }
@@ -115,6 +122,13 @@ export default {
     } else {
       this.lockScr = true;
       this.ArrayData = false;
+    }
+    // 刷新之后重新赋值
+    this.editableTabs2 = JSON.parse(localStorage.getItem("editableTabs2"));
+    console.log(this.editableTabs2);
+    if (this.editableTabs2) {
+      localStorage.setItem("Deletenavigationbar", "true");
+      this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
     }
   },
   components: {
@@ -146,37 +160,71 @@ export default {
     Collection() {
       this.Collectiondisplay = !this.Collectiondisplay;
     },
-    Collectionpage(url) {
-      console.log(url);
-      this.$router.push((name = url));
-      this.Collectiondisplay = !this.Collectiondisplay;
+    Collectionpage(url, names, id) {
       this.editableTabs2 = JSON.parse(localStorage.getItem("editableTabs2"));
-      console.log(this.editableTabs2.length)
-      if(this.editableTabs2.length== 0){
-        alert(2)
+      console.log(this.editableTabs2);
+      if (this.editableTabs2.length == 0) {
         this.editableTabs2.push({
-                  title: "菜单借款明细表222",
-                  name: 4,
-                  content: "reportIndex"
-                });
-      }else{
-        alert(3)
-            this.editableTabs2.forEach((r) => {
-              alert(4)
-              if (r.content !== url) {
-                alert(5)
-                this.editableTabs2.push({
-                  title: "菜单借款明细表1111",
-                  name: 5,
-                  content: "demo"
-                });
-              }
+          title: names,
+          name: id,
+          content: url
+        });
+        localStorage.setItem("Deletenavigationbar", "22");
+      } else {
+        console.log( this.editableTabs2)
+        var a = [];
+         this.editableTabs2.forEach(r=>{
+           a.push(r.content)
+         })
+
+         if(a.indexOf(url) == -1){
+           this.editableTabs2.push({
+              title: names,
+              name: id,
+              content: url
             });
+            localStorage.setItem("Deletenavigationbar", "true");
+         }
+        // for (var i = 0; i < this.editableTabs2.length; i++) {
+
+        //   if (this.editableTabs2[i].content == url) {
+        //     console.log(this.editableTabs2[i].content)
+        //     console.log(url)
+        //     alert(5);
+        //     return false;
+        //   } else {
+        //     this.editableTabs2.push({
+        //       title: names,
+        //       name: id,
+        //       content: url
+        //     });
+        //     localStorage.setItem("Deletenavigationbar", "true");
+        //   }
+        // }
+        
+        // this.editableTabs2.forEach((r) => {
+        //   alert(4)
+        //   console.log(r.content )
+        //   console.log(url)
+        //   console.log(r.content !== url)
+        //   if (r.content !== url) {
+        //     alert(5)
+        //     this.editableTabs2.push({
+        //       title: names,
+        //       name: id,
+        //       content:url
+        //     });
+        //      localStorage.setItem("Deletenavigationbar", "true");
+        //   }
+        // });
       }
+ this.$router.push((name = url));
+      this.Collectiondisplay = !this.Collectiondisplay;
       console.log(this.editableTabs2);
       this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
     }
-  }
+  },
+  watch: {}
 };
 </script>
 
@@ -207,12 +255,12 @@ export default {
 }
 .triangle_border_up {
   width: 0;
-  height: 0;
-  border-width: 0 30px 30px;
-  border-style: solid;
-  border-color: transparent transparent #333; /*透明 透明  灰*/
-  margin: 40px auto;
-  position: relative;
+    height: 0;
+    border-width: 0 9px 13px;
+    border-style: solid;
+    border-color: transparent transparent #fff;
+    margin: -5px auto;
+    position: relative;
 }
 .triangle_border_up span {
   display: block;
@@ -222,7 +270,7 @@ export default {
   border-style: solid;
   border-color: transparent transparent #fff;
   position: absolute;
-  top: -40px;
-  left: 0px;
+  top: -13px;
+  left: 98px;
 }
 </style>

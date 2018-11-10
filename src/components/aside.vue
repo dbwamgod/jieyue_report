@@ -32,7 +32,7 @@
         </div>
         <div v-show="!val" style="width:50px;height:100%;background:#3c404c;">
           <ul>
-            <li v-for="(item,index) in this.ArrayData" :key="index" style="padding-top:12px;">
+            <li v-for="(item,index) in this.ArrayData" :key="index" style="padding-top:12px;    padding-left: 15px;">
               <i :class=[item.icon]></i>
             </li>
           </ul>
@@ -63,13 +63,15 @@
             </span> -->
 
           <!--触发器-->
-          <el-tabs id="editableTabs" v-model="editableTabsValue2" type="card" @tab-click="tabsn" closable @tab-remove="removeTab" style="z-index: 999;height: 32px;" v-if="Deletenavigationbar">
+          <el-tabs id="editableTabs" v-model="editableTabsValue2" type="card" @tab-click="tabsn" closable 
+                  @tab-remove="removeTab" style="z-index: 999;height: 32px;" v-show="Deletenavigationbar">
             <el-tab-pane v-for="option in $store.state.editableTabs2" :label="option.title" :name="option.content" :key="option.name"></el-tab-pane>
           </el-tabs>
         </div>
         <router-view style="margin: 0px 34px;"></router-view>
       </el-col>
       <!-- </div> -->
+      
     </el-row>
   </div>
 </template>
@@ -103,7 +105,7 @@ export default {
       fanhuishouye: require("../assets/images/icon-fanhuishouye.png"), //小房子 icon-shouqizuocedaohang
       shouqizuocedaohang: require("../assets/images/icon-shouqizuocedaohang.png"), // icon-sousuo.png
       icon: [{ name: 1 }, { name: 1 }, { name: 1 }, { name: 1 }, { name: 1 }],
-      Deletenavigationbar: !!localStorage.getItem("Deletenavigationbar")
+      Deletenavigationbar: !!localStorage.getItem("Deletenavigationbar ")
     };
   },
   computed: {
@@ -113,7 +115,6 @@ export default {
   watch: {
     state_router() {
       this.defaultActive = this.state_router;
-      console.log(this.defaultActive);
     },
     CollectionNameLis: function() {
       this.CollectionNameLislength = this.CollectionNameLis.length;
@@ -121,10 +122,20 @@ export default {
     $route(to, from) {
       this.editableTabsValue2 = to.name;
       this.Deletenavigationbar = !!to.meta.isShowTabs;
+    },
+    Deletenavigationbar(news, old) {
+      if(old == 'true'){
+        this.Deletenavigationbar = true;
+      }
     }
   },
   beforeUpdate() {
     this.defaultActive = this.state_router;
+    if(JSON.parse(localStorage.getItem("editableTabs2")).length){
+        this.Deletenavigationbar = true;
+      }else{
+        this.Deletenavigationbar = false;
+      }
   },
   mounted() {},
   created() {
@@ -148,13 +159,34 @@ export default {
         {
           name: "菜单报表管理",
           id: 1,
-          url: "demo",
           icon: "baobiaogongneng",
           children: [
             {
               name: "菜单借款明细表",
               id: 4,
               url: "reportIndex"
+            },
+            {
+              name: "菜单借款明细表AAAA",
+              id: 5,
+              url: "Messagenotification"
+            }
+          ]
+        },
+        {
+          name: "菜单报表管理",
+          id: 2,
+          icon: "baobiaogongneng",
+          children: [
+            {
+              name: "菜单借款明细表B",
+              id: 6,
+              url: "demo"
+            },
+            {
+              name: "菜单借款明细表AAAAB",
+              id: 7,
+              url: "demo1"
             }
           ]
         }
@@ -223,11 +255,12 @@ export default {
             });
             this.tabName.push(c);
             this.editableTabsValue2 = newTabName;
-            localStorage.setItem("Deletenavigationbar", "true");
+            this.Deletenavigationbar = localStorage.getItem("Deletenavigationbar");
             this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
             this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
           } else {
             this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
+            this.Deletenavigationbar = localStorage.getItem("Deletenavigationbar");
           }
         } else {
           if (this.tabName.indexOf(c) == -1) {
@@ -238,14 +271,14 @@ export default {
               content: d
             });
             this.tabName.push(c);
-            console.log(this.tabName.indexOf(c));
             this.editableTabsValue2 = newTabName;
-            localStorage.setItem("Deletenavigationbar", "true");
+            this.Deletenavigationbar = localStorage.setItem("Deletenavigationbar", "true")||localStorage.getItem("Deletenavigationbar");
             this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
             this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
           }
         }
       }
+      console.log(this.editableTabs2.length)
     }, //点击侧边栏 添加在导航栏上
     removeTab(targetName) {
       let tabs = this.$store.state.editableTabs2;
@@ -271,12 +304,14 @@ export default {
         this.$store.commit("SAVE_EDITABLETABS3", []);
         return this.$router.push((name = "mainApp"));
       } else {
-        this.editableTabs2 = tabs.filter(tab => tab.content !== targetName);
+        if(tabs){
+          this.editableTabs2 = tabs.filter(tab => tab.content !== targetName);
+        }
         //遍历editableTabs2 找到id 添加进去
         this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
         this.tabName = this.editableTabs2.map(r => r.name);
-        let pathInfo = this.editableTabs2[this.editableTabs2.length - 1]
-          .content;
+        let pathInfo = this.editableTabs2[this.editableTabs2.length - 1].content;
+        console.log(pathInfo)
         this.$router.push({
           path: pathInfo
         });
@@ -419,13 +454,13 @@ export default {
 #asideList .el-submenu .is-active {
   background: #2d65ad;
 }
-.el-submenu .is-active  .activeAfte{
-        width: 0;
-        height:0;
-        border:4px solid transparent;
-        border-left: 4px solid #8BD0FF;
-        position:absolute;
-        left:4px;
-        top:calc(50% - 4px);
-    }
+.el-submenu .is-active .activeAfte {
+  width: 0;
+  height: 0;
+  border: 4px solid transparent;
+  border-left: 4px solid #8bd0ff;
+  position: absolute;
+  left: 4px;
+  top: calc(50% - 4px);
+}
 </style>

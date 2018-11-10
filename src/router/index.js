@@ -2,10 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router';
 import login from '@/view/login';
 import saas from '@/view/saasHT';
-
-
-// import nationwide from '../view/message/nationwideEcharts';
-// import regionEcharts from '../view/message/regionEcharts';
 import mainApp from '../view/message/mainApp'
 import demo from '../view/message/demo'
 import demo1 from '../view/message/demo1'

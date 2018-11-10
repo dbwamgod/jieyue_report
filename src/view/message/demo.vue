@@ -84,6 +84,7 @@
 
 <script>
   export default {
+    name: "demo",
     data (){
       return {
         body:'',header:'',currentYear:'',currentMonth:'',currentDay:'',
