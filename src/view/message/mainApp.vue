@@ -590,7 +590,6 @@
           })
           .then(res => {
             this.ArrayData = res.data.data;
-            // console.log(this.ArrayData)
             this.ArrayData.forEach(r => {
               if (r.eventData) {
                 this.Memo_c.push(r.eventData.substring(0, 10));
