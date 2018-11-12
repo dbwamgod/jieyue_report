@@ -17,24 +17,24 @@ export default {
     },
     // 日历接口
     // 添加接口  传参：content: this.textarea（内容）, eventData: this.firstday1（日期 yyyy-mm-dd）, masterNo: "01",title: this.inputTitle(标题)
-    notepadadd(){
+    notepadAdd(){
       return _baseUrl +'saasbi/report/notepad/add'
     },
     //查询接口  传参：  form: {eventData: this.dataheaders(日期 yyyy-mm),formatter: "yyyy-MM-dd HH:mm:ss"}
-    notepadlist(){
+    notepadList(){
       return _baseUrl +'saasbi/report/notepad/list'
     },
     // 收藏接口
     // 查询接口  传参：form: {}
-    userCollectlist(){
+    userCollectList(){
       return _baseUrl +'saasbi/report/userCollect/list'
     },
     // 添加接口 传参: collectionName :'菜单借款明细表',collectionUrl :'reportIndex',masterNo :'01'
-    userCollectadd(){
+    userCollectAdd(){
       return _baseUrl +'saasbi/report/userCollect/add'
     },
     // 删除接口 传参： 'datas':[id]  
-    userCollectremove(){
+    userCollectRemove(){
       return _baseUrl +'saasbi/report/userCollect/remove'
     },
  

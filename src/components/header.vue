@@ -11,14 +11,16 @@
         <div class="fl logo1" v-show="!val" style="cursor: pointer;line-height:50px;height:50px;width: 50px;">
           <img :src="logoshouqi" alt="" style="margin-left: -2px;margin-top: 10px;">
         </div>
-
+        <!-- 退出 -->
         <div class='fr userOut' style="margin-left: 17px;margin-right: 20px;position: relative;">
           <div @click="outLogin"  @mouseenter="outLoginenter()" @mouseleave="outLoginleave()">
             <img :src="Signout" style="vertical-align: sub;">
             <div style="background: white;position: absolute;top: 39px;right: -14px;width: 39px;line-height: 30px;color: black;border: 0.5px solid #c2c2c2 " v-show="this.outLogins">退出</div>
           </div>
         </div>
+
         <div class='fr' style="border: 1px solid #14171A;height: 48px;"></div>
+        <!-- 收藏 -->
         <div class='fr userOut' style="width:60px;position: relative;" @click="Collection()" @mouseenter="Collectionenter()" @mouseleave="Collectionleave()">
           <span class="el-dropdown-link" style="color: rgba(135,157,227,0.40);font-size: 15px;">
             <img :src="shoucangAA" alt="" style="margin-top: 16px;" v-show="!Collectiondisplay">
@@ -26,7 +28,9 @@
           </span>
           <div style="background: white;position: absolute;top: 39px;right: 9px;width: 40px;line-height: 30px;color: black;border: 0.5px solid #c2c2c2 " v-show="this.Collections">收藏</div>
         </div>
+
         <div class='fr' style="border: 1px solid #14171A;height: 48px;"></div>
+        <!-- 返回首页 -->
         <div class='fr userOut' style="width:60px;" @click="HomePage" @mouseenter="HomePageenter()" @mouseleave="HomePageleave()">
           <span class="el-dropdown-link" style="color: rgba(135,157,227,0.40);font-size: 15px;">
             <img :src="FrontpageclickA" alt="" style="margin-top: 15px;" v-show="shoucangboolen">
@@ -34,6 +38,7 @@
           </span>
           <div style="background: white;position: absolute;top: 39px;right: 125px;width: 40px;line-height: 30px;color: black;border: 0.5px solid #c2c2c2 " v-show="this.HomePages">首页</div>
         </div>
+
         <div class='fr' style="border: 1px solid #14171A;height: 48px;"></div>
         <!--用户名-->
         <div class='fr userOut' style="width:100px;margin-right: 10px;">
@@ -43,14 +48,14 @@
           </span>
         </div>
         <!-- ========================== -->
-        <div class='fr userOut' style="width:100px;margin-right: 10px;" @click="shoucangadd">
+        <div class='fr userOut' style="width:120px;margin-right: 10px;" @click="shoucangadd">
           <span class="el-dropdown-link" style="color: rgba(135,157,227,0.40);font-size: 15px;">
-            <span style="color: #BCC9DB">测试添加接口</span>
+            <span style="color: #BCC9DB">测试收藏添加接口</span>
           </span>
         </div>
-        <div class='fr userOut' style="width:100px;margin-right: 10px;" @click="shoucangdelete">
+        <div class='fr userOut' style="width:120px;margin-right: 10px;" @click="shoucangdelete">
           <span class="el-dropdown-link" style="color: rgba(135,157,227,0.40);font-size: 15px;">
-            <span style="color: #BCC9DB">测试删除接口</span>
+            <span style="color: #BCC9DB">测试收藏删除接口</span>
           </span>
         </div>
       </div>
@@ -62,7 +67,7 @@
         </el-container>
       </div>
       <!-- 收藏功能 -->
-      <div style="width:244px;background:white;position: absolute;top: 60px;right: 48px;border-radius: 7px;padding:12px;text-align: initial;z-index: 999;"
+      <div style="width:244px;background:white;position: absolute;top: 60px;right: 48px;border-radius: 7px;padding:12px;text-align: initial;z-index: 999;box-shadow: 0 2px 4px 0 rgba(190,190,190,0.50);"
         v-show="Collectiondisplay">
         <div class="triangle_border_up" v-show="Collectiondisplay"><span></span></div>
         <div v-show="this.shoucangAlength != 0">
@@ -273,7 +278,7 @@
       }, //收藏功能点击事件
       shoucangAs() {
         this.$http
-          .post(api.userCollectlist(), {
+          .post(api.userCollectList(), {
             form: {}
           })
           .then(res => {
@@ -293,7 +298,7 @@
       }, //收藏功能接口
       shoucangadd(){
         this.$http
-          .post(api.userCollectadd(), {
+          .post(api.userCollectAdd(), {
             collectionName :'菜单借款明细表',
             collectionUrl :'reportIndex',
             masterNo :'01'
@@ -311,9 +316,8 @@
             this.shoucangdeleteId = r.id;
           }
         })
-        console.log(this.shoucangdeleteId)
         this.$http
-          .post(api.userCollectremove(), {
+          .post(api.userCollectRemove(), {
            'datas':[this.shoucangdeleteId]
           })
           .then(res => {
