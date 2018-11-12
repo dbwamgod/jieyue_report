@@ -16,13 +16,26 @@ export default {
     return _baseUrl + 'saasbi/report/menu/subject/list'
   },
   // 日历接口
-  // 添加接口  /notepad/list
+  // 添加接口  传参：content: this.textarea（内容）, eventData: this.firstday1（日期 yyyy-mm-dd）, masterNo: "01",title: this.inputTitle(标题)
   notepadadd() {
     return _baseUrl + 'saasbi/report/notepad/add'
   },
-  //查询接口
+  //查询接口  传参：  form: {eventData: this.dataheaders(日期 yyyy-mm),formatter: "yyyy-MM-dd HH:mm:ss"}
   notepadlist() {
     return _baseUrl + 'saasbi/report/notepad/list'
+  },
+  // 收藏接口
+  // 查询接口  传参：form: {}
+  userCollectlist() {
+    return _baseUrl + 'saasbi/report/userCollect/list'
+  },
+  // 添加接口 传参: collectionName :'菜单借款明细表',collectionUrl :'reportIndex',masterNo :'01'
+  userCollectadd() {
+    return _baseUrl + 'saasbi/report/userCollect/add'
+  },
+  // 删除接口 传参： 'datas':[id]  
+  userCollectremove() {
+    return _baseUrl + 'saasbi/report/userCollect/remove'
   },
   //报表明细 （过滤条件 展示字段）获取
   reportRptFrame() {
@@ -52,5 +65,6 @@ export default {
   reportRptData() {
     return _baseUrl + 'saasbi/report/rpt/data'
   },
+
 
 }

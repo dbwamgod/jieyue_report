@@ -32,12 +32,12 @@
       <div class="show-screen-list">
         <el-row :gutter="10" style="padding-left:17px;border-size:border-box;">
           <el-col :span="20">
-            <el-form :inline="true" :model="form" class="demo-form-inline" >
+            <el-form :inline="true" :model="form" class="demo-form-inline">
               <el-form-item v-for="(data, index) in screenList" :label="data.name+'：'" style="margin-right:30px;">
                 <el-input v-model="form[data.key]" placeholder="请输入内容" style="width:140px;" v-if="data.key=='input'" @change='inpoutChange'></el-input>
                 <el-date-picker v-model="form[data.key]" type="date" placeholder="选择日期" :value-format="'yyyy-MM-dd'" v-if="data.key=='date'" style="width:140px;">
                 </el-date-picker>
-                <el-date-picker v-model="form[data.key]" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-if="data.key=='submit'" :value-format="'yyyy-MM-dd'"  style="width:240px;">
+                <el-date-picker v-model="form[data.key]" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-if="data.key=='submit'" :value-format="'yyyy-MM-dd'" style="width:240px;">
                 </el-date-picker>
               </el-form-item>
               <p v-if="!screenList.length" style="height:40px;"></p>
@@ -53,7 +53,6 @@
     </div>
 
     <div class="report-content-table">
-
       <el-table :data="tableData" style="width: 100%">
         <el-table-column label="序号" type="index" width="60" align="center">
         </el-table-column>
@@ -70,7 +69,7 @@
     <el-dialog title="筛选条件" :visible.sync="dialogVisible" width="850px" :before-close="handleClose">
       <div>
         <el-checkbox-group v-model="checkList">
-          <span v-for=" ( data, index) in checkboxList" style="display:inline-block;margin-right:30px; margin-bottom:20px; ">
+          <span v-for=" ( data, index) in checkboxList" style="display:inline-block;margin-right:30px; margin-bottom:20px;" :key="index">
             <el-checkbox :label="data.name" :key="index"></el-checkbox>
             <el-input placeholder="审批人" style="width:140px;margin-left:10px;" disabled v-if="data.key=='input'"></el-input>
             <el-date-picker type="date" placeholder="选择日期" disabled v-if="data.key=='date'" style="width:140px;margin-left:10px;">
@@ -114,7 +113,7 @@
               已选字段
             </el-col>
             <el-col :span="21">
-              <div class="wordDialog-selected" v-for="item in checkListWord">
+              <div class="wordDialog-selected" v-for="(item,index) in checkListWord" :key="index">
                 {{item}}
                 <i class="el-icon-error wordDialog-selected-delete" @click="handClickremove(item)"></i>
               </div>
@@ -144,7 +143,7 @@
 </template>
  <script>
 import Vmodel from "@/view/reportTemplate/Vmodel";
-import api from '@/api'
+import api from "@/api";
 export default {
   name: "reportIndex",
   data() {
@@ -156,10 +155,10 @@ export default {
       wordDialogScreen: "",
       checkedAllScreen: false,
       form: {},
-      screenList: [],//筛选条件页面展示集合
-      checkList: [],//弹框筛选条件集合
-      checkListWord: [],//弹框已选字段展示
-      checkListWordConfirm:[],
+      screenList: [], //筛选条件页面展示集合
+      checkList: [], //弹框筛选条件集合
+      checkListWord: [], //弹框已选字段展示
+      checkListWordConfirm: [],
       checkListWordShow: [
         { name: "1" },
         { name: "2" },
@@ -197,11 +196,13 @@ export default {
     Vmodel
   },
   created() {
-    this.init()
+    this.init();
   },
-  computed:{
+  computed: {
     checkListWordShowF() {
-       return this.wordDialogScreen ? this.checkListWordShow.filter(r=>r.name===this.wordDialogScreen): this.checkListWordShow
+      return this.wordDialogScreen
+        ? this.checkListWordShow.filter(r => r.name === this.wordDialogScreen)
+        : this.checkListWordShow;
     }
   },
   watch: {
@@ -221,13 +222,14 @@ export default {
       //  }).then(res=>{
       //    console.log(res)
       //    })
-       this.$http.post(api.reportRptFilterList(),{
-         masterNo:'06',
-         reportCode:'RPT_LN_LEND_DTL_RPT',
-         
-       }).then(res=>{
-         console.log(res)
-         })
+      this.$http
+        .post(api.reportRptFilterList(), {
+          masterNo: "06",
+          reportCode: "RPT_LN_LEND_DTL_RPT"
+        })
+        .then(res => {
+          console.log(res);
+        });
     },
     handClick() {
       this.screenList = this.checkList.map(r => {
@@ -252,12 +254,12 @@ export default {
       this.dialogVisible = false;
     },
     handClickWord() {
-      console.log('checkListWord', this.checkListWord)
-      this.checkListWordConfirm=this.checkListWord
+      console.log("checkListWord", this.checkListWord);
+      this.checkListWordConfirm = this.checkListWord;
       this.dialogVisibleWord = false;
     },
     handClickWordCancel() {
-      console.log('checkListWord', this.checkListWordConfirm)
+      console.log("checkListWord", this.checkListWordConfirm);
       this.dialogVisibleWord = false;
     },
     handSubmit() {
@@ -269,10 +271,10 @@ export default {
       console.log("2222");
     },
     handClickScreen() {
-      this.checkList = this.screenList.map(item=>{
-        return item.name
-      })
-      console.log('',this.checkList)
+      this.checkList = this.screenList.map(item => {
+        return item.name;
+      });
+      console.log("", this.checkList);
       this.dialogVisible = true;
     },
     handleCloseWord() {
@@ -298,6 +300,12 @@ export default {
   }
 };
 </script>
+ <style >
+.report-content-table .el-table__header th,
+.report-content-table .el-table__header tr {
+  background-color: #ededed !important;
+}
+</style>
  
  <style lang="less" scoped>
 #report-index {
@@ -333,7 +341,7 @@ export default {
           img {
             width: 5px;
             height: 8px;
-            margin-left:10px;
+            margin-left: 10px;
             // background:url(../../assets/images/password.png) no-repeat ;
           }
         }

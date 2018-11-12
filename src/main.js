@@ -11,6 +11,7 @@ import CryptoJS from 'crypto-js'
 import 'element-ui/lib/theme-chalk/index.css'
 import Axios from '@/utils/diyaxios'
 import common from '@/common/common.js'
+import moment from 'moment'
 
 import LazyRender from 'vue-lazy-render'
 Vue.use(LazyRender)
