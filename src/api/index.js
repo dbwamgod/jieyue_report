@@ -23,6 +23,19 @@ export default {
     //查询接口
     notepadlist(){
       return _baseUrl +'saasbi/report/notepad/list'
-    }
+    },
+    // 收藏接口
+    // 查询接口
+    userCollectlist(){
+      return _baseUrl +'saasbi/report/userCollect/list'
+    },
+    // 添加接口
+    userCollectadd(){
+      return _baseUrl +'saasbi/report/userCollect/add'
+    },
+    // 删除接口
+    userCollectremove(){
+      return _baseUrl +'saasbi/report/userCollect/remove'
+    },
  
 }

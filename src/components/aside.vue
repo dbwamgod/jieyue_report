@@ -167,7 +167,7 @@ export default {
               url: "reportIndex"
             },
             {
-              name: "菜单借款明细表AAAA",
+              name: "菜单借款明细表AA",
               id: 5,
               url: "Messagenotification"
             }
@@ -184,7 +184,7 @@ export default {
               url: "demo"
             },
             {
-              name: "菜单借款明细表AAAAB",
+              name: "菜单借款明细表AAB",
               id: 7,
               url: "demo1"
             }
@@ -278,7 +278,6 @@ export default {
           }
         }
       }
-      console.log(this.editableTabs2.length)
     }, //点击侧边栏 添加在导航栏上
     removeTab(targetName) {
       let tabs = this.$store.state.editableTabs2;
