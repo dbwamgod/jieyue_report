@@ -1,4 +1,4 @@
- // const _baseUrl = "http://bi.jieyuechina.com/api/" //正式环境
+// const _baseUrl = "http://bi.jieyuechina.com/api/" //正式环境
 // const _baseUrl = 'http://172.18.101.112:10000/'//测试库
 const _baseUrl = 'http://172.18.101.118:10000/'//开发库
 //const _baseUrl = 'http://172.18.101.111:10000/'//内部正式环境
@@ -38,4 +38,5 @@ export default {
       return _baseUrl +'saasbi/report/userCollect/remove'
     },
  
+
 }
