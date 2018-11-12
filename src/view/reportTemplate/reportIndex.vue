@@ -37,7 +37,7 @@
                 <el-input v-model="form[data.key]" placeholder="请输入内容" style="width:140px;" v-if="data.key=='input'" @change='inpoutChange'></el-input>
                 <el-date-picker v-model="form[data.key]" type="date" placeholder="选择日期" :value-format="'yyyy-MM-dd'" v-if="data.key=='date'" style="width:140px;">
                 </el-date-picker>
-                <el-date-picker v-model="form[data.key]" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-if="data.key=='submit'" style="width:240px;">
+                <el-date-picker v-model="form[data.key]" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-if="data.key=='submit'" :value-format="'yyyy-MM-dd'"  style="width:240px;">
                 </el-date-picker>
               </el-form-item>
               <p v-if="!screenList.length" style="height:40px;"></p>
@@ -124,7 +124,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisibleWord = false">取消</el-button>
+        <el-button @click="handClickWordCancel">取消</el-button>
         <el-button type="primary" @click="handClickWord">确定</el-button>
       </span>
     </el-dialog>
@@ -159,6 +159,7 @@ export default {
       screenList: [],//筛选条件页面展示集合
       checkList: [],//弹框筛选条件集合
       checkListWord: [],//弹框已选字段展示
+      checkListWordConfirm:[],
       checkListWordShow: [
         { name: "1" },
         { name: "2" },
@@ -214,9 +215,16 @@ export default {
   },
   methods: {
     init() {
-       this.$http.post(api.reportRptFrame(),{
+      //  this.$http.post(api.reportRptFrame(),{
+      //    masterNo:'06',
+      //    reportCode:'ASP10021'
+      //  }).then(res=>{
+      //    console.log(res)
+      //    })
+       this.$http.post(api.reportRptFilterList(),{
          masterNo:'06',
-         reportCode:'ASP10021'
+         reportCode:'RPT_LN_LEND_DTL_RPT',
+         
        }).then(res=>{
          console.log(res)
          })
@@ -245,6 +253,11 @@ export default {
     },
     handClickWord() {
       console.log('checkListWord', this.checkListWord)
+      this.checkListWordConfirm=this.checkListWord
+      this.dialogVisibleWord = false;
+    },
+    handClickWordCancel() {
+      console.log('checkListWord', this.checkListWordConfirm)
       this.dialogVisibleWord = false;
     },
     handSubmit() {
@@ -256,12 +269,17 @@ export default {
       console.log("2222");
     },
     handClickScreen() {
+      this.checkList = this.screenList.map(item=>{
+        return item.name
+      })
+      console.log('',this.checkList)
       this.dialogVisible = true;
     },
     handleCloseWord() {
       this.dialogVisibleWord = false;
     },
     handClickShowWord() {
+      this.checkListWord = this.checkListWordConfirm;
       this.dialogVisibleWord = true;
     },
     changeAllScreen(data) {
