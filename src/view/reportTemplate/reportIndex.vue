@@ -6,10 +6,11 @@
         <div class="screen-left">
           <div class="screen-left-item" @click="handClickScreen">
             <span>筛选条件</span>
-            <img :src="require('@/assets/images/Signout.png')" alt="">
+            <img :src="require('@/assets/images/tanchu.png')" alt="">
           </div>
           <div class="screen-left-item" @click="handClickShowWord">
             <span>字段展示</span>
+            <img :src="require('@/assets/images/tanchu.png')" alt="">
           </div>
         </div>
         <div class="screen-right">
@@ -31,8 +32,8 @@
       <div class="show-screen-list">
         <el-row :gutter="10" style="padding-left:17px;border-size:border-box;">
           <el-col :span="20">
-            <el-form :inline="true" :model="form" class="demo-form-inline">
-              <el-form-item v-for="(data, index) in screenList" :label="data.name">
+            <el-form :inline="true" :model="form" class="demo-form-inline" >
+              <el-form-item v-for="(data, index) in screenList" :label="data.name+'：'" style="margin-right:30px;">
                 <el-input v-model="form[data.key]" placeholder="请输入内容" style="width:140px;" v-if="data.key=='input'" @change='inpoutChange'></el-input>
                 <el-date-picker v-model="form[data.key]" type="date" placeholder="选择日期" :value-format="'yyyy-MM-dd'" v-if="data.key=='date'" style="width:140px;">
                 </el-date-picker>
@@ -312,9 +313,9 @@ export default {
             border-color: #3a96f2;
           }
           img {
-            vertical-align: middle;
-            width: 8px;
+            width: 5px;
             height: 8px;
+            margin-left:10px;
             // background:url(../../assets/images/password.png) no-repeat ;
           }
         }
