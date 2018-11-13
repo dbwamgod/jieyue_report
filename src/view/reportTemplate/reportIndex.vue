@@ -22,7 +22,7 @@
             <img :src="require('@/assets/images/downloadIcon.png')" alt="">
           </div>
           <div class="screen-right-item">
-            <img :src="require('@/assets/images/quanping.png')" alt="">
+            <img :src="require('@/assets/images/quanping.png')" alt="" @click="fullScreenMode ">
             <img :src="require('@/assets/images/biaoshouqi.png')" alt="" v-if="false">
           </div>
 
@@ -80,7 +80,7 @@
         </el-checkbox-group>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">重置</el-button>
+        <el-button @click="handleReset">重置</el-button>
         <el-button type="primary" @click="handClick">确定</el-button>
       </span>
     </el-dialog>
@@ -197,6 +197,12 @@ export default {
   },
   created() {
     this.init();
+    let a = JSON.parse(
+      '[{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"}]'
+    );
+    console.log(a);
+    let b = JSON.stringify();
+    console.log(b);
   },
   computed: {
     checkListWordShowF() {
@@ -268,12 +274,12 @@ export default {
     inpoutChange() {},
     handleClose() {
       this.dialogVisible = false;
-      console.log("2222");
+    },
+    handleReset() {
+      this.checkList = [];
     },
     handClickScreen() {
-      this.checkList = this.screenList.map(item => {
-        return item.name;
-      });
+      this.checkList = this.screenList.map(item => item.name);
       console.log("", this.checkList);
       this.dialogVisible = true;
     },
@@ -296,6 +302,11 @@ export default {
     handClickremove(data) {
       let index = this.checkListWord.indexOf(data);
       this.checkListWord.splice(index, 1);
+    },
+    fullScreenMode() {
+      // this.$store.commit("SAVE_EDITABLETABS2", result);
+      this.$store.state.SAVE_EDITABLETABS2=true;
+      console.log(this.$store.state)
     }
   }
 };
