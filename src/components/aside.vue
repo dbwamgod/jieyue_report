@@ -431,7 +431,8 @@ export default {
   background: #8b8b8b;
   color: #fff;
   font-size: 16px;
-  border-radius: 15px 15px 0 0;
+  border-radius: 8px 8px 0 0;
+  padding:0 11px;
 }
 #editableTabs > .el-tabs__header .el-tabs__item .el-icon-close {
   width: 22px;

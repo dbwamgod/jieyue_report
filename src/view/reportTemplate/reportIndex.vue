@@ -15,6 +15,9 @@
         </div>
         <div class="screen-right">
           <div class="screen-right-item">
+            <img :src="require('@/assets/images/detail.png')" alt="">
+          </div>
+          <div class="screen-right-item">
             <img :src="require('@/assets/images/collectionIconhide.png')" alt="" v-if="false">
             <img :src="require('@/assets/images/collectionIcon.png')" alt="">
           </div>
@@ -202,12 +205,12 @@ export default {
   },
   created() {
     this.init();
-    let a = JSON.parse(
-      '[{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"}]'
-    );
-    console.log(a);
-    let b = JSON.stringify();
-    console.log(b);
+    // let a = JSON.parse(
+    //   '[{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"}]'
+    // );
+    // console.log(a);
+    // let b = JSON.stringify();
+    // console.log(b);
   },
   computed: {
     checkListWordShowF() {
@@ -240,10 +243,18 @@ export default {
       this.$http
         .post(api.reportRptFilterList(), {
           masterNo: "06",
-          reportCode: "RPT_LN_LEND_DTL_RPT"
+          reportCode: "ASP10021"
         })
         .then(res => {
           console.log(res);
+        });
+      this.$http
+        .post(api.reportRptInfo(), {
+          masterNo: "01",
+          reportCode: "RPT_LN_LEND_DTL_RPT"
+        })
+        .then(res => {
+          console.log('reportRptInfo',res);
         });
     },
     handClick() {
