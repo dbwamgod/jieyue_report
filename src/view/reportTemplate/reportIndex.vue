@@ -22,8 +22,8 @@
             <img :src="require('@/assets/images/downloadIcon.png')" alt="">
           </div>
           <div class="screen-right-item">
-            <img :src="require('@/assets/images/quanping.png')" alt="" @click="fullScreenMode ">
-            <img :src="require('@/assets/images/biaoshouqi.png')" alt="" v-if="false">
+            <img :src="require('@/assets/images/quanping.png')" alt="" @click="handleFullScreen(false)" v-if="$store.state.hideheaderaside">
+            <img :src="require('@/assets/images/biaoshouqi.png')" alt="" @click="handleFullScreen(true)" v-if="!$store.state.hideheaderaside">
           </div>
 
         </div>
@@ -144,6 +144,11 @@
  <script>
 import Vmodel from "@/view/reportTemplate/Vmodel";
 import api from "@/api";
+  import {
+    mapState,
+    mapActions,
+    mapGetters
+  } from "vuex";
 export default {
   name: "reportIndex",
   data() {
@@ -209,7 +214,8 @@ export default {
       return this.wordDialogScreen
         ? this.checkListWordShow.filter(r => r.name === this.wordDialogScreen)
         : this.checkListWordShow;
-    }
+    },
+    ...mapGetters(["hideheaderaside"])
   },
   watch: {
     checkListWord(newData) {
@@ -221,6 +227,9 @@ export default {
     }
   },
   methods: {
+      handleFullScreen(type) {
+        this.$store.state.hideheaderaside=type;
+      }, //图标--全屏显示
     init() {
       //  this.$http.post(api.reportRptFrame(),{
       //    masterNo:'06',
@@ -302,11 +311,6 @@ export default {
     handClickremove(data) {
       let index = this.checkListWord.indexOf(data);
       this.checkListWord.splice(index, 1);
-    },
-    fullScreenMode() {
-      // this.$store.commit("SAVE_EDITABLETABS2", result);
-      this.$store.state.SAVE_EDITABLETABS2=true;
-      console.log(this.$store.state)
     }
   }
 };

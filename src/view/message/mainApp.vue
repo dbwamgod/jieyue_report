@@ -11,7 +11,7 @@
                   <div style="background:white;height:317px;">
                     <div style="margin-left: 42%;padding-top: 45px;">
                       <div><img :src="dontopen" alt=""></div>
-                      <p style="font-size:16px;color:#54657E;margin-left:13px;margin-top: 18px;letter-spacing: 3px;">暂未开放，敬请期待…</p>
+                      <p style="font-size:16px;color:#54657E;margin-left:48px;margin-top: 18px;letter-spacing: 3px;">暂无数据…</p>
                     </div>
                     <!-- <div style="margin:0px auto;background:red;width:200px;height:200px;"></div> -->
                   </div>
@@ -26,14 +26,14 @@
                   <div style="background:white;height:317px;">
                     <div style="margin-left: 42%;padding-top: 45px;">
                       <div><img :src="dontopen" alt=""></div>
-                      <p style="font-size:16px;color:#54657E;margin-left:13px;margin-top: 18px;letter-spacing: 3px;">暂未开放，敬请期待…</p>
+                      <p style="font-size:16px;color:#54657E;margin-left:48px;margin-top: 18px;letter-spacing: 3px;">暂无数据…</p>
                     </div>
                     <!-- <div style="margin:0px auto;background:red;width:200px;height:200px;"></div> -->
                   </div>
                 </el-tab-pane>
               </el-tabs>
               <div class="Agencytaskshu"></div>
-              <div class="Agencytaskmore" @click="MoreManagementTasks">更多</div>
+              <div class="Agencytaskmore" @click="handleFullScreen">更多</div>
             </div>
             <!-- <div style="width:90px;height:90px;background:pink;float:right;" @click="handleFullScreen"></div> -->
           </div>
@@ -567,7 +567,7 @@
         // console.log(this.inputTitle);
         // console.log(this.firstday);
         this.$http
-          .post(api.notepadadd(), {
+          .post(api.notepadAdd(), {
             content: this.textarea,
             eventData: this.firstday1,
             masterNo: "01",
@@ -582,7 +582,7 @@
       }, //日期保存数据接口
       Queryriqi() {
         this.$http
-          .post(api.notepadlist(), {
+          .post(api.notepadList(), {
             form: {
               eventData: this.dataheaders,
               formatter: "yyyy-MM-dd HH:mm:ss"
@@ -633,7 +633,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 242px;
+    width:60%;
     display: inline-block;
   }
 
@@ -772,7 +772,7 @@
   #calender {
     overflow: auto;
     width: 90%;
-    margin-left: 20px;
+    margin: 0 auto;
   }
 
   #celender_head {
@@ -791,7 +791,7 @@
     height: 40px;
     width: 40px;
     float: left;
-    margin-left: 15%;
+    margin-left: 23%;
   }
 
   #celender_head_inner {
