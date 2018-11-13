@@ -281,10 +281,10 @@ tr:first-of-type td:first-of-type {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.el-table__header th,
+/* .el-table__header th,
 .el-table__header tr {
-  /* background-color: #ededed !important; */
-}
+  background-color: #ededed !important;
+} */
 .el-table {
   color: #2d323a !important;
   font-size: 14px;

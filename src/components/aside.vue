@@ -30,9 +30,10 @@
             </el-submenu>
           </el-menu>
         </div>
+        <!-- 收起之后的样式 -->
         <div v-show="!val" style="width:50px;height:100%;background:#3c404c;">
           <ul>
-            <li v-for="(item,index) in this.ArrayData" :key="index" style="padding-top:12px;    padding-left: 15px;">
+            <li v-for="(item,index) in this.ArrayData" :key="index" style="padding-top:12px;padding-left: 15px;">
               <i :class=[item.icon]></i>
             </li>
           </ul>
@@ -166,11 +167,6 @@ export default {
               id: 4,
               url: "reportIndex"
             },
-            {
-              name: "菜单借款明细表AA",
-              id: 5,
-              url: "Messagenotification"
-            }
           ]
         },
         {

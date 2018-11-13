@@ -22,8 +22,8 @@
             <img :src="require('@/assets/images/downloadIcon.png')" alt="">
           </div>
           <div class="screen-right-item">
-            <img :src="require('@/assets/images/quanping.png')" alt="">
-            <img :src="require('@/assets/images/biaoshouqi.png')" alt="" v-if="false">
+            <img :src="require('@/assets/images/quanping.png')" alt="" @click="handleFullScreen">
+            <img :src="require('@/assets/images/biaoshouqi.png')" alt="" @click="handleFullScreen" v-if="false">
           </div>
 
         </div>
@@ -32,13 +32,12 @@
       <div class="show-screen-list">
         <el-row :gutter="10" style="padding-left:17px;border-size:border-box;">
           <el-col :span="20">
-=
-            <el-form :inline="true" :model="form" class="demo-form-inline" >
+            <el-form :inline="true" :model="form" class="demo-form-inline">
               <el-form-item v-for="(data, index) in screenList" :label="data.name+'：'" style="margin-right:30px;">
                 <el-input v-model="form[data.key]" placeholder="请输入内容" style="width:140px;" v-if="data.key=='input'" @change='inpoutChange'></el-input>
                 <el-date-picker v-model="form[data.key]" type="date" placeholder="选择日期" :value-format="'yyyy-MM-dd'" v-if="data.key=='date'" style="width:140px;">
                 </el-date-picker>
-                <el-date-picker v-model="form[data.key]" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-if="data.key=='submit'" style="width:240px;">
+                <el-date-picker v-model="form[data.key]" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-if="data.key=='submit'" :value-format="'yyyy-MM-dd'" style="width:240px;">
                 </el-date-picker>
               </el-form-item>
               <p v-if="!screenList.length" style="height:40px;"></p>
@@ -54,7 +53,6 @@
     </div>
 
     <div class="report-content-table">
-
       <el-table :data="tableData" style="width: 100%">
         <el-table-column label="序号" type="index" width="60" align="center">
         </el-table-column>
@@ -125,7 +123,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisibleWord = false">取消</el-button>
+        <el-button @click="handClickWordCancel">取消</el-button>
         <el-button type="primary" @click="handClickWord">确定</el-button>
       </span>
     </el-dialog>
@@ -145,7 +143,12 @@
 </template>
  <script>
 import Vmodel from "@/view/reportTemplate/Vmodel";
-import api from '@/api'
+import api from "@/api";
+  import {
+    mapState,
+    mapActions,
+    mapGetters
+  } from "vuex";
 export default {
   name: "reportIndex",
   data() {
@@ -157,9 +160,10 @@ export default {
       wordDialogScreen: "",
       checkedAllScreen: false,
       form: {},
-      screenList: [],//筛选条件页面展示集合
-      checkList: [],//弹框筛选条件集合
-      checkListWord: [],//弹框已选字段展示
+      screenList: [], //筛选条件页面展示集合
+      checkList: [], //弹框筛选条件集合
+      checkListWord: [], //弹框已选字段展示
+      checkListWordConfirm: [],
       checkListWordShow: [
         { name: "1" },
         { name: "2" },
@@ -197,12 +201,15 @@ export default {
     Vmodel
   },
   created() {
-    this.init()
+    this.init();
   },
-  computed:{
+  computed: {
     checkListWordShowF() {
-       return this.wordDialogScreen ? this.checkListWordShow.filter(r=>r.name===this.wordDialogScreen): this.checkListWordShow
-    }
+      return this.wordDialogScreen
+        ? this.checkListWordShow.filter(r => r.name === this.wordDialogScreen)
+        : this.checkListWordShow;
+    },
+    ...mapGetters(["hideheaderaside"])
   },
   watch: {
     checkListWord(newData) {
@@ -214,13 +221,50 @@ export default {
     }
   },
   methods: {
+      ...mapActions(["saveDatal"]),
+      handleFullScreen() {
+        let element = document.documentElement;
+        if (this.fullscreen) {
+          this.saveDatal(true);
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+        } else {
+          this.saveDatal(false);
+          if (element.requestFullscreen) {
+            element.requestFullscreen();
+          } else if (element.webkitRequestFullScreen) {
+            element.webkitRequestFullScreen();
+          } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+          } else if (element.msRequestFullscreen) {
+            // IE11
+            element.msRequestFullscreen();
+          }
+        }
+        this.fullscreen = !this.fullscreen;
+      }, //图标--全屏显示
     init() {
-       this.$http.post(api.reportRptFrame(),{
-         masterNo:'06',
-         reportCode:'ASP10021'
-       }).then(res=>{
-         console.log(res)
-         })
+      //  this.$http.post(api.reportRptFrame(),{
+      //    masterNo:'06',
+      //    reportCode:'ASP10021'
+      //  }).then(res=>{
+      //    console.log(res)
+      //    })
+      this.$http
+        .post(api.reportRptFilterList(), {
+          masterNo: "06",
+          reportCode: "RPT_LN_LEND_DTL_RPT"
+        })
+        .then(res => {
+          console.log(res);
+        });
     },
     handClick() {
       this.screenList = this.checkList.map(r => {
@@ -245,7 +289,12 @@ export default {
       this.dialogVisible = false;
     },
     handClickWord() {
-      console.log('checkListWord', this.checkListWord)
+      console.log("checkListWord", this.checkListWord);
+      this.checkListWordConfirm = this.checkListWord;
+      this.dialogVisibleWord = false;
+    },
+    handClickWordCancel() {
+      console.log("checkListWord", this.checkListWordConfirm);
       this.dialogVisibleWord = false;
     },
     handSubmit() {
@@ -257,12 +306,17 @@ export default {
       console.log("2222");
     },
     handClickScreen() {
+      this.checkList = this.screenList.map(item => {
+        return item.name;
+      });
+      console.log("", this.checkList);
       this.dialogVisible = true;
     },
     handleCloseWord() {
       this.dialogVisibleWord = false;
     },
     handClickShowWord() {
+      this.checkListWord = this.checkListWordConfirm;
       this.dialogVisibleWord = true;
     },
     changeAllScreen(data) {
@@ -281,6 +335,12 @@ export default {
   }
 };
 </script>
+ <style >
+.report-content-table .el-table__header th,
+.report-content-table .el-table__header tr {
+  background-color: #ededed !important;
+}
+</style>
  
  <style lang="less" scoped>
 #report-index {
@@ -316,7 +376,7 @@ export default {
           img {
             width: 5px;
             height: 8px;
-            margin-left:10px;
+            margin-left: 10px;
             // background:url(../../assets/images/password.png) no-repeat ;
           }
         }

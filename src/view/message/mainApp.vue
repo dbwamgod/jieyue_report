@@ -11,7 +11,7 @@
                   <div style="background:white;height:317px;">
                     <div style="margin-left: 42%;padding-top: 45px;">
                       <div><img :src="dontopen" alt=""></div>
-                      <p style="font-size:16px;color:#54657E;margin-left:13px;margin-top: 18px;letter-spacing: 3px;">暂未开放，敬请期待…</p>
+                      <p style="font-size:16px;color:#54657E;margin-left:48px;margin-top: 18px;letter-spacing: 3px;">暂无数据…</p>
                     </div>
                     <!-- <div style="margin:0px auto;background:red;width:200px;height:200px;"></div> -->
                   </div>
@@ -26,7 +26,7 @@
                   <div style="background:white;height:317px;">
                     <div style="margin-left: 42%;padding-top: 45px;">
                       <div><img :src="dontopen" alt=""></div>
-                      <p style="font-size:16px;color:#54657E;margin-left:13px;margin-top: 18px;letter-spacing: 3px;">暂未开放，敬请期待…</p>
+                      <p style="font-size:16px;color:#54657E;margin-left:48px;margin-top: 18px;letter-spacing: 3px;">暂无数据…</p>
                     </div>
                     <!-- <div style="margin:0px auto;background:red;width:200px;height:200px;"></div> -->
                   </div>
