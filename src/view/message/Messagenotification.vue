@@ -146,4 +146,7 @@ export default {
 .b {
   color: gold;
 }
+.Messagenotification .el-table__header th, .Messagenotification .el-table__header tr {
+    background-color: #ededed !important;
+}
 </style>
