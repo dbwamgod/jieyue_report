@@ -22,8 +22,8 @@
             <img :src="require('@/assets/images/downloadIcon.png')" alt="">
           </div>
           <div class="screen-right-item">
-            <img :src="require('@/assets/images/quanping.png')" alt="" @click="handleFullScreen">
-            <img :src="require('@/assets/images/biaoshouqi.png')" alt="" @click="handleFullScreen" v-if="false">
+            <img :src="require('@/assets/images/quanping.png')" alt="" @click="handleFullScreen(false)" v-if="$store.state.hideheaderaside">
+            <img :src="require('@/assets/images/biaoshouqi.png')" alt="" @click="handleFullScreen(true)" v-if="!$store.state.hideheaderaside">
           </div>
 
         </div>
@@ -80,7 +80,7 @@
         </el-checkbox-group>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">重置</el-button>
+        <el-button @click="handleReset">重置</el-button>
         <el-button type="primary" @click="handClick">确定</el-button>
       </span>
     </el-dialog>
@@ -202,6 +202,12 @@ export default {
   },
   created() {
     this.init();
+    let a = JSON.parse(
+      '[{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"}]'
+    );
+    console.log(a);
+    let b = JSON.stringify();
+    console.log(b);
   },
   computed: {
     checkListWordShowF() {
@@ -221,34 +227,8 @@ export default {
     }
   },
   methods: {
-      ...mapActions(["saveDatal"]),
-      handleFullScreen() {
-        let element = document.documentElement;
-        if (this.fullscreen) {
-          this.saveDatal(true);
-          if (document.exitFullscreen) {
-            document.exitFullscreen();
-          } else if (document.webkitCancelFullScreen) {
-            document.webkitCancelFullScreen();
-          } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-          } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-          }
-        } else {
-          this.saveDatal(false);
-          if (element.requestFullscreen) {
-            element.requestFullscreen();
-          } else if (element.webkitRequestFullScreen) {
-            element.webkitRequestFullScreen();
-          } else if (element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-          } else if (element.msRequestFullscreen) {
-            // IE11
-            element.msRequestFullscreen();
-          }
-        }
-        this.fullscreen = !this.fullscreen;
+      handleFullScreen(type) {
+        this.$store.state.hideheaderaside=type;
       }, //图标--全屏显示
     init() {
       //  this.$http.post(api.reportRptFrame(),{
@@ -303,12 +283,12 @@ export default {
     inpoutChange() {},
     handleClose() {
       this.dialogVisible = false;
-      console.log("2222");
+    },
+    handleReset() {
+      this.checkList = [];
     },
     handClickScreen() {
-      this.checkList = this.screenList.map(item => {
-        return item.name;
-      });
+      this.checkList = this.screenList.map(item => item.name);
       console.log("", this.checkList);
       this.dialogVisible = true;
     },

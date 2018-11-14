@@ -12,21 +12,22 @@
               <template slot="title">
                 <i :class=[item.icon]></i> {{item.name}}</template>
               <!--第二层-->
-              <el-submenu v-for="(itema,index) in item.children" :index="itema.id +''" v-if="itema.children != undefined" :key="index">
+              <el-submenu v-for="(itema,index) in item.children" :index="itema.id +''" v-if="(!itema.children)" >
                 <!--第三层-->
-                <template slot="title" v-show='itema.name'>{{itema.name}}</template>
+                <template slot="title" v-show='itema.name'>{{itema.name}}{{itema.children == []}}</template>
                 <el-menu-item-group v-for="(itemb,index) in itema.children" :index="itemb.id +''" :key="index">
-                  <el-menu-item :index="itemb.id+''" @click="gotoPath(itemb.url,itemb.id) ;addTab(editableTabsValue2,itemb.url,itemb.name,itemb.id)">
+                  <el-menu-item :index="itemb.id+''" @click="gotoPath(itemb.url,itemb.id,itema.reportCode) ;addTab(editableTabsValue2,itemb.url,itemb.name,itemb.id)">
                     <span class="activeAfte"></span>
-                    {{itemb.name}}
+                    {{itemb.name}}1111111
                 </el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <!--第二层-->
-              <el-menu-item v-if="itema.children == undefined " :index="itema.id+''" @click="gotoPath(itema.url,itema.id) ;addTab(editableTabsValue2,itema.url,itema.name,itema.id)" v-for="(itema,index) in item.children" :key="index">
-                 <span class="activeAfte"></span>
-                {{itema.name}}
-              </el-menu-item>
+                <el-menu-item :index="itema.id+''" @click="gotoPath(itema.url,itema.id,itema.reportCode) ;addTab(editableTabsValue2,itema.url,itema.name,itema.id)" 
+                v-for="(itema,index) in item.children" v-if="(itema.children)" >
+                  <span class="activeAfte"></span>
+                  {{itema.name}}
+                </el-menu-item>
             </el-submenu>
           </el-menu>
         </div>
@@ -118,7 +119,7 @@ export default {
       this.defaultActive = this.state_router;
     },
     CollectionNameLis: function() {
-      this.CollectionNameLislength = this.CollectionNameLis.length;
+      // this.CollectionNameLis = this.CollectionNameLis.length;
     },
     $route(to, from) {
       this.editableTabsValue2 = to.name;
@@ -165,7 +166,8 @@ export default {
             {
               name: "菜单借款明细表",
               id: 4,
-              url: "reportIndex"
+              url: "reportIndex?dfadsff=asdfasdf",
+              children:[]
             },
           ]
         },
@@ -188,9 +190,11 @@ export default {
         }
       ];
       this.$http
-        .get(api.pdng())
+        .post(api.pdng(),{
+          masterNo:'06'
+        })
         .then(res => {
-          // this.ArrayData = res.data.data;
+          this.ArrayData = res.data.data;
           // console.log(this.ArrayData)
           //   }
           // ];
@@ -216,9 +220,10 @@ export default {
         })
         .catch(() => {});
     }, //调接口渲染侧边栏接口--跳转主页--存储侧边栏name
-    gotoPath(address, id) {
+    gotoPath(address, id, reportCode) {
       this.$router.push({
-        path: address
+        'path': address,
+        'reportCode':reportCode
       });
       this.stateRouter(id);
       this.hackReset = false;

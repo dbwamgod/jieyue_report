@@ -13,7 +13,7 @@ export default {
   pdng() { //判断用户是全国还是大区 -- 侧边栏接口  
     // return _baseUrl +'admin/menu/subject/list'
     // return _baseUrl +'saasbi/manager/menu/subject/list'
-    return _baseUrl + 'saasbi/report/menu/subject/list'
+    return _baseUrl + 'saasbi/report/subject/list'
   },
   // 日历接口
   // 添加接口  传参：content: this.textarea（内容）, eventData: this.firstday1（日期 yyyy-mm-dd）, masterNo: "01",title: this.inputTitle(标题)
