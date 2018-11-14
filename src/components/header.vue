@@ -216,10 +216,6 @@
         this.Collections = false;
       },
       Collectionpage(url, names, id,reportCode) {
-        console.log(url)
-        console.log(names)
-        console.log(id)
-        console.log(reportCode)
         this.editableTabs2 = JSON.parse(localStorage.getItem("editableTabs2"));
         if (this.editableTabs2.length == 0) {
           this.editableTabs2.push({
@@ -244,8 +240,7 @@
             localStorage.setItem("Deletenavigationbar", "true");
           }
         }
-        // console.log(url)
-        this.$router.push({'path':url});
+        this.$router.push({'path':url,query:{'reportCode':reportCode}});
         this.Collectiondisplay = !this.Collectiondisplay;
         // console.log(this.editableTabs2);
         this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);

@@ -16,15 +16,14 @@
                 <!--第三层-->
                 <template slot="title" v-show='itema.name'>{{itema.name}}{{itema.children == []}}</template>
                 <el-menu-item-group v-for="(itemb,index) in itema.children" :index="itemb.id +''" :key="index">
-                  <el-menu-item :index="itemb.id+''" @click="gotoPath(itemb.url,itemb.id,itema.reportCode) ;addTab(editableTabsValue2,itemb.url,itemb.name,itemb.id)">
+                  <el-menu-item :index="itemb.id+''" @click="gotoPath(itemb.url,itemb.id,itemb.templateCode) ;addTab(editableTabsValue2,itemb.url,itemb.name,itemb.id)">
                     <span class="activeAfte"></span>
-                    {{itemb.name}}1111111
+                    {{itemb.name}}
                 </el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <!--第二层-->
-                <el-menu-item :index="itema.id+''" @click="gotoPath(itema.url,itema.id,itema.reportCode) ;addTab(editableTabsValue2,itema.url,itema.name,itema.id)" 
-                v-for="(itema,index) in item.children" v-if="(itema.children)" >
+                <el-menu-item :index="itema.id+''" @click="gotoPath(itema.url,itema.id,itema.templateCode) ;addTab(editableTabsValue2,itema.url,itema.name,itema.id)" v-for="(itema,index) in item.children" v-if="(itema.children)" >
                   <span class="activeAfte"></span>
                   {{itema.name}}
                 </el-menu-item>
@@ -220,10 +219,10 @@ export default {
         })
         .catch(() => {});
     }, //调接口渲染侧边栏接口--跳转主页--存储侧边栏name
-    gotoPath(address, id, reportCode) {
+    gotoPath(address, id, templateCode) {
+      console.log(templateCode)
       this.$router.push({
-        'path': address,
-        'reportCode':reportCode
+        'path': address,  query:{'reportCode':templateCode}
       });
       this.stateRouter(id);
       this.hackReset = false;
@@ -436,7 +435,8 @@ export default {
   background: #8b8b8b;
   color: #fff;
   font-size: 16px;
-  border-radius: 15px 15px 0 0;
+  border-radius: 8px 8px 0 0;
+  padding:0 11px;
 }
 #editableTabs > .el-tabs__header .el-tabs__item .el-icon-close {
   width: 22px;

@@ -3,7 +3,7 @@
   <div id="report-index">
     <div class="report-index-header">
       <div class="screen-config-item">
-        <div class="screen-left">
+        <div class="screen-left"> 
           <div class="screen-left-item" @click="handClickScreen">
             <span>筛选条件</span>
             <img :src="require('@/assets/images/tanchu.png')" alt="">
@@ -15,8 +15,11 @@
         </div>
         <div class="screen-right">
           <div class="screen-right-item">
+            <img :src="require('@/assets/images/detail.png')" alt="">
+          </div>
+          <div class="screen-right-item">
             <img :src="require('@/assets/images/collectionIconhide.png')" alt="" v-if="false">
-            <img :src="require('@/assets/images/collectionIcon.png')" alt="">
+            <img :src="require('@/assets/images/collectionIcon.png')" alt=""> 
           </div>
           <div class="screen-right-item">
             <img :src="require('@/assets/images/downloadIcon.png')" alt="">
@@ -25,7 +28,7 @@
             <img :src="require('@/assets/images/quanping.png')" alt="" @click="handleFullScreen(false)" v-if="$store.state.hideheaderaside">
             <img :src="require('@/assets/images/biaoshouqi.png')" alt="" @click="handleFullScreen(true)" v-if="!$store.state.hideheaderaside">
           </div>
-
+<!-- {{this.$route.query.reportCode}} -->
         </div>
       </div>
 
@@ -138,6 +141,7 @@
                 {{data.name}}/{{data.key}}
             </p>
         </div> -->
+   
 
   </div>
 </template>
@@ -202,12 +206,12 @@ export default {
   },
   created() {
     this.init();
-    let a = JSON.parse(
-      '[{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"}]'
-    );
-    console.log(a);
-    let b = JSON.stringify();
-    console.log(b);
+    // let a = JSON.parse(
+    //   '[{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"}]'
+    // );
+    // console.log(a);
+    // let b = JSON.stringify();
+    // console.log(b);
   },
   computed: {
     checkListWordShowF() {
@@ -240,10 +244,18 @@ export default {
       this.$http
         .post(api.reportRptFilterList(), {
           masterNo: "06",
-          reportCode: "RPT_LN_LEND_DTL_RPT"
+          reportCode: "ASP10021"
         })
         .then(res => {
           console.log(res);
+        });
+      this.$http
+        .post(api.reportRptInfo(), {
+          masterNo: "01",
+          reportCode: "RPT_LN_LEND_DTL_RPT"
+        })
+        .then(res => {
+          console.log('reportRptInfo',res);
         });
     },
     handClick() {
