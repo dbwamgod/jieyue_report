@@ -29,11 +29,11 @@ export default {
   userCollectList() {
     return _baseUrl + 'saasbi/report/userCollect/list'
   },
-  // 添加接口 传参: collectionName :'菜单借款明细表',collectionUrl :'reportIndex',masterNo :'01'
+  // 添加接口 传参:"reportCode":"RPT_LN_LEND_DTL_RPT","masterNo":"01"'
   userCollectAdd() {
     return _baseUrl + 'saasbi/report/userCollect/add'
   },
-  // 删除接口 传参： 'datas':[id]  
+  // 删除接口 传参： "reportCode":"RPT_LN_LEND_DTL_RPT"
   userCollectRemove() {
     return _baseUrl + 'saasbi/report/userCollect/remove'
   },

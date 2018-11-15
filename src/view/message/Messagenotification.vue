@@ -6,7 +6,7 @@
       <span style="float:right;font-size: 16px;color: #5594EB;" @click="Messagebacks"><img :src="Messageback" alt=""
           style="vertical-align: sub;margin-right:10px;">返回</span>
     </div>
-    <div class="Messagenotification">
+    <div class="Messagenotification" v-show="tableData.length == 0">
       <el-table :data="tableData" style="width: 100%;" stripe>
         <el-table-column type="index" width="50"> </el-table-column>
 
@@ -28,10 +28,18 @@
         </span>
       </el-dialog>
     </div>
-    <div class="block" style="text-align: right;margin-top:10px;">
+    <div class="block" style="text-align: right;margin-top:10px;" v-show="tableData.length == 0">
       <el-pagination @size-change="MessagehandleSizeChange" @current-change="MessagehandleCurrentChange" :current-page="messagecurrentPage-0"
         :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
       </el-pagination>
+    </div>
+
+    <div style="width: 100%;height: 500px;background: white;position: relative;">
+      <div style="position: absolute;top: 23%; left: 40%;">
+        <div><img :src="Nodata" alt=""></div>
+        <p style="font-size: 18px;color: #54657E;letter-spacing: 1px;margin-top: 15px;margin-left: 50px;">暂无数据</p>
+      </div>
+       
     </div>
   </div>
 </template>
@@ -41,6 +49,7 @@ export default {
   data() {
     return {
       Messageback: require("../../assets/images/back.png"),
+      Nodata: require("../../assets/images/Nodata.png"),
       messagecurrentPage: "",
       tableData: [
         {
@@ -112,7 +121,10 @@ export default {
     getMore2(row) {
       this.row = row;
       console.log(row);
-    }
+    },
+    MessageFunction(){
+      
+    }//消息接口留位子
   }
 };
 </script>
