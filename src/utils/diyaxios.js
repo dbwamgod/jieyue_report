@@ -5,7 +5,7 @@ import router from '../router';
 var storage=localStorage;
 var Authorization = storage.getItem("userid");
 
-axios.defaults.headers.common['Authorization'] = Authorization;
+axios.defaults.headers.common['Authorization'] ='9C6611FEE38347C484BAC59ED4560D44'; //Authorization;
 axios.defaults.timeout = 60000
 // code状态码200判断
 axios.interceptors.request.use(function (config) {
