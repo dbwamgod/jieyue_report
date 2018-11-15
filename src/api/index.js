@@ -59,7 +59,7 @@ export default {
   },
   //展示字段保存
   reportFieldAdd() {
-    return _baseUrl + 'saasbi/report/field/add'
+    return _baseUrl + 'saasbi/report/rpt/field/add'
   },
   //数据查询
   reportRptData() {
