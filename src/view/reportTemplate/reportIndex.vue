@@ -3,7 +3,7 @@
   <div id="report-index">
     <div class="report-index-header">
       <div class="screen-config-item">
-        <div class="screen-left"> 
+        <div class="screen-left">
           <div class="screen-left-item" @click="handClickScreen">
             <span>筛选条件</span>
             <img :src="require('@/assets/images/tanchu.png')" alt="">
@@ -26,17 +26,17 @@
             </el-popover>
           </div>
           <div class="screen-right-item">
-            <img :src="require('@/assets/images/collectionIconhide.png')" alt="" v-if="false">
-            <img :src="require('@/assets/images/collectionIcon.png')" alt=""> 
+            <img :src="require('@/assets/images/collectionIconhide.png')" alt="" @click="collectionClick" v-if="!collectFlag">
+            <img :src="require('@/assets/images/collectionIcon.png')" alt="" @click="collectionClick" v-if="collectFlag">
           </div>
           <div class="screen-right-item">
-            <img :src="require('@/assets/images/downloadIcon.png')" alt="">
+            <img :src="require('@/assets/images/downloadIcon.png')" alt="" @click="downloadTypeClick">
           </div>
           <div class="screen-right-item">
             <img :src="require('@/assets/images/quanping.png')" alt="" @click="handleFullScreen(false)" v-if="$store.state.hideheaderaside">
             <img :src="require('@/assets/images/biaoshouqi.png')" alt="" @click="handleFullScreen(true)" v-if="!$store.state.hideheaderaside">
           </div>
-<!-- {{this.$route.query.reportCode}} -->
+          <!-- {{this.$route.query.reportCode}} -->
         </div>
       </div>
 
@@ -48,7 +48,7 @@
                 <el-input v-model="form[data.filterCode]" placeholder="请输入内容" style="width:140px;" v-if="data.filterType=='srk'" @change='inpoutChange'></el-input>
                 <el-date-picker v-model="form[data.filterCode]" type="date" placeholder="选择日期" :value-format="'yyyy-MM-dd'" v-if="data.filterType=='riqi'" style="width:140px;">
                 </el-date-picker>
-                <el-date-picker v-model="form[data.filterCode]" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-if="data.filterType=='xlx'" :value-format="'yyyy-MM-dd'" style="width:240px;">
+                <el-date-picker v-model="form[data.filterCode]" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-if="data.filterType==''" :value-format="'yyyy-MM-dd'" style="width:240px;">
                 </el-date-picker>
               </el-form-item>
               <p v-if="!screenList.length" style="height:40px;"></p>
@@ -67,11 +67,15 @@
       <el-table :data="tableData" style="width: 100%">
         <el-table-column label="序号" type="index" width="60" align="center">
         </el-table-column>
-        <el-table-column v-for="item in checkListWordConfirm" :prop="item.reportFieldCode" :label="item.fieldText" >
+        <el-table-column v-for="item in checkListWordConfirm" :prop="item.reportFieldCode" :label="item.fieldText">
         </el-table-column>
       </el-table>
-
     </div>
+    <div style="text-align: right; margin-top:13px;">
+      <el-pagination @current-change="handleCurrentChange" :current-page.sync="page.currentPage" :page-size="page.pageSize" layout="prev, pager, next, jumper" :total="page.totalRecords" :background="true">
+      </el-pagination>
+    </div>
+
     <!-- 筛选条件弹框 -->
     <el-dialog title="筛选条件" :visible.sync="dialogVisible" width="850px" :before-close="handleClose">
       <div>
@@ -81,7 +85,7 @@
             <el-input placeholder="审批人" style="width:140px;margin-left:10px;" disabled v-if="data.filterType=='srk'"></el-input>
             <el-date-picker type="date" placeholder="选择日期" disabled v-if="data.filterType=='riqi'" style="width:140px;margin-left:10px;">
             </el-date-picker>
-            <el-date-picker type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" disabled v-if="data.filterType=='xlx'" style="width:240px;margin-left:10px;">
+            <el-date-picker type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" disabled v-if="data.filterType==''" style="width:240px;margin-left:10px;">
             </el-date-picker>
           </span>
         </el-checkbox-group>
@@ -128,10 +132,21 @@
           </el-row>
 
         </div>
-      </div>
+      </div> 
       <span slot="footer" class="dialog-footer">
         <el-button @click="handClickWordCancel">取消</el-button>
         <el-button type="primary" @click="handClickWord">确定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog title="下载为" :visible.sync="dialogVisibleDownload" width="720px" :before-close="handleCloseDownload">
+      <div style="margin-left:38px;">
+        <el-radio v-model="downloadFilterType" label="1">PDF文件（.pdf）将文件保存为PDF文件</el-radio><br>
+        <el-radio v-model="downloadFilterType" label="2" style="margin-top:32px;">Excel文件（.xlsx）将文件导出为Excel文件</el-radio>
+      </div>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleCloseDownload">取消</el-button>
+        <el-button type="primary" @click="handClickDownload">下载</el-button>
       </span>
     </el-dialog>
     <!-- 报表系统
@@ -145,7 +160,6 @@
                 {{data.name}}/{{data.key}}
             </p>
         </div> -->
-   
 
   </div>
 </template>
@@ -163,7 +177,10 @@ export default {
       dialogVisibleWord: false, //字段
       wordDialogScreen: "",
       checkedAllScreen: false,
+      downloadFilterType:'1',
       form: {},
+      collectFlag: false,
+      dialogVisibleDownload: false,
       screenList: [], //筛选条件页面展示集合
       checkList: [], //弹框筛选条件集合
       checkListWord: [], //弹框已选字段展示
@@ -171,7 +188,7 @@ export default {
       reportRptInfo: [],
       reportInfo: {
         masterNo: "06",
-        reportCode: "RPT_LN_LEND_DTL_RPT"
+        reportCode: this.$route.query.reportCode || "RPT_LN_LEND_DTL_RPT"
       },
       page: {
         pageSize: 10,
@@ -215,12 +232,6 @@ export default {
   },
   created() {
     this.init();
-    let a = JSON.parse(
-      '[{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"},{"name":"huangxiaojian","age":"23"}]'
-    );
-    console.log(a);
-    let b = JSON.stringify();
-    console.log(b);
   },
   computed: {
     checkListWordShowF() {
@@ -234,10 +245,12 @@ export default {
   },
   watch: {
     checkListWord(newData) {
-      if (newData.length === this.checkListWordShow.length) {
-        this.checkedAllScreen = true;
-      } else {
-        this.checkedAllScreen = false;
+      if (newData.length !== 0) {
+        if (newData.length === this.checkListWordShow.length) {
+          this.checkedAllScreen = true;
+        } else {
+          this.checkedAllScreen = false;
+        }
       }
     }
   },
@@ -262,7 +275,6 @@ export default {
                 duration: 1500
               });
             }
-            console.log("reportRptInfo", this.reportRptInfo);
           },
           err => {
             this.$message({
@@ -279,7 +291,6 @@ export default {
         })
         .then(
           res => {
-            console.log("reportRptFrame", res);
             if (res.data.code == 200) {
               this.screenList = res.data.data ? res.data.data.filterList : [];
               // this.checkListWordConfirm = res.data.data ? res.data.data.fieldList.map(r=>r.fieldText) : [];
@@ -289,6 +300,7 @@ export default {
               this.checkListWord = this.checkListWordConfirm.map(
                 item => item.fieldText
               );
+              this.collectFlag = !!res.data.data.collectFlag;
             } else {
               this.$message({
                 message: res.data.msg,
@@ -311,7 +323,6 @@ export default {
         })
         .then(
           res => {
-            console.log("reportRptInfo", res);
             if (res.data.code == 200) {
               this.checkboxList = res.data.data;
             } else {
@@ -336,9 +347,8 @@ export default {
         })
         .then(
           res => {
-            console.log("reportRptFieldSearch", res);
             if (res.data.code == 200) {
-              this.checkListWordShow = res.data.data;
+              this.checkListWordShow = res.data.data || [];
             } else {
               this.$message({
                 message: res.data.msg,
@@ -355,8 +365,12 @@ export default {
             });
           }
         );
-      Promise.all([a, b, c]).then(r => {
-        console.log("全部执行了", r);
+      Promise.all([a, b, c, d]).then(r => {
+        if (this.checkListWordConfirm.length == 0)
+          this.checkListWordConfirm = this.checkListWordShow.map(
+            item => item.fieldText
+          );
+        this.handSubmit();
       });
     },
     handClick() {
@@ -380,7 +394,6 @@ export default {
       let filterCodeList = this.screenList.map(r => {
         return r.filterCode;
       });
-      console.log(filterCodeList);
       this.$http
         .post(api.reportRptFilterAdd(), {
           ...this.reportInfo,
@@ -388,7 +401,11 @@ export default {
         })
         .then(res => {
           if (res.data.code == 200) {
-            console.log(res);
+            //  this.$message({
+            //   message: res.data.msg,
+            //   type: "warning",
+            //   duration: 1500
+            // });
           } else {
             this.$message({
               message: res.data.msg,
@@ -400,30 +417,36 @@ export default {
         });
     },
     handClickWord() {
-      let filterCodeList = this.checkListWordShow.filter(data => {
-        if (this.checkListWord.indexOf(data.fieldText) > -1) {
-          return data;
-        }
-      });
-      this.$http
-        .post(api.reportFieldAdd(), {
-          ...this.reportInfo,
-          ...filterCodeList
-        })
-        .then(res => {
-          if (res.data.code == 200) {
-            this.checkListWordConfirm = filterCodeList;
-            console.log(this.checkListWordConfirm)
-            console.log(res);
-          } else {
-            this.$message({
-              message: res.data.msg,
-              type: "warning",
-              duration: 1500
-            });
+      if (this.checkListWord.length != 0) {
+        let filterCodeList = this.checkListWordShow.filter(data => {
+          if (this.checkListWord.indexOf(data.fieldText) > -1) {
+            return data;
           }
-          this.dialogVisibleWord = false;
         });
+        this.$http
+          .post(api.reportFieldAdd(), {
+            ...this.reportInfo,
+            ...filterCodeList
+          })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.checkListWordConfirm = filterCodeList;
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "warning",
+                duration: 1500
+              });
+            }
+            this.dialogVisibleWord = false;
+          });
+      } else {
+        this.$message({
+          message: "最少选择一个展示字段",
+          type: "warning",
+          duration: 1500
+        });
+      }
     },
     handClickWordCancel() {
       this.dialogVisibleWord = false;
@@ -431,19 +454,24 @@ export default {
     handSubmit() {
       let filterList = [],
         fieldList = [];
+      console.log("22", this.form);
       for (let item in this.form) {
-        filterList = this.screenList.map(data => {
-          if (data.filterCode == item) {
-            data.filterVal = this.form[item];
-          }
-          return data;
-        });
+        filterList = this.screenList
+          .map(data => {
+            if (data.filterCode == item) {
+              data.filterVal = this.form[item];
+            }
+            return data;
+          })
+          .filter(r => r.filterVal);
       }
-      fieldList = this.checkListWordShow.map(data => {
-        if (this.checkListWord.indexOf(data.fieldText) > -1) {
-          return data.reportFieldCode;
-        }
-      });
+      fieldList = this.checkListWordShow
+        .map(data => {
+          if (this.checkListWord.indexOf(data.fieldText) > -1) {
+            return data.reportFieldCode;
+          }
+        })
+        .filter(r => r);
       this.$http
         .post(api.reportRptData(), {
           //筛选条件
@@ -455,11 +483,11 @@ export default {
         })
         .then(
           res => {
-            console.log("reportRptFieldSearch", res);
             if (res.data.code == 200) {
-              let data = res.data.data.replace(/['']/g, '""');
-              console.log(`'[${data}]'`);
-              // console.log(JSON.parse(`'[${data}]'`))
+              let data = res.data.data.replace(/[']/g, '"');
+              let str1 = eval(`'[${data}]'`);
+              this.tableData = JSON.parse(str1);
+              this.page = { ...res.data.page };
             } else {
               this.$message({
                 message: res.data.msg,
@@ -491,6 +519,9 @@ export default {
     handleCloseWord() {
       this.dialogVisibleWord = false;
     },
+    handleCloseDownload() {
+      this.dialogVisibleDownload = false;
+    },
     handClickShowWord() {
       this.checkListWord = this.checkListWordConfirm.map(
         item => item.fieldText
@@ -499,11 +530,9 @@ export default {
     },
     changeAllScreen(data) {
       if (data) {
-        console.log(this.checkListWordShow);
         this.checkListWord = this.checkListWordShow.map(item => {
           return item.fieldText;
         });
-        console.log(this.checkListWord);
       } else {
         this.checkListWord = [];
       }
@@ -511,7 +540,99 @@ export default {
     handClickremove(data) {
       let index = this.checkListWord.indexOf(data);
       this.checkListWord.splice(index, 1);
-    }
+    },
+    handleCurrentChange(val) {
+      this.page.currentPage = val;
+      this.handSubmit();
+    },
+    collectionClick(type) {
+      let ip = !this.collectFlag
+        ? api.userCollectAdd()
+        : api.userCollectRemove();
+      this.$http
+        .post(ip, {
+          //报表详情
+          ...this.reportInfo
+        })
+        .then(
+          res => {
+            if (res.data.code == 200) {
+              this.collectFlag = !this.collectFlag;
+              this.$message({
+                message: res.data.msg,
+                type: "warning",
+                duration: 1500
+              });
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "warning",
+                duration: 1500
+              });
+            }
+          },
+          err => {
+            this.$message({
+              message: "网络错误",
+              type: "warning",
+              duration: 1500
+            });
+          }
+        );
+    },
+    handClickDownload() {
+       let filterList = [],
+        fieldList = [];
+      for (let item in this.form) {
+        filterList = this.screenList
+          .map(data => {
+            if (data.filterCode == item) {
+              data.filterVal = this.form[item];
+            }
+            return data;
+          })
+          .filter(r => r.filterVal);
+      }
+      fieldList = this.checkListWordShow
+        .map(data => {
+          if (this.checkListWord.indexOf(data.fieldText) > -1) {
+            return data.reportFieldCode;
+          }
+        })
+        .filter(r => r);
+      this.$http
+        .get(api.reportRptDataExport(), {
+         params:{
+           ...this.reportInfo,
+          filterList,
+          fieldList,
+          fileType:this.downloadFilterType
+         }          
+        })
+        .then(
+          res => {
+            if (res.data.code == 200) {
+            console.log(res.data)
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "warning",
+                duration: 1500
+              });
+            }
+          },
+          err => {
+            this.$message({
+              message: "网络错误",
+              type: "warning",
+              duration: 1500
+            });
+          }
+        );
+    },
+    downloadTypeClick() {
+      this.dialogVisibleDownload=true;
+    },
   }
 };
 </script>
