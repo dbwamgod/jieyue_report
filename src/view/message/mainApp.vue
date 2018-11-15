@@ -105,7 +105,7 @@
             </div>
             <!-- 日历部分 -->
             <div style="background:white;height: 409px;padding: 0 15px;">
-              <div style="height: 270px;background-color: rgb(255,255,255);padding-top: 17px;">
+              <div style="height: 280px;background-color: rgb(255,255,255);padding-top: 17px;">
                 <div id="calender">
                   <div id="celender_head">
                     <div id="left" class="celender_head" @click="left()">
@@ -128,15 +128,19 @@
                           v-for="(item1,index) in item " @click="showDate(item1,$event);" style="height: 28px;width: 28px;position: relative"
                           :key='index'>
                           <span>{{item1.num}}</span>
-                          <span :style=" [Memo_c.indexOf(item1.Memo_a) > -1? {background:'red'}: '' ]" style="width:3px;height:3px;position: absolute;left: 48%;bottom: 0;"></span>
+                          <span :style=" [Memo_c.indexOf(item1.Memo_a) > -1? {background:'red'}: '' ]" style="width:3px;height:3px;position: absolute;left: 48%;bottom: 5px;"></span>
+                          <!-- {{Memo_c}} -->
+                          <!-- {{item1.Memo_a}} -->
+                          <!-- {{Memo_c.indexOf(item1.Memo_a)}} -->
                         </td>
                       </tr>
                     </table>
                   </div>
-                  <div id="calender_foot">
+                  <!-- <div id="calender_foot">
                     <p @click="backToday">回到今天</p>
-                  </div>
+                  </div> -->
                 </div>
+                <!-- {{Memo_c}} -->
               </div>
               <!-- 显示日历内容 -->
               <div style="padding-top: 12px;border-top: 1px dashed #ccc;">
@@ -330,6 +334,7 @@ export default {
     },
     backToday() {
       this.setCalender(new Date());
+      this.Queryriqi();
     },
     getcurrentDates(calender_Date) {
       //传入正常的Date（）类型数据  获取上个月天数
@@ -350,6 +355,8 @@ export default {
       this.initline();
       var yy = this.currentYear;
       var mm = this.currentMonth;
+      console.log(this.currentYear)
+      console.log(this.currentMonth)
       var dd = 1;
       if (yy == new Date().getFullYear() && mm == new Date().getMonth() + 1) {
         dd = new Date().getDate();
@@ -360,10 +367,12 @@ export default {
         this.currentMonth = mm;
         this.currentYear = yy;
       }
-      var calenderrDate = yy + "-" + mm + "-" + dd;
+      var calenderrDate = yy + "-" + (mm)  + "-" + dd;
       var calenderrDates = yy + "-" + (mm > 9 ? mm : "0" + mm);
       this.dataheaders = calenderrDate;
       this.setCalender(new Date(calenderrDate));
+      console.log(this.dataheaders )
+      this.Queryriqi()
     },
     right() {
       this.initline();
@@ -384,6 +393,8 @@ export default {
 
       this.dataheaders = calender__Dates;
       this.setCalender(new Date(calender__Date));
+      console.log(this.dataheaders )
+      this.Queryriqi()
     },
     setCalender(dateNow) {
       //显示日历部分
@@ -424,7 +435,7 @@ export default {
       for (var i = 1; i <= cur_days; i++) {
         var date = new Object();
         date.num = i;
-        date.Memo_a = yy + "-" + mm + "-" + (i > 9 ? i : "0" + i);
+        date.Memo_a = yy + "-" + (mm>9?mm:'0'+mm) + "-" + (i > 9 ? i : "0" + i);
         date.attr = "this_month";
         if (
           i == this.currentDay &&
@@ -461,14 +472,6 @@ export default {
       // console.log(this.show);
     },
     showDate(index, e) {
-      this.setCalender(new Date());
-      if (index.attr == "last_month") {
-        this.currentMonth = this.currentMonth;
-      } else if (index.attr == "next_month") {
-        this.currentMonth = this.currentMonth + 2;
-      } else {
-        this.currentMonth = this.currentMonth + 1;
-      }
       this.currentDay = index.num;
       this.Memo_e = [];
       for (var i = 0; i < this.Memo_d.length; i++) {
@@ -483,19 +486,17 @@ export default {
     dialogVisibleTextarea(e) {
       var vm = this;
       this.aaaa = true;
-      
-      setTimeout(function() {
-      vm.setCalender(new Date());
-      vm.dialogVisible = false;
-      vm.textarea = this.textarea;
-      vm.inputTitle = this.inputTitle;
-      vm.headlines.push({
-        name: vm.inputTitle
+      this.setCalender(new Date());
+      this.dialogVisible = false;
+      this.textarea = this.textarea;
+      this.inputTitle = this.inputTitle;
+      this.headlines.push({
+        name: this.inputTitle
       });
       //先获取日期 然后转一手 之后 赋值给Memo_b
-      if (vm.valueDate) {
-        var d = new Date(vm.valueDate);
-        vm.firstday1 =
+      if (this.valueDate) {
+        var d = new Date(this.valueDate);
+        this.firstday1 =
           d.getFullYear() +
           "-" +
           (d.getMonth() + 1) +
@@ -511,8 +512,9 @@ export default {
           d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
         // this.Memo_b.push(firstday);
       } else {
-        vm.firstday1 = "";
+        this.firstday1 = "";
       }
+      setTimeout(function() {
         vm.aaaa = false;
       },1000);
     }, //控制点击确定之后状态
@@ -572,21 +574,31 @@ export default {
       // console.log(tab, event);
     },
     Diurnalinterface() {
+      console.log(this.firstday1)
+      console.log(this.textarea)
+      console.log(this.inputTitle)
       this.$http
-        .post(api.notepadAdd(), {
+        .post(api.notepadAdd(),
+        {
           content: this.textarea,
           eventData: this.firstday1,
           masterNo: "01",
           title: this.inputTitle
-        })
+        }
+        )
         .then(res => {
           this.ArrayData = res.data.data;
+          console.log(this.ArrayData)
         })
         .catch(() => {});
       this.textarea = "";
       this.inputTitle = "";
     }, //日期保存数据接口
     Queryriqi() {
+      console.log('重新刷新',this.dataheaders)
+      this.Memo_c = []
+      this.Memo_d = []
+      this.Memo_e = []
       this.$http
         .post(api.notepadList(), {
           form: {
@@ -596,7 +608,10 @@ export default {
         })
         .then(res => {
           this.ArrayData = res.data.data;
-          this.ArrayData.forEach(r => {
+          console.log(this.ArrayData)
+          if(this.ArrayData.length != 0){
+            
+            this.ArrayData.forEach(r => {
             if (r.eventData) {
               this.Memo_c.push(r.eventData.substring(0, 10));
               this.Memo_d.push({
@@ -606,13 +621,15 @@ export default {
               });
             }
           });
-          this.Memo_d.push({
+           this.Memo_d.push({
             data: "2029-09-09",
             content: "11",
             datas: "2019-09-09 00::00:00"
           });
+          
           this.currentdate = moment().format("YYYY-MM-DD");
-
+          console.log(this.currentdate)
+          console.log(this.Memo_d)
           for (var i = 0; i < this.Memo_d.length; i++) {
             if (this.currentdate == this.Memo_d[i].data) {
               this.bbb = false;
@@ -622,6 +639,10 @@ export default {
               });
             }
           }
+          }
+          // console.log(this.Memo_c)
+     
+          console.log(this.Memo_e.length)
         })
         .catch(() => {});
     },//查询日期内容
@@ -687,6 +708,9 @@ export default {
 
 .grid-content textarea {
   height: 200px;
+}
+.grid-content #calender_body tr{
+  height: 35px;
 }
 
 /* 消息功能区 */
@@ -802,7 +826,7 @@ export default {
   height: 40px;
   width: 40px;
   float: left;
-  margin-left: 23%;
+  margin-left: 25%;
 }
 
 #celender_head_inner {

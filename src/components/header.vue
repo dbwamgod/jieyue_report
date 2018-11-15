@@ -41,14 +41,14 @@
 
         <div class='fr' style="border: 1px solid #14171A;height: 48px;"></div>
         <!--用户名-->
-        <div class='fr userOut' style="width:100px;margin-right: 10px;">
+        <div class='fr userOut' style="margin-right: 10px;">
           <span class="el-dropdown-link" style="color: rgba(135,157,227,0.40);font-size: 15px;">
             <img :src="user" alt="" style="vertical-align: sub;margin-bottom: 3px;margin-right: 4px;">
             <span style="color: #BCC9DB">您好 {{name}}</span>
           </span>
         </div>
         <!-- ========================== -->
-        <div class='fr userOut' style="width:120px;margin-right: 10px;" @click="shoucangadd">
+        <!-- <div class='fr userOut' style="width:120px;margin-right: 10px;" @click="shoucangadd">
           <span class="el-dropdown-link" style="color: rgba(135,157,227,0.40);font-size: 15px;">
             <span style="color: #BCC9DB">测试收藏添加接口</span>
           </span>
@@ -57,7 +57,7 @@
           <span class="el-dropdown-link" style="color: rgba(135,157,227,0.40);font-size: 15px;">
             <span style="color: #BCC9DB">测试收藏删除接口</span>
           </span>
-        </div>
+        </div> -->
       </div>
       <div style="height:100%;width: 100%;border: none;">
         <el-container>
@@ -264,7 +264,7 @@
               });
             });
             this.shoucangAlength = this.shoucangdata.length;
-            console.log(this.shoucangdata)
+            // console.log(this.shoucangdata)
           })
           .catch(() => {});
       }, //收藏功能接口
