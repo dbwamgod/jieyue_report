@@ -70,10 +70,10 @@
       <div style="width:244px;background:white;position: absolute;top: 60px;right: 48px;border-radius: 7px;padding:12px;text-align: initial;z-index: 999;box-shadow: 0 2px 4px 0 rgba(190,190,190,0.50);"
         v-show="Collectiondisplay">
         <div class="triangle_border_up" v-show="Collectiondisplay"><span></span></div>
-        <div v-show="this.shoucangAlength != 0">
+        <div v-show="this.shoucangAlength != 0" style="height:100px;">
           <ul>
-            <li style="list-style: inside;color: black;" v-for="(item,index) in shoucangdata" :key="index" @click="Collectionpage(item.collectionUrl,item.collectionName,item.id)">
-              <span style="color:#707070;">{{item.collectionName}}</span>
+            <li style="list-style: inside;color: black;cursor: pointer;" v-for="(item,index) in shoucangdata" :key="index" @click="Collectionpage(item.reportUrl,item.reportName,item.id,item.reportCode)">
+              <span style="color:#707070;">{{item.reportName}}</span>
               <span style="float:right;color:#707070;">{{item.createTime}}</span>
             </li>
           </ul>
@@ -117,7 +117,7 @@
         user: require("../assets/images/user.png"),
         shoucangAA: require("../assets/images/shoucangA.png"),
         shoucangB: require("../assets/images/shoucangB.png"),
-        FrontpageclickA: require("../assets/images/FrontpageclickA.png"), //Nocollection      logoshouqi
+        FrontpageclickA: require("../assets/images/FrontpageclickA.png"), 
         FrontpageclickB: require("../assets/images/FrontpageclickB.png"),
         Frontpageurl: window.location.search,
         Nocollection: require("../assets/images/Nocollection.png"),
@@ -130,7 +130,8 @@
         HomePages:false,
         shoucangAlength: "",
         editableTabs2: [],
-        shoucangdeleteId:''
+        shoucangdeleteId:'',
+        ArrayDataA:[]
       };
     },
     computed: {
@@ -214,17 +215,16 @@
       Collectionleave(){
         this.Collections = false;
       },
-      Collectionpage(url, names, id) {
+      Collectionpage(url, names, id,reportCode) {
         this.editableTabs2 = JSON.parse(localStorage.getItem("editableTabs2"));
         if (this.editableTabs2.length == 0) {
           this.editableTabs2.push({
-            title: names,
-            name: id,
-            content: url
+            'title': names,
+            'name': id,
+            'content': url,
+            'reportCode':reportCode
           });
-          localStorage.setItem("Deletenavigationbar", "22");
         } else {
-          // console.log(this.editableTabs2)
           var a = [];
           this.editableTabs2.forEach(r => {
             a.push(r.content);
@@ -232,46 +232,15 @@
 
           if (a.indexOf(url) == -1) {
             this.editableTabs2.push({
-              title: names,
-              name: id,
-              content: url
+              'title': names,
+              'name': id,
+              'content': url,
+              'reportCode':reportCode
             });
             localStorage.setItem("Deletenavigationbar", "true");
           }
-          // for (var i = 0; i < this.editableTabs2.length; i++) {
-
-          //   if (this.editableTabs2[i].content == url) {
-          //     console.log(this.editableTabs2[i].content)
-          //     console.log(url)
-          //     alert(5);
-          //     return false;
-          //   } else {
-          //     this.editableTabs2.push({
-          //       title: names,
-          //       name: id,
-          //       content: url
-          //     });
-          //     localStorage.setItem("Deletenavigationbar", "true");
-          //   }
-          // }
-
-          // this.editableTabs2.forEach((r) => {
-          //   alert(4)
-          //   console.log(r.content )
-          //   console.log(url)
-          //   console.log(r.content !== url)
-          //   if (r.content !== url) {
-          //     alert(5)
-          //     this.editableTabs2.push({
-          //       title: names,
-          //       name: id,
-          //       content:url
-          //     });
-          //      localStorage.setItem("Deletenavigationbar", "true");
-          //   }
-          // });
         }
-        this.$router.push((name = url));
+        this.$router.push({'path':url,query:{'reportCode':reportCode}});
         this.Collectiondisplay = !this.Collectiondisplay;
         // console.log(this.editableTabs2);
         this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
@@ -282,47 +251,52 @@
             form: {}
           })
           .then(res => {
-            this.ArrayData = res.data.data;
+            this.ArrayDataA = res.data.data;
+            console.log(this.ArrayDataA )
             var shoucangdata = [];
-            this.ArrayData.forEach(r => {
+            this.ArrayDataA.forEach(r => {
               this.shoucangdata.push({
-                collectionName: r.collectionName,
-                collectionUrl: r.collectionUrl,
+                reportName: r.reportName,
+                reportCode: r.reportCode,
                 createTime: r.createTime.substring(0, 10),
-                id: r.id
+                id: r.id,
+                reportUrl:r.reportUrl
               });
             });
             this.shoucangAlength = this.shoucangdata.length;
+            console.log(this.shoucangdata)
           })
           .catch(() => {});
       }, //收藏功能接口
       shoucangadd(){
         this.$http
           .post(api.userCollectAdd(), {
-            collectionName :'菜单借款明细表',
-            collectionUrl :'reportIndex',
-            masterNo :'01'
+            "reportCode":"RPT_LN_LEND_DTL_RPT",
+            "masterNo" :'01',
           })
           .then(res => {
             this.ArrayData = res.data.data;
             console.log(this.ArrayData)
+            
+            this.shoucangAs();
           })
           .catch(() => {});
       },//收藏添加功能接口
       shoucangdelete(){
         console.log(this.shoucangdata)
-        this.shoucangdata.forEach((r)=>{
-          if(r.collectionName == '菜单借款明细表'){
-            this.shoucangdeleteId = r.id;
-          }
-        })
+        // this.shoucangdata.forEach((r)=>{
+        //   if(r.collectionName == '菜单借款明细表'){
+        //     this.shoucangdeleteId = r.id;
+        //   }
+        // })
         this.$http
           .post(api.userCollectRemove(), {
-           'datas':[this.shoucangdeleteId]
+          //  'datas':[this.shoucangdeleteId]
+          // "reportCode":"RPT_LN_LEND_DTL_RPT"
+           "reportCode":"RPT_LN_LEND_DTL_RPT"
           })
           .then(res => {
-            this.ArrayData = res.data.data;
-            console.log(this.ArrayData)
+            //  this.shoucangAs();
           })
           .catch(() => {});
       },//收藏删除功能接口
@@ -337,7 +311,7 @@
     watch: {
       $route(to, from) {
         this.Frontpageclick()
-      }
+      },
     }
   };
 
