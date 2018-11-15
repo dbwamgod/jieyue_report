@@ -10,7 +10,7 @@
                 <el-tab-pane label="待处理" name="first">
                   <div style="background:white;height:317px;">
                     <div style="margin-left: 42%;padding-top: 45px;">
-                      <div><img :src="dontopen" alt=""></div>
+                      <div><img :src="Nodata" alt=""></div>
                       <p style="font-size:16px;color:#54657E;margin-left:48px;margin-top: 18px;letter-spacing: 3px;">暂无数据…</p>
                     </div>
                     <!-- <div style="margin:0px auto;background:red;width:200px;height:200px;"></div> -->
@@ -25,7 +25,7 @@
                 <el-tab-pane label="已处理" name="second">
                   <div style="background:white;height:317px;">
                     <div style="margin-left: 42%;padding-top: 45px;">
-                      <div><img :src="dontopen" alt=""></div>
+                      <div><img :src="Nodata" alt=""></div>
                       <p style="font-size:16px;color:#54657E;margin-left:48px;margin-top: 18px;letter-spacing: 3px;">暂无数据…</p>
                     </div>
                     <!-- <div style="margin:0px auto;background:red;width:200px;height:200px;"></div> -->
@@ -35,21 +35,20 @@
               <div class="Agencytaskshu"></div>
               <div class="Agencytaskmore" @click="handleFullScreen">更多</div>
             </div>
-            <!-- <div style="width:90px;height:90px;background:pink;float:right;" @click="handleFullScreen"></div> -->
           </div>
         </el-col>
       </el-row>
       <el-row style="margin-top:20px;">
         <!-- 消息 -->
         <el-col :span="12">
-          <div class="grid-content bg-purple" style="padding-right: 7px;">
+          <div class="grid-content bg-purple" style="padding-right: 7px; position: relative;">
             <div style="background:#EDEDED;width:100%;height:465px;border-radius: 10px;">
               <div style="line-height:50px;padding:0 20px;">
                 <span><img :src="xiaoxitongzhi" alt="" style="vertical-align: sub;;margin-right:10px;"></span><span
                   style="font-size:18px;font-weight: 700;">消息通知</span>
                 <span style="float:right;font-size:12px;color:#4DA1FC;" @click="MoreManagementTasks">更多...</span>
               </div>
-              <div style="background:white;height:408px;">
+              <div style="background:white;height:408px;" v-show="tableData.length == 0">
                 <el-table :data="tableData" style="width: 100%" stripe>
 
                   <el-table-column prop="address" :label="'内容'"></el-table-column>
@@ -58,8 +57,15 @@
                 </el-table>
                 <div style="color:#BDBDBD;line-height:46px;font-size: 14px;"> <img :src="mailbox" alt="" style="margin-left: 12px;margin-right:3px;vertical-align: middle;"><span>共12条信息</span></div>
               </div>
-            </div>
 
+              <div style="background:white;height:408px;" v-show="tableData.length !== 0">
+                 <div style="width: 200px;height: 200px;margin: 0px auto;">
+                   <div style="position: absolute;top: 50%;left: 40%;">
+                     <img :src="Nocollection" alt="" style="vertical-align: bottom;"> <span style="font-size: 16px;color: #54657E;letter-spacing: 1px;">暂无消息</span>
+                   </div>
+                 </div>
+              </div>
+            </div>
           </div>
         </el-col>
         <!-- 日历 -->
@@ -95,7 +101,7 @@
                 </span>
               </el-dialog>
               <div id="aaaa" style="width:200px;height:50px;font-size:16px;background:#000000;opacity: 0.5;color:rgb(255, 255, 255);box-shadow: 0 0 black;position:absolute;top:-48px;left:-210px;z-index: 100000;text-align: center;
-" v-show="aaaa">保存成功</div>
+            " v-show="aaaa">保存成功</div>
             </div>
             <!-- 日历部分 -->
             <div style="background:white;height: 409px;padding: 0 15px;">
@@ -178,8 +184,9 @@ export default {
       xinjianjishiben: require("../../assets/images/icon-xinjianjishiben.png"),
       xiaoxitongzhi: require("../../assets/images/icon-xiaoxitongzhi.png"),
       schedule: require("../../assets/images/schedule.png"),
-      dontopen: require("../../assets/images/dontopen.png"),
+      Nodata: require("../../assets/images/Nodata.png"),
       Nocollection: require("../../assets/images/Nocollection.png"), //mailbox
+      // NocollectionA: require("../../assets/images/NocollectionA.png"),
       mailbox: require("../../assets/images/mailbox.png"),
       body: "",
       dataheader: "",
@@ -560,7 +567,7 @@ export default {
       //   }
       // }
       // this.$store.commit("SAVE_EDITABLETABS2", result);
-    },
+    }, //任务的跳转
     handleClick(tab, event) {
       // console.log(tab, event);
     },
@@ -617,7 +624,12 @@ export default {
           }
         })
         .catch(() => {});
-    }
+    },//查询日期内容
+    MessageFunction(){
+      
+    }//消息接口留位子
+
+
   }
 };
 </script>
