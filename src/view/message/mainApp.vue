@@ -595,7 +595,7 @@ export default {
       this.inputTitle = "";
     }, //日期保存数据接口
     Queryriqi() {
-      console.log('重新刷新',this.dataheaders)
+      // console.log('重新刷新',this.dataheaders)
       this.Memo_c = []
       this.Memo_d = []
       this.Memo_e = []
@@ -608,7 +608,7 @@ export default {
         })
         .then(res => {
           this.ArrayData = res.data.data;
-          console.log(this.ArrayData)
+          // console.log(this.ArrayData)
           if(this.ArrayData.length != 0){
             
             this.ArrayData.forEach(r => {
@@ -628,8 +628,8 @@ export default {
           });
           
           this.currentdate = moment().format("YYYY-MM-DD");
-          console.log(this.currentdate)
-          console.log(this.Memo_d)
+          // console.log(this.currentdate)
+          // console.log(this.Memo_d)
           for (var i = 0; i < this.Memo_d.length; i++) {
             if (this.currentdate == this.Memo_d[i].data) {
               this.bbb = false;
@@ -642,7 +642,7 @@ export default {
           }
           // console.log(this.Memo_c)
      
-          console.log(this.Memo_e.length)
+          // console.log(this.Memo_e.length)
         })
         .catch(() => {});
     },//查询日期内容

@@ -156,7 +156,7 @@
         this.ArrayData = false;
       }
       // 刷新之后重新赋值
-      this.editableTabs2 = JSON.parse(localStorage.getItem("editableTabs2"));
+      this.editableTabs2 = localStorage.getItem("editableTabs2");
       if (this.editableTabs2) {
         localStorage.setItem("Deletenavigationbar", "true");
         this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
@@ -216,8 +216,13 @@
         this.Collections = false;
       },
       Collectionpage(url, names, id,reportCode) {
-        this.editableTabs2 = JSON.parse(localStorage.getItem("editableTabs2"));
+        this.editableTabs2 = localStorage.getItem("editableTabs2");
+        console.log(typeof [])
+        console.log(this.editableTabs2)
+        console.log(this.editableTabs2.length)
+        console.log(this.editableTabs2.length > 0)
         if (this.editableTabs2.length == 0) {
+          this.editableTabs2 = []
           this.editableTabs2.push({
             'title': names,
             'name': id,
@@ -226,6 +231,7 @@
           });
         } else {
           var a = [];
+          console.log(this.editableTabs2)
           this.editableTabs2.forEach(r => {
             a.push(r.content);
           });
@@ -252,7 +258,7 @@
           })
           .then(res => {
             this.ArrayDataA = res.data.data;
-            console.log(this.ArrayDataA )
+            // console.log(this.ArrayDataA )
             var shoucangdata = [];
             this.ArrayDataA.forEach(r => {
               this.shoucangdata.push({

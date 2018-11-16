@@ -12,7 +12,7 @@
               <template slot="title">
                 <i :class=[item.icon]></i> {{item.name}}</template>
               <!--第二层-->
-              <el-submenu v-for="(itema,index) in item.children" :index="itema.id +''" v-if="(!itema.children)" >
+              <el-submenu v-for="(itema,index) in item.children" :index="itema.id +''" v-if="(!itema.children)" :key='index' >
                 <!--第三层-->
                 <template slot="title" v-show='itema.name'>{{itema.name}}{{itema.children == []}}</template>
                 <el-menu-item-group v-for="(itemb,index) in itema.children" :index="itemb.id +''" :key="index">
@@ -23,7 +23,7 @@
                 </el-menu-item-group>
               </el-submenu>
               <!--第二层-->
-                <el-menu-item :index="itema.id+''" @click="gotoPath(itema.url,itema.id,itema.templateCode) ;addTab(editableTabsValue2,itema.url,itema.name,itema.id)" v-for="(itema,index) in item.children" v-if="(itema.children)" >
+                <el-menu-item :index="itema.id+''" @click="gotoPath(itema.url,itema.id,itema.templateCode) ;addTab(editableTabsValue2,itema.url,itema.name,itema.id)" v-for="(itema,index) in item.children" v-if="(itema.children)" :key='index'>
                   <span class="activeAfte"></span>
                   {{itema.name}}
                 </el-menu-item>
@@ -72,7 +72,7 @@
         <router-view style="margin: 0px 34px;"></router-view>
       </el-col>
       <!-- </div> -->
-      
+      {{this.Deletenavigationbar}}
     </el-row>
   </div>
 </template>
@@ -118,10 +118,11 @@ export default {
       this.defaultActive = this.state_router;
     },
     CollectionNameLis: function() {
-      // this.CollectionNameLis = this.CollectionNameLis.length;
+      this.CollectionNameLis = this.CollectionNameLis.length;
     },
     $route(to, from) {
       this.editableTabsValue2 = to.name;
+      // console.log(to.name)
       this.Deletenavigationbar = !!to.meta.isShowTabs;
     },
     Deletenavigationbar(news, old) {
@@ -132,22 +133,23 @@ export default {
   },
   beforeUpdate() {
     this.defaultActive = this.state_router;
-    if(JSON.parse(localStorage.getItem("editableTabs2")).length){
-        this.Deletenavigationbar = true;
-      }else{
-        this.Deletenavigationbar = false;
-      }
+    // console.log(localStorage.getItem("editableTabs2").length)
+    // if(localStorage.getItem("editableTabs2").length){
+    //     this.Deletenavigationbar = true;
+    //   }else{
+    //     this.Deletenavigationbar = false;
+    //   }
   },
   mounted() {},
   created() {
     this.aside();
-    this.Navigationstate();
+    // this.Navigationstate();
   },
   methods: {
     ...mapActions(["stateRouter", "saveData", "saveDatal"]),
     Navigationstate() {
       this.editableTabs2 =
-        JSON.parse(localStorage.getItem("editableTabs2")) || [];
+      localStorage.getItem("editableTabs2") || [];
       this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
     }, //刷新之前保存导航栏
     tabsn(tab, event) {
@@ -245,8 +247,9 @@ export default {
       var index = str.lastIndexOf("/");
       let d = str.substring(index + 1, str.length);
       if (d) {
-        if (JSON.parse(localStorage.getItem("Savearray"))) {
-          if (JSON.parse(localStorage.getItem("Savearray")).indexOf(c) == -1) {
+        if (localStorage.getItem("Savearray")) {
+          console.log('aaaa')
+          if (localStorage.getItem("Savearray").indexOf(c) == -1) {
             let newTabName = ++this.tabIndex + "";
             this.editableTabs2.push({
               title: b,
@@ -263,6 +266,7 @@ export default {
             this.Deletenavigationbar = localStorage.getItem("Deletenavigationbar");
           }
         } else {
+          console.log('bbbbb')
           if (this.tabName.indexOf(c) == -1) {
             let newTabName = ++this.tabIndex + "";
             this.editableTabs2.push({
@@ -301,6 +305,8 @@ export default {
           localStorage.removeItem("Deletenavigationbar");
         }
         this.$store.commit("SAVE_EDITABLETABS3", []);
+        this.Deletenavigationbar =false;
+        localStorage.setItem("editableTabs2",[]);
         return this.$router.push((name = "mainApp"));
       } else {
         if(tabs){
@@ -309,8 +315,10 @@ export default {
         //遍历editableTabs2 找到id 添加进去
         this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
         this.tabName = this.editableTabs2.map(r => r.name);
+        console.log(this.editableTabs2)
         let pathInfo = this.editableTabs2[this.editableTabs2.length - 1].content;
-        console.log(pathInfo)
+        // console.log(pathInfo)
+        // console.log('111111')
         this.$router.push({
           path: pathInfo
         });
