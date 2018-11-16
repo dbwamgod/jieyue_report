@@ -13,9 +13,9 @@ module.exports = {
       '/open': {
         target: 'https://www.sojson.com', //源地址  开发
         changeOrigin: true, //改变源
-        secure: true, //如果是https接口，需要配置这个参数
+        secure: false, //如果是https接口，需要配置这个参数
         // pathRewrite: {
-        //   '^/api': '/api' //路径重写
+        //   '^/open': '/open' //路径重写
         // }
       },
     },

@@ -104,8 +104,8 @@ export default {
       ths: "160",
       fanhuishouye: require("../assets/images/icon-fanhuishouye.png"), //小房子 icon-shouqizuocedaohang
       shouqizuocedaohang: require("../assets/images/icon-shouqizuocedaohang.png"), // icon-sousuo.png
-      icon: [{ name: 1 }, { name: 1 }, { name: 1 }, { name: 1 }, { name: 1 }],
-      Deletenavigationbar: !!localStorage.getItem("Deletenavigationbar ")
+      Deletenavigationbar: !!localStorage.getItem("Deletenavigationbar"),
+      a: JSON.parse(localStorage.getItem("editableTabs2"))
     };
   },
   computed: {
@@ -121,34 +121,30 @@ export default {
     },
     $route(to, from) {
       this.editableTabsValue2 = to.name;
-      // console.log(to.name)
       this.Deletenavigationbar = !!to.meta.isShowTabs;
     },
     Deletenavigationbar(news, old) {
-      if(old == 'true'){
+      if (old == "true") {
         this.Deletenavigationbar = true;
       }
     }
   },
   beforeUpdate() {
     this.defaultActive = this.state_router;
-    // console.log(localStorage.getItem("editableTabs2").length)
-    // if(localStorage.getItem("editableTabs2").length){
-    //     this.Deletenavigationbar = true;
-    //   }else{
-    //     this.Deletenavigationbar = false;
-    //   }
+    var srt = JSON.parse(localStorage.getItem("editableTabs2"));
+    if (srt.length) {
+      this.Deletenavigationbar = true;
+    }
   },
-  mounted() {},
   created() {
     this.aside();
-    // this.Navigationstate();
+    this.Navigationstate();
   },
   methods: {
     ...mapActions(["stateRouter", "saveData", "saveDatal"]),
     Navigationstate() {
       this.editableTabs2 =
-      localStorage.getItem("editableTabs2") || [];
+        JSON.parse(localStorage.getItem("editableTabs2")) || [];
       this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
     }, //刷新之前保存导航栏
     tabsn(tab, event) {
@@ -167,8 +163,8 @@ export default {
               name: "菜单借款明细表",
               id: 4,
               url: "reportIndex?dfadsff=asdfasdf",
-              children:[]
-            },
+              children: []
+            }
           ]
         },
         {
@@ -190,40 +186,18 @@ export default {
         }
       ];
       this.$http
-        .post(api.pdng(),{
-          masterNo:'06'
+        .post(api.pdng(), {
+          masterNo: "06"
         })
         .then(res => {
           this.ArrayData = res.data.data;
-          // console.log(this.ArrayData)
-          //   }
-          // ];
-          // let serchData = res.data.data;
-          // serchData.forEach(seriesA => {
-          //   if (seriesA.children) {
-          //     seriesA.children.forEach(seriesB => {
-          //       if (seriesB.children) {
-          //         seriesB.children.forEach(seriesC => {
-          //           this.serchDatalist.push({
-          //             value: seriesC.name,
-          //             url: seriesC.url,
-          //             index: seriesC.id
-          //           });
-          //         });
-          //       }
-          //     });
-          //   }
-          //   // 刷新之后跳转主页
-          //   // this.$router.push(name="mainApp")
-          // });
-          this.restaurants = this.loadAll();
         })
         .catch(() => {});
     }, //调接口渲染侧边栏接口--跳转主页--存储侧边栏name
     gotoPath(address, id, templateCode) {
-      console.log(templateCode)
       this.$router.push({
-        'path': address,  query:{'reportCode':templateCode}
+        path: address,
+        query: { reportCode: templateCode }
       });
       this.stateRouter(id);
       this.hackReset = false;
@@ -247,7 +221,6 @@ export default {
       let d = str.substring(index + 1, str.length);
       if (d) {
         if (localStorage.getItem("Savearray")) {
-          console.log('aaaa')
           if (localStorage.getItem("Savearray").indexOf(c) == -1) {
             let newTabName = ++this.tabIndex + "";
             this.editableTabs2.push({
@@ -257,15 +230,18 @@ export default {
             });
             this.tabName.push(c);
             this.editableTabsValue2 = newTabName;
-            this.Deletenavigationbar = localStorage.getItem("Deletenavigationbar");
+            this.Deletenavigationbar = localStorage.getItem(
+              "Deletenavigationbar"
+            );
             this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
             this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
           } else {
             this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
-            this.Deletenavigationbar = localStorage.getItem("Deletenavigationbar");
+            this.Deletenavigationbar = localStorage.getItem(
+              "Deletenavigationbar"
+            );
           }
         } else {
-          console.log('bbbbb')
           if (this.tabName.indexOf(c) == -1) {
             let newTabName = ++this.tabIndex + "";
             this.editableTabs2.push({
@@ -275,7 +251,9 @@ export default {
             });
             this.tabName.push(c);
             this.editableTabsValue2 = newTabName;
-            this.Deletenavigationbar = localStorage.setItem("Deletenavigationbar", "true")||localStorage.getItem("Deletenavigationbar");
+            this.Deletenavigationbar =
+              localStorage.setItem("Deletenavigationbar", "true") ||
+              localStorage.getItem("Deletenavigationbar");
             this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
             this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
           }
@@ -299,23 +277,28 @@ export default {
       if (this.$store.state.editableTabs2.length == 1) {
         this.editableTabs2 = tabs.filter(tab => tab.content !== targetName);
         this.tabName = [];
-        this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
+        // this.$store.commit("this.editableTabs2", this.editableTabs2);
+        localStorage.setItem(
+          "editableTabs2",
+          JSON.stringify(this.editableTabs2)
+        );
         if (localStorage.removeItem("Deletenavigationbar")) {
           localStorage.removeItem("Deletenavigationbar");
         }
         this.$store.commit("SAVE_EDITABLETABS3", []);
-        this.Deletenavigationbar =false;
-        localStorage.setItem("editableTabs2",[]);
+        this.Deletenavigationbar = false;
+        // localStorage.setItem("editableTabs2",[]);
         return this.$router.push((name = "mainApp"));
       } else {
-        if(tabs){
+        if (tabs) {
           this.editableTabs2 = tabs.filter(tab => tab.content !== targetName);
         }
         //遍历editableTabs2 找到id 添加进去
-        this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
+        // this.$store.commit("this.editableTabs2", this.editableTabs2);
         this.tabName = this.editableTabs2.map(r => r.name);
-        console.log(this.editableTabs2)
-        let pathInfo = this.editableTabs2[this.editableTabs2.length - 1].content;
+        console.log(this.editableTabs2);
+        let pathInfo = this.editableTabs2[this.editableTabs2.length - 1]
+          .content;
         this.$router.push({
           path: pathInfo
         });
@@ -441,7 +424,7 @@ export default {
   color: #fff;
   font-size: 16px;
   border-radius: 8px 8px 0 0;
-  padding:0 11px;
+  padding: 0 11px;
 }
 #editableTabs > .el-tabs__header .el-tabs__item .el-icon-close {
   width: 22px;
