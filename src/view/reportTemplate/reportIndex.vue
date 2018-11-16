@@ -50,6 +50,10 @@
                 </el-date-picker>
                 <el-date-picker v-model="form[data.filterCode]" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-if="data.filterType==''" :value-format="'yyyy-MM-dd'" style="width:240px;">
                 </el-date-picker>
+                <el-select v-model="form[data.filterCode]" placeholder="请选择" v-if="data.filterType=='xlx'">
+                  <el-option v-for="item in data.filterData || []" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
               </el-form-item>
               <p v-if="!screenList.length" style="height:40px;"></p>
             </el-form>
@@ -87,6 +91,10 @@
             </el-date-picker>
             <el-date-picker type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" disabled v-if="data.filterType==''" style="width:240px;margin-left:10px;">
             </el-date-picker>
+             <el-select v-model="form[data.filterCode]" placeholder="请选择" v-if="data.filterType=='xlx'" style="margin-left:10px;">
+                  <el-option v-for="item in data.filterData || []" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
           </span>
         </el-checkbox-group>
       </div>
@@ -132,7 +140,7 @@
           </el-row>
 
         </div>
-      </div> 
+      </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="handClickWordCancel">取消</el-button>
         <el-button type="primary" @click="handClickWord">确定</el-button>
@@ -177,7 +185,7 @@ export default {
       dialogVisibleWord: false, //字段
       wordDialogScreen: "",
       checkedAllScreen: false,
-      downloadFilterType:'1',
+      downloadFilterType: "1",
       form: {},
       collectFlag: false,
       dialogVisibleDownload: false,
@@ -232,6 +240,11 @@ export default {
   },
   created() {
     this.init();
+     var array=[7,8,3,5,1,2,4,3,1];
+    var arrlist=arr =>Number(Array.from(new Set(arr)).sort((a,b)=>b-a).join('')).toLocaleString('en-US');
+    console.log(arrlist(array))
+
+
   },
   computed: {
     checkListWordShowF() {
@@ -368,7 +381,7 @@ export default {
       Promise.all([a, b, c, d]).then(r => {
         if (this.checkListWordConfirm.length == 0)
           this.checkListWordConfirm = this.checkListWordShow.map(
-            (item, index) => index<10&& item.fieldText
+            (item, index) => index < 10 && item.fieldText
           );
         this.handSubmit();
       });
@@ -580,7 +593,7 @@ export default {
         );
     },
     handClickDownload() {
-       let filterList = [],
+      let filterList = [],
         fieldList = [];
       for (let item in this.form) {
         filterList = this.screenList
@@ -599,46 +612,12 @@ export default {
           }
         })
         .filter(r => r);
-        console.log(fieldList.join(','))
-      this.$http
-        .get(api.reportRptDataExport(), {
-         params:{
-           ...this.reportInfo,
-          filterList:JSON.stringify(filterList),
-          fieldCodes:fieldList.join(','), 
-          fileType:this.downloadFilterType
-         }
-         })
-        .then(
-          res => {
-            if (res.data.code == 200) {
-            const elemIF = document.createElement("a");   
-            const blob = new Blob(res.data.data);
-            elemIF.href =  window.URL.createObjectURL(blob);   
-            elemIF.download =  blob.name;   
-            elemIF.style.display = "none";   
-            elemIF.click();
-            this.dialogVisibleDownload = false;
-            } else {
-              this.$message({
-                message: res.data.msg,
-                type: "warning",
-                duration: 1500
-              });
-            }
-          },
-          err => {
-            this.$message({
-              message: "网络错误",
-              type: "warning",
-              duration: 1500
-            });
-          }
-        );
+        let paremData = `masterNo=${this.reportInfo.masterNo}&reportCode=${this.reportInfo.reportCode}&fileType=${this.downloadFilterType}&filterList=${JSON.stringify(filterList)}&token=${localStorage.getItem("userid")}&fieldList=${fieldList.join(',')}`
+        window.open(api.reportRptDataExport(paremData),'_blank');
     },
     downloadTypeClick() {
-      this.dialogVisibleDownload=true;
-    },
+      this.dialogVisibleDownload = true;
+    }
   }
 };
 </script>
