@@ -608,7 +608,7 @@ export default {
       fieldList = this.checkListWordShow
         .map(data => {
           if (this.checkListWord.indexOf(data.fieldText) > -1) {
-            return data.reportFieldCode;
+            return data.reportFieldCode;       
           }
         })
         .filter(r => r);
