@@ -65,6 +65,10 @@ export default {
   reportRptData() {
     return _baseUrl + 'saasbi/report/rpt/data'
   },
+  //下载文件
+  reportRptDataExport() {
+    return _baseUrl + 'saasbi/report/rpt/data/export'
+  },
 
 
 }

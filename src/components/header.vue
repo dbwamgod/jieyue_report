@@ -268,38 +268,38 @@
           })
           .catch(() => {});
       }, //收藏功能接口
-      shoucangadd(){
-        this.$http
-          .post(api.userCollectAdd(), {
-            "reportCode":"RPT_LN_LEND_DTL_RPT",
-            "masterNo" :'01',
-          })
-          .then(res => {
-            this.ArrayData = res.data.data;
-            console.log(this.ArrayData)
+      // shoucangadd(){
+      //   this.$http
+      //     .post(api.userCollectAdd(), {
+      //       "reportCode":"RPT_LN_LEND_DTL_RPT",
+      //       "masterNo" :'01',
+      //     })
+      //     .then(res => {
+      //       this.ArrayData = res.data.data;
+      //       console.log(this.ArrayData)
             
-            this.shoucangAs();
-          })
-          .catch(() => {});
-      },//收藏添加功能接口
-      shoucangdelete(){
-        console.log(this.shoucangdata)
-        // this.shoucangdata.forEach((r)=>{
-        //   if(r.collectionName == '菜单借款明细表'){
-        //     this.shoucangdeleteId = r.id;
-        //   }
-        // })
-        this.$http
-          .post(api.userCollectRemove(), {
-          //  'datas':[this.shoucangdeleteId]
-          // "reportCode":"RPT_LN_LEND_DTL_RPT"
-           "reportCode":"RPT_LN_LEND_DTL_RPT"
-          })
-          .then(res => {
-            //  this.shoucangAs();
-          })
-          .catch(() => {});
-      },//收藏删除功能接口
+      //       this.shoucangAs();
+      //     })
+      //     .catch(() => {});
+      // },//收藏添加功能接口
+      // shoucangdelete(){
+      //   console.log(this.shoucangdata)
+      //   // this.shoucangdata.forEach((r)=>{
+      //   //   if(r.collectionName == '菜单借款明细表'){
+      //   //     this.shoucangdeleteId = r.id;
+      //   //   }
+      //   // })
+      //   this.$http
+      //     .post(api.userCollectRemove(), {
+      //     //  'datas':[this.shoucangdeleteId]
+      //     // "reportCode":"RPT_LN_LEND_DTL_RPT"
+      //      "reportCode":"RPT_LN_LEND_DTL_RPT"
+      //     })
+      //     .then(res => {
+      //       //  this.shoucangAs();
+      //     })
+      //     .catch(() => {});
+      // },//收藏删除功能接口
       Frontpageclick() {
         if (this.$route.path == "/saas/message/mainApp") {
           this.shoucangboolen = true;
