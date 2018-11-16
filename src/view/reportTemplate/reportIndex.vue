@@ -71,7 +71,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <div style="text-align: right; margin-top:13px;">
+    <div style="text-align: right; margin-top:13px;" v-if="!!page.currentPage">
       <el-pagination @current-change="handleCurrentChange" :current-page.sync="page.currentPage" :page-size="page.pageSize" layout="prev, pager, next, jumper" :total="page.totalRecords" :background="true">
       </el-pagination>
     </div>
@@ -368,7 +368,7 @@ export default {
       Promise.all([a, b, c, d]).then(r => {
         if (this.checkListWordConfirm.length == 0)
           this.checkListWordConfirm = this.checkListWordShow.map(
-            item => item.fieldText
+            (item, index) => index<10&& item.fieldText
           );
         this.handSubmit();
       });
@@ -454,7 +454,6 @@ export default {
     handSubmit() {
       let filterList = [],
         fieldList = [];
-      console.log("22", this.form);
       for (let item in this.form) {
         filterList = this.screenList
           .map(data => {
@@ -600,19 +599,26 @@ export default {
           }
         })
         .filter(r => r);
+        console.log(fieldList.join(','))
       this.$http
         .get(api.reportRptDataExport(), {
          params:{
            ...this.reportInfo,
-          filterList,
-          fieldList,
+          filterList:JSON.stringify(filterList),
+          fieldCodes:fieldList.join(','), 
           fileType:this.downloadFilterType
-         }          
-        })
+         }
+         })
         .then(
           res => {
             if (res.data.code == 200) {
-            console.log(res.data)
+            const elemIF = document.createElement("a");   
+            const blob = new Blob(res.data.data);
+            elemIF.href =  window.URL.createObjectURL(blob);   
+            elemIF.download =  blob.name;   
+            elemIF.style.display = "none";   
+            elemIF.click();
+            this.dialogVisibleDownload = false;
             } else {
               this.$message({
                 message: res.data.msg,
