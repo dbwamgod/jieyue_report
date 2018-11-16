@@ -72,7 +72,6 @@
         <router-view style="margin: 0px 34px;"></router-view>
       </el-col>
       <!-- </div> -->
-      {{this.Deletenavigationbar}}
     </el-row>
   </div>
 </template>
@@ -317,8 +316,6 @@ export default {
         this.tabName = this.editableTabs2.map(r => r.name);
         console.log(this.editableTabs2)
         let pathInfo = this.editableTabs2[this.editableTabs2.length - 1].content;
-        // console.log(pathInfo)
-        // console.log('111111')
         this.$router.push({
           path: pathInfo
         });
