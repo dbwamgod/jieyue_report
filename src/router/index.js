@@ -1,10 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router';
-import login from '@/view/login';
 import saas from '@/view/saasHT';
 import mainApp from '../view/message/mainApp'
-import demo from '../view/message/demo'
-import demo1 from '../view/message/demo1'
 import reportIndex from '../view/reportTemplate/reportIndex'
 
 import Messagenotification from '../view/message/Messagenotification'
@@ -37,48 +34,12 @@ export default new Router({
         title: 'SAASBI'
       },
       children: [
-        // {
-        //   path: 'nationwide',
-        //   component: nationwide,
-        //   name: '全国简报',
-        //   ind:1,
-        //   meta: {
-        //     title: '全国简报',
-        //     ind:1,
-        //   }
-        // },
-        // {
-        //   path: 'regionEcharts',
-        //   component: regionEcharts,
-        //   name: '大区简报',
-        //   ind:2,
-        //   meta: {
-        //     title: '大区简报',
-        //     ind:2,
-        //   }
-        // },
         {
           path: 'mainApp',
           component: mainApp,
           name: 'mainApp',
           meta: {
             title: 'mainApp'
-          }
-        },
-        {
-          path: 'demo',
-          component: demo,
-          name: 'demo',
-          meta: {
-            title: 'demo'
-          }
-        },
-        {
-          path: 'demo1',
-          component: demo1,
-          name: 'demo1',
-          meta: {
-            title: 'demo1'
           }
         },
         {

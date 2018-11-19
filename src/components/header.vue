@@ -87,9 +87,6 @@
         <div style="margin-top:5px;"><span style="float:right;color:#4DA1FC;">更多...</span></div>
       </div>
     </div>
-
-    <!--<ivd style="width: 100%;height: 40px;background:#1f283a;position: fixed;bottom: 0px;z-index: 999;">asdf</div>-->
-    <!-- <bottoms></bottoms> -->
   </div>
 </template>
 
@@ -153,10 +150,6 @@ export default {
     }
     // 刷新之后重新赋值
     this.editableTabs2 = JSON.parse(localStorage.getItem("editableTabs2"));
-    // if (this.editableTabs2) {
-      // localStorage.setItem("Deletenavigationbar", "true");
-      // this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
-    // }
     this.shoucangAs();
     this.Frontpageclick();
   },

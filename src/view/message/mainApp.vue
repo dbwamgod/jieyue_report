@@ -28,12 +28,12 @@
                       <div><img :src="Nodata" alt=""></div>
                       <p style="font-size:16px;color:#54657E;margin-left:48px;margin-top: 18px;letter-spacing: 3px;">暂无数据…</p>
                     </div>
-                    <!-- <div style="margin:0px auto;background:red;width:200px;height:200px;"></div> -->
                   </div>
                 </el-tab-pane>
               </el-tabs>
-              <div class="Agencytaskshu"></div>
-              <div class="Agencytaskmore" @click="handleFullScreen">更多</div>
+              <div class="AgencytaskshuA" v-show="TaskCount.length !== 0"></div>
+              <div class="AgencytaskshuB" v-show="TaskCount.length !== 0"></div>
+              <div class="Agencytaskmore">更多</div>
             </div>
           </div>
         </el-col>
@@ -100,8 +100,8 @@
                   <el-button type="primary" @click="dialogVisibleTextarea();Diurnalinterface()">保存</el-button>
                 </span>
               </el-dialog>
-              <div id="aaaa" style="width:200px;height:50px;font-size:16px;background:#000000;opacity: 0.5;color:rgb(255, 255, 255);box-shadow: 0 0 black;position:absolute;top:-48px;left:-210px;z-index: 100000;text-align: center;
-            " v-show="aaaa">保存成功</div>
+              <div id="Savesuccess" style="width:200px;height:50px;font-size:16px;background:#000000;opacity: 0.5;color:rgb(255, 255, 255);box-shadow: 0 0 black;position:absolute;top:-48px;left:-210px;z-index: 100000;text-align: center;
+            " v-show="Savesuccess">保存成功</div>
             </div>
             <!-- 日历部分 -->
             <div style="background:white;height: 409px;padding: 0 15px;">
@@ -129,9 +129,6 @@
                           :key='index'>
                           <span>{{item1.num}}</span>
                           <span :style=" [Memo_c.indexOf(item1.Memo_a) > -1? {background:'red'}: '' ]" style="width:3px;height:3px;position: absolute;left: 48%;bottom: 5px;"></span>
-                          <!-- {{Memo_c}} -->
-                          <!-- {{item1.Memo_a}} -->
-                          <!-- {{Memo_c.indexOf(item1.Memo_a)}} -->
                         </td>
                       </tr>
                     </table>
@@ -140,11 +137,10 @@
                     <p @click="backToday">回到今天</p>
                   </div> -->
                 </div>
-                <!-- {{Memo_c}} -->
               </div>
               <!-- 显示日历内容 -->
               <div style="padding-top: 12px;border-top: 1px dashed #ccc;">
-                <div style="height: 110px;overflow-y: auto;">
+                <div style="height: 110px;overflow-y: auto;position: relative;">
                   <ul v-show="Memo_e.length>0">
                     <!-- <li class="headlineLi" style="padding-left: 23px;padding-right: 29px;line-height: 48px;height: 48px;"
                       v-for="(item,index) in headlines" @click="headlineLiC(index)" :key='index'>
@@ -161,12 +157,8 @@
                         <img :src="Nocollection" alt="" style="vertical-align:middle;"> 暂无收藏
                       </div>
                     </div>
-                    <!-- <span style="position: absolute;bottom: 13%;left: 43%;">暂无消息</span> -->
                   </div>
                 </div>
-                <!-- <div style="float:left">
-                  b
-                </div> -->
               </div>
             </div>
           </div>
@@ -189,8 +181,7 @@ export default {
       xiaoxitongzhi: require("../../assets/images/icon-xiaoxitongzhi.png"),
       schedule: require("../../assets/images/schedule.png"),
       Nodata: require("../../assets/images/Nodata.png"),
-      Nocollection: require("../../assets/images/Nocollection.png"), //mailbox
-      // NocollectionA: require("../../assets/images/NocollectionA.png"),
+      Nocollection: require("../../assets/images/Nocollection.png"), 
       mailbox: require("../../assets/images/mailbox.png"),
       body: "",
       dataheader: "",
@@ -258,7 +249,8 @@ export default {
       editableTabs2: [],
       activeName: "first",
       currentdate: "",
-      aaaa: false
+      Savesuccess: false,
+      TaskCount:''
     };
   },
   computed: {
@@ -270,35 +262,6 @@ export default {
     this.Queryriqi();
   },
   methods: {
-    ...mapActions(["saveDatal"]),
-    handleFullScreen() {
-      let element = document.documentElement;
-      if (this.fullscreen) {
-        this.saveDatal(true);
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.webkitCancelFullScreen) {
-          document.webkitCancelFullScreen();
-        } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        }
-      } else {
-        this.saveDatal(false);
-        if (element.requestFullscreen) {
-          element.requestFullscreen();
-        } else if (element.webkitRequestFullScreen) {
-          element.webkitRequestFullScreen();
-        } else if (element.mozRequestFullScreen) {
-          element.mozRequestFullScreen();
-        } else if (element.msRequestFullscreen) {
-          // IE11
-          element.msRequestFullscreen();
-        }
-      }
-      this.fullscreen = !this.fullscreen;
-    }, //图标--全屏显示
     datasTime() {
       let date = new Date();
       let preDate = new Date(date.getTime());
@@ -485,7 +448,7 @@ export default {
     }, //点击日期获取年月日--切換內容
     dialogVisibleTextarea(e) {
       var vm = this;
-      this.aaaa = true;
+      this.Savesuccess = true;
       this.setCalender(new Date());
       this.dialogVisible = false;
       this.textarea = this.textarea;
@@ -515,8 +478,8 @@ export default {
         this.firstday1 = "";
       }
       setTimeout(function() {
-        vm.aaaa = false;
-      },1000);
+        vm.Savesuccess = false;
+      },500);
     }, //控制点击确定之后状态
     headlineLiC(index) {
       console.log(index);
@@ -574,9 +537,6 @@ export default {
       // console.log(tab, event);
     },
     Diurnalinterface() {
-      console.log(this.firstday1)
-      console.log(this.textarea)
-      console.log(this.inputTitle)
       this.$http
         .post(api.notepadAdd(),
         {
@@ -646,6 +606,9 @@ export default {
         })
         .catch(() => {});
     },//查询日期内容
+    TaskInterface(){
+        this.TaskCount = 0
+    }, //任务接口留位子
     MessageFunction(){
       
     }//消息接口留位子
@@ -666,6 +629,7 @@ export default {
   text-overflow: ellipsis;
   width: 60%;
   display: inline-block;
+  position: absolute;
 }
 
 /* 日期功能区 */
@@ -737,12 +701,21 @@ export default {
 }
 
 /* 任务功能区 */
-#mainApp .Agencytaskshu {
+#mainApp .AgencytaskshuA {
   padding: 5px;
   background-color: red;
   position: absolute;
   top: 8px;
   left: 103px;
+  border-radius: 50%;
+  z-index: 999;
+}
+#mainApp .AgencytaskshuB {
+  padding: 5px;
+  background-color: red;
+  position: absolute;
+  top: 8px;
+  left: 199px;
   border-radius: 50%;
   z-index: 999;
 }

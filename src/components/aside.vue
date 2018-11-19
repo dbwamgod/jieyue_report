@@ -42,7 +42,6 @@
       </el-col>
 
       <!--页面的内容-->
-      <!-- <div v-show="this.hideheaderaside" style="width:100%;height:100%;"> -->
       <el-col :span="22" style="-webkit-box-flex: 1;width:87%;height:100%;flex:1;position: relative;background: #f1f2f6" :style="this.hideheaderaside?(this.val?{marginLeft:'160px'}:{marginLeft:'50px'}) :({marginLeft:0+'px'})">
         <div style="width: 2px;height: 100%;background:rgba(0,0,0,.1);position: absolute;" id="DetectionHeight"></div>
 
@@ -56,14 +55,7 @@
 
         <!--整体导航-->
         <div style="margin:21px 0 0 32px;" class="OverallNavigation">
-          <!--图标-->
-
-          <!-- <span class="el-dropdown-link" style="float: left;padding:3px 16px;height: 26px;display: inline-block;background: #3C404C;border-radius: 4px 4px 0 0;"
-              @click="buttonMainD">
-              <img :src="fanhuishouye" alt="" style="width: 20px;height: 20px">
-            </span> -->
-
-          <!--触发器-->
+         <!--触发器-->
           <el-tabs id="editableTabs" v-model="editableTabsValue2" type="card" @tab-click="tabsn" closable 
                   @tab-remove="removeTab" style="z-index: 999;height: 32px;" v-show="Deletenavigationbar">
             <el-tab-pane v-for="option in $store.state.editableTabs2" :label="option.title" :name="option.content" :key="option.name"></el-tab-pane>
@@ -71,7 +63,6 @@
         </div>
         <router-view style="margin: 0px 34px;"></router-view>
       </el-col>
-      <!-- </div> -->
     </el-row>
   </div>
 </template>
@@ -105,7 +96,6 @@ export default {
       fanhuishouye: require("../assets/images/icon-fanhuishouye.png"), //小房子 icon-shouqizuocedaohang
       shouqizuocedaohang: require("../assets/images/icon-shouqizuocedaohang.png"), // icon-sousuo.png
       Deletenavigationbar: !!localStorage.getItem("Deletenavigationbar"),
-      a: JSON.parse(localStorage.getItem("editableTabs2"))
     };
   },
   computed: {
