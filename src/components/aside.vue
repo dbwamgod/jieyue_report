@@ -16,14 +16,14 @@
                 <!--第三层-->
                 <template slot="title" v-show='itema.name'>{{itema.name}}{{itema.children == []}}</template>
                 <el-menu-item-group v-for="(itemb,index) in itema.children" :index="itemb.id +''" :key="index">
-                  <el-menu-item :index="itemb.id+''" @click="gotoPath(itemb.url,itemb.id,itemb.templateCode) ;addTab(editableTabsValue2,itemb.url,itemb.name,itemb.id)">
+                  <el-menu-item :index="itemb.id+''" @click="gotoPath(itemb.url,itemb.id,itemb.templateCode) ;addTab(editableTabsValue2,itemb.url,itemb.name,itemb.id,itemb.templateCode)">
                     <span class="activeAfte"></span>
                     {{itemb.name}}
                 </el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <!--第二层-->
-                <el-menu-item :index="itema.id+''" @click="gotoPath(itema.url,itema.id,itema.templateCode) ;addTab(editableTabsValue2,itema.url,itema.name,itema.id)" v-for="(itema,index) in item.children" v-if="(itema.children)" :key='index'>
+                <el-menu-item :index="itema.id+''" @click="gotoPath(itema.url,itema.id,itema.templateCode) ;addTab(editableTabsValue2,itema.url,itema.name,itema.id,itema.templateCode)" v-for="(itema,index) in item.children" v-if="(itema.children)" :key='index'>
                   <span class="activeAfte"></span>
                   {{itema.name}}
                 </el-menu-item>
@@ -95,7 +95,7 @@ export default {
       ths: "160",
       fanhuishouye: require("../assets/images/icon-fanhuishouye.png"), //小房子 icon-shouqizuocedaohang
       shouqizuocedaohang: require("../assets/images/icon-shouqizuocedaohang.png"), // icon-sousuo.png
-      Deletenavigationbar: !!localStorage.getItem("Deletenavigationbar"),
+      Deletenavigationbar: JSON.parse(localStorage.getItem("Deletenavigationbar")),
     };
   },
   computed: {
@@ -110,21 +110,23 @@ export default {
       this.CollectionNameLis = this.CollectionNameLis.length;
     },
     $route(to, from) {
+      console.log(from.query.reportCode)
+      localStorage.setItem("aa", JSON.stringify(from.query.reportCode))
       this.editableTabsValue2 = to.name;
-      this.Deletenavigationbar = !!to.meta.isShowTabs;
-    },
-    Deletenavigationbar(news, old) {
-      if (old == "true") {
-        this.Deletenavigationbar = true;
+      if(this.editableTabsValue2 == 'mainApp'){
+        localStorage.setItem("editableTabs2", JSON.stringify([]));
+        this.Deletenavigationbar = false;
+        // alert('ddddddddddd')
       }
-    }
+    },
   },
   beforeUpdate() {
     this.defaultActive = this.state_router;
-    var srt = JSON.parse(localStorage.getItem("editableTabs2"));
-    if (srt.length) {
-      this.Deletenavigationbar = true;
-    }
+     var srt = JSON.parse(localStorage.getItem("editableTabs2"));
+     if (srt.length) {
+       this.addTab();
+       this.Deletenavigationbar = true;
+     }
   },
   created() {
     this.aside();
@@ -137,44 +139,58 @@ export default {
         JSON.parse(localStorage.getItem("editableTabs2")) || [];
       this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
     }, //刷新之前保存导航栏
+    aaa(){
+       this.Deletenavigationbar = false;
+    },
     tabsn(tab, event) {
+      console.log(tab)
+      console.log(event)
       this.$router.push({
-        path: tab.name
+        path: tab.name,
+         query: { reportCode: JSON.parse(localStorage.getItem("aa")) }
       });
     },
     aside() {
-      this.ArrayData = [
-        {
-          name: "菜单报表管理",
-          id: 1,
-          icon: "baobiaogongneng",
-          children: [
-            {
-              name: "菜单借款明细表",
-              id: 4,
-              url: "reportIndex?dfadsff=asdfasdf",
-              children: []
-            }
-          ]
-        },
-        {
-          name: "菜单报表管理",
-          id: 2,
-          icon: "baobiaogongneng",
-          children: [
-            {
-              name: "菜单借款明细表B",
-              id: 6,
-              url: "demo"
-            },
-            {
-              name: "菜单借款明细表AAB",
-              id: 7,
-              url: "demo1"
-            }
-          ]
-        }
-      ];
+      // this.ArrayData = [
+      //   {
+      //     name: "菜单报表管理",
+      //     id: 1,
+      //     icon: "baobiaogongneng",
+      //     children: [
+      //       {
+      //         name: "借款明细表",
+      //         id: 4,
+      //         url: "reportIndex",
+      //         templateCode:'RPT_LN_LEND_DTL_RPT',
+      //         children: []
+      //       },
+      //       {
+      //         name: "借款明细表A",
+      //         id: 4,
+      //         url: "reportIndex",
+      //         templateCode:'RPT_LN_LEND_DTL_RPTA',
+      //         children: []
+      //       }
+      //     ]
+      //   },
+      //   {
+      //     name: "菜单报表管理",
+      //     id: 2,
+      //     icon: "baobiaogongneng",
+      //     children: [
+      //       {
+      //         name: "菜单借款明细表B",
+      //         id: 6,
+      //         url: "demo"
+      //       },
+      //       {
+      //         name: "菜单借款明细表AAB",
+      //         id: 7,
+      //         url: "demo1"
+      //       }
+      //     ]
+      //   }
+      // ];
       this.$http
         .post(api.pdng(), {
           masterNo: "06"
@@ -204,11 +220,9 @@ export default {
       this.vl = !this.vl;
       this.hl = !this.hl;
     }, //点击 隐藏和打开侧边栏
-    addTab(targetName, a, b, c) {
+    addTab(targetName, a, b, c, f) {
       // a 路径 b 名字  c id
-      let str = a; ///saas/message/nationwide
-      var index = str.lastIndexOf("/");
-      let d = str.substring(index + 1, str.length);
+      let d = a;
       if (d) {
         if (localStorage.getItem("Savearray")) {
           if (localStorage.getItem("Savearray").indexOf(c) == -1) {
@@ -216,38 +230,30 @@ export default {
             this.editableTabs2.push({
               title: b,
               name: c,
-              content: d
+              content: d,
+              reportCode:f
             });
             this.tabName.push(c);
             this.editableTabsValue2 = newTabName;
-            this.Deletenavigationbar = localStorage.getItem(
-              "Deletenavigationbar"
-            );
-            this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
-            this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
-          } else {
-            this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
-            this.Deletenavigationbar = localStorage.getItem(
-              "Deletenavigationbar"
-            );
-          }
+          } 
         } else {
           if (this.tabName.indexOf(c) == -1) {
             let newTabName = ++this.tabIndex + "";
             this.editableTabs2.push({
               title: b,
               name: c,
-              content: d
+              content: d,
+              reportCode:f
             });
             this.tabName.push(c);
             this.editableTabsValue2 = newTabName;
-            this.Deletenavigationbar =
-              localStorage.setItem("Deletenavigationbar", "true") ||
-              localStorage.getItem("Deletenavigationbar");
-            this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
-            this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
           }
         }
+            this.Deletenavigationbar =
+              localStorage.setItem("Deletenavigationbar", JSON.stringify("true")) ||
+              JSON.parse(localStorage.getItem("Deletenavigationbar"));
+            this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
+            this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
       }
     }, //点击侧边栏 添加在导航栏上
     removeTab(targetName) {
@@ -276,8 +282,8 @@ export default {
           localStorage.removeItem("Deletenavigationbar");
         }
         this.$store.commit("SAVE_EDITABLETABS3", []);
+        // localStorage.setItem("Deletenavigationbar", JSON.stringify("false"))
         this.Deletenavigationbar = false;
-        // localStorage.setItem("editableTabs2",[]);
         return this.$router.push((name = "mainApp"));
       } else {
         if (tabs) {
@@ -294,9 +300,7 @@ export default {
         });
       }
     }, //删除导航栏
-    buttonMainD() {
-      this.$router.push((name = "mainApp"));
-    } //图标--回主页
+
   }
 };
 </script>
