@@ -162,6 +162,14 @@ export default {
       localStorage.removeItem("userName");
       localStorage.removeItem("userid");
       localStorage.removeItem("password");
+      this.$http.post(api.logCollection(),{
+                account:sessionStorage.getItem("userPhone"),
+                masterNo:'06',
+                sysNo:'PcReport',
+                modelNo:'999',
+                optionNo:'nothing',
+                params:[],
+              });
       this.$router.push({
         name: "Login"
       });

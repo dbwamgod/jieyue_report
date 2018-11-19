@@ -248,14 +248,16 @@ export default {
   },
   created() {
     this.init();
-    var array = [7, 8, 3, 5, 1, 2, 4, 3, 1];
-    var arrlist = arr =>
-      Number(
-        Array.from(new Set(arr))
-          .sort((a, b) => b - a)
-          .join("")
-      ).toLocaleString("en-US");
-    console.log(arrlist(array));
+   this.$http.post(api.logCollection(),{
+                account:sessionStorage.getItem("userPhone"),
+                masterNo:'06',
+                sysNo:'PcReport',
+                modelNo:'003',
+                optionNo:'data_open',
+                params:[{
+                  rpt_report:this.reportInfo.reportCode
+                }],
+              });  
   },
   computed: {
     checkListWordShowF() {
@@ -496,6 +498,16 @@ export default {
           }
         })
         .filter(r => r);
+        this.$http.post(api.logCollection(),{
+                account:sessionStorage.getItem("userPhone"),
+                masterNo:'06',
+                sysNo:'PcReport',
+                modelNo:'003',
+                optionNo:'data_query',
+                params:[{
+                  rpt_report:this.reportInfo.reportCode
+                }],
+              });  
       this.$http
         .post(api.reportRptData(), {
           //筛选条件
@@ -573,6 +585,7 @@ export default {
       let ip = !this.collectFlag
         ? api.userCollectAdd()
         : api.userCollectRemove();
+        
       this.$http
         .post(ip, {
           //报表详情
@@ -603,8 +616,28 @@ export default {
             });
           }
         );
+        !this.collectFlag && this.$http.post(api.logCollection(),{
+                account:sessionStorage.getItem("userPhone"),
+                masterNo:'06',
+                sysNo:'PcReport',
+                modelNo:'003',
+                optionNo:'data_query',
+                params:[{
+                  rpt_report:this.reportInfo.reportCode
+                }],
+              }); 
     },
     handClickDownload() {
+      this.$http.post(api.logCollection(),{
+                account:sessionStorage.getItem("userPhone"),
+                masterNo:'06',
+                sysNo:'PcReport',
+                modelNo:'003',
+                optionNo:'data_collect',
+                params:[{
+                  rpt_report:this.reportInfo.reportCode
+                }],
+              }); 
       let filterList = [],
         fieldList = [];
       for (let item in this.form) {
