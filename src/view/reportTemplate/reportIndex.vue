@@ -51,7 +51,7 @@
                 <el-date-picker v-model="form[data.filterCode]" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-if="data.filterType==''" :value-format="'yyyy-MM-dd'" style="width:240px;">
                 </el-date-picker>
                 <el-select v-model="form[data.filterCode]" placeholder="请选择" v-if="data.filterType=='xlx'">
-                  <el-option v-for="item in data.filterData || []" :key="item.value" :label="item.label" :value="item.value">
+                  <el-option v-for="item in data.selectItemList || []" :key="item.code" :label="item.name" :value="item.code">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -66,8 +66,14 @@
       </div>
 
     </div>
+    <div style="background:#fff;margin-top:10px; display:flex; justify-content: center" v-if="!initType">
+      <div style="text-align: center; width:180px; height:210px;">
+        <img :src="require('@/assets/images/Nodata.png')" alt="">
+        <p>暂无数据...</p>
+      </div>
+    </div>
+    <div class="report-content-table" v-if="initType">
 
-    <div class="report-content-table">
       <el-table :data="tableData" style="width: 100%">
         <el-table-column label="序号" type="index" width="60" align="center">
         </el-table-column>
@@ -75,7 +81,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <div style="text-align: right; margin-top:13px;" v-if="!!page.currentPage">
+    <div style="text-align: right; margin-top:13px;" v-if="!!page.currentPage && initType">
       <el-pagination @current-change="handleCurrentChange" :current-page.sync="page.currentPage" :page-size="page.pageSize" layout="prev, pager, next, jumper" :total="page.totalRecords" :background="true">
       </el-pagination>
     </div>
@@ -91,10 +97,10 @@
             </el-date-picker>
             <el-date-picker type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" disabled v-if="data.filterType==''" style="width:240px;margin-left:10px;">
             </el-date-picker>
-             <el-select v-model="form[data.filterCode]" placeholder="请选择" v-if="data.filterType=='xlx'" style="margin-left:10px;">
-                  <el-option v-for="item in data.filterData || []" :key="item.value" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
+            <el-select v-model="form[data.filterCode]" placeholder="请选择" v-if="data.filterType=='xlx'" style="margin-left:10px;">
+              <el-option v-for="item in data.filterData || []" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
           </span>
         </el-checkbox-group>
       </div>
@@ -172,7 +178,7 @@
   </div>
 </template>
  <script>
-import Vmodel from "@/view/reportTemplate/Vmodel";
+
 import api from "@/api";
 import { mapState, mapActions, mapGetters } from "vuex";
 export default {
@@ -188,6 +194,7 @@ export default {
       downloadFilterType: "1",
       form: {},
       collectFlag: false,
+      initType: false,
       dialogVisibleDownload: false,
       screenList: [], //筛选条件页面展示集合
       checkList: [], //弹框筛选条件集合
@@ -235,16 +242,20 @@ export default {
       ]
     };
   },
-  components: {
-    Vmodel
-  },
   created() {
     this.init();
-     var array=[7,8,3,5,1,2,4,3,1];
-    var arrlist=arr =>Number(Array.from(new Set(arr)).sort((a,b)=>b-a).join('')).toLocaleString('en-US');
-    console.log(arrlist(array))
-
-
+    this.$http.post(api.logCollection(), {
+      account: sessionStorage.getItem("userPhone"),
+      masterNo: "06",
+      sysNo: "PcReport",
+      modelNo: "003",
+      optionNo: "data_open",
+      params: [
+        {
+          rpt_report: this.reportInfo.reportCode
+        }
+      ]
+    });
   },
   computed: {
     checkListWordShowF() {
@@ -282,11 +293,12 @@ export default {
             if (res.data.code == 200) {
               this.reportRptInfo = res.data.data;
             } else {
-              this.$message({
-                message: res.data.msg,
-                type: "warning",
-                duration: 1500
-              });
+              res.data.code != 407 &&
+                this.$message({
+                  message: res.data.msg,
+                  type: "warning",
+                  duration: 1500
+                });
             }
           },
           err => {
@@ -315,11 +327,12 @@ export default {
               );
               this.collectFlag = !!res.data.data.collectFlag;
             } else {
-              this.$message({
-                message: res.data.msg,
-                type: "warning",
-                duration: 1500
-              });
+              res.data.code != 407 &&
+                this.$message({
+                  message: res.data.msg,
+                  type: "warning",
+                  duration: 1500
+                });
             }
           },
           err => {
@@ -339,11 +352,12 @@ export default {
             if (res.data.code == 200) {
               this.checkboxList = res.data.data;
             } else {
-              this.$message({
-                message: res.data.msg,
-                type: "warning",
-                duration: 1500
-              });
+              res.data.code != 407 &&
+                this.$message({
+                  message: res.data.msg,
+                  type: "warning",
+                  duration: 1500
+                });
             }
           },
           err => {
@@ -363,11 +377,12 @@ export default {
             if (res.data.code == 200) {
               this.checkListWordShow = res.data.data || [];
             } else {
-              this.$message({
-                message: res.data.msg,
-                type: "warning",
-                duration: 1500
-              });
+              res.data.code != 407 &&
+                this.$message({
+                  message: res.data.msg,
+                  type: "warning",
+                  duration: 1500
+                });
             }
           },
           err => {
@@ -383,6 +398,7 @@ export default {
           this.checkListWordConfirm = this.checkListWordShow.map(
             (item, index) => index < 10 && item.fieldText
           );
+        this.initType = true;
         this.handSubmit();
       });
     },
@@ -484,6 +500,18 @@ export default {
           }
         })
         .filter(r => r);
+      this.$http.post(api.logCollection(), {
+        account: sessionStorage.getItem("userPhone"),
+        masterNo: "06",
+        sysNo: "PcReport",
+        modelNo: "003",
+        optionNo: "data_query",
+        params: [
+          {
+            rpt_report: this.reportInfo.reportCode
+          }
+        ]
+      });
       this.$http
         .post(api.reportRptData(), {
           //筛选条件
@@ -561,6 +589,7 @@ export default {
       let ip = !this.collectFlag
         ? api.userCollectAdd()
         : api.userCollectRemove();
+
       this.$http
         .post(ip, {
           //报表详情
@@ -591,8 +620,33 @@ export default {
             });
           }
         );
+      !this.collectFlag &&
+        this.$http.post(api.logCollection(), {
+          account: sessionStorage.getItem("userPhone"),
+          masterNo: "06",
+          sysNo: "PcReport",
+          modelNo: "003",
+          optionNo: "data_query",
+          params: [
+            {
+              rpt_report: this.reportInfo.reportCode
+            }
+          ]
+        });
     },
     handClickDownload() {
+      this.$http.post(api.logCollection(), {
+        account: sessionStorage.getItem("userPhone"),
+        masterNo: "06",
+        sysNo: "PcReport",
+        modelNo: "003",
+        optionNo: "data_collect",
+        params: [
+          {
+            rpt_report: this.reportInfo.reportCode
+          }
+        ]
+      });
       let filterList = [],
         fieldList = [];
       for (let item in this.form) {
@@ -608,12 +662,19 @@ export default {
       fieldList = this.checkListWordShow
         .map(data => {
           if (this.checkListWord.indexOf(data.fieldText) > -1) {
-            return data.reportFieldCode;       
+            return data.reportFieldCode;
           }
         })
         .filter(r => r);
-        let paremData = `masterNo=${this.reportInfo.masterNo}&reportCode=${this.reportInfo.reportCode}&fileType=${this.downloadFilterType}&filterList=${JSON.stringify(filterList)}&token=${localStorage.getItem("userid")}&fieldList=${fieldList.join(',')}`
-        window.open(api.reportRptDataExport(paremData),'_blank');
+
+      let paremData = `masterNo=${this.reportInfo.masterNo}&reportCode=${
+        this.reportInfo.reportCode
+      }&fileType=${this.downloadFilterType}&filterList=${encodeURI(
+        JSON.stringify(filterList)
+      )}&token=${localStorage.getItem("userid")}&fieldList=${fieldList.join(
+        ","
+      )}`;
+      window.open(api.reportRptDataExport(paremData), "_blank");
     },
     downloadTypeClick() {
       this.dialogVisibleDownload = true;

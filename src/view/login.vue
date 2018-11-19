@@ -132,6 +132,14 @@ export default {
           .then(res => {
             if (res.data.code == 200) {
               Toast({ message: "登录成功", duration: 1000 });
+              this.$http.post(api.logCollection(),{
+                account:phone,
+                masterNo:'06',
+                sysNo:'PcReport',
+                modelNo:'001',
+                optionNo:'nothing',
+                params:[],
+              });
               let token = res.data.data.token;
               localStorage.removeItem("userid");
               localStorage.setItem("userName", res.data.data.userName);
