@@ -178,10 +178,9 @@
   </div>
 </template>
  <script>
-import Vmodel from "@/view/reportTemplate/Vmodel";
+
 import api from "@/api";
 import { mapState, mapActions, mapGetters } from "vuex";
-import base64 from 'base64-js'
 export default {
   name: "reportIndex",
   data() {
@@ -243,21 +242,20 @@ export default {
       ]
     };
   },
-  components: {
-    Vmodel
-  },
   created() {
     this.init();
-   this.$http.post(api.logCollection(),{
-                account:sessionStorage.getItem("userPhone"),
-                masterNo:'06',
-                sysNo:'PcReport',
-                modelNo:'003',
-                optionNo:'data_open',
-                params:[{
-                  rpt_report:this.reportInfo.reportCode
-                }],
-              });  
+    this.$http.post(api.logCollection(), {
+      account: sessionStorage.getItem("userPhone"),
+      masterNo: "06",
+      sysNo: "PcReport",
+      modelNo: "003",
+      optionNo: "data_open",
+      params: [
+        {
+          rpt_report: this.reportInfo.reportCode
+        }
+      ]
+    });
   },
   computed: {
     checkListWordShowF() {
@@ -295,11 +293,12 @@ export default {
             if (res.data.code == 200) {
               this.reportRptInfo = res.data.data;
             } else {
-              this.$message({
-                message: res.data.msg,
-                type: "warning",
-                duration: 1500
-              });
+              res.data.code != 407 &&
+                this.$message({
+                  message: res.data.msg,
+                  type: "warning",
+                  duration: 1500
+                });
             }
           },
           err => {
@@ -328,11 +327,12 @@ export default {
               );
               this.collectFlag = !!res.data.data.collectFlag;
             } else {
-              this.$message({
-                message: res.data.msg,
-                type: "warning",
-                duration: 1500
-              });
+              res.data.code != 407 &&
+                this.$message({
+                  message: res.data.msg,
+                  type: "warning",
+                  duration: 1500
+                });
             }
           },
           err => {
@@ -352,11 +352,12 @@ export default {
             if (res.data.code == 200) {
               this.checkboxList = res.data.data;
             } else {
-              this.$message({
-                message: res.data.msg,
-                type: "warning",
-                duration: 1500
-              });
+              res.data.code != 407 &&
+                this.$message({
+                  message: res.data.msg,
+                  type: "warning",
+                  duration: 1500
+                });
             }
           },
           err => {
@@ -376,11 +377,12 @@ export default {
             if (res.data.code == 200) {
               this.checkListWordShow = res.data.data || [];
             } else {
-              this.$message({
-                message: res.data.msg,
-                type: "warning",
-                duration: 1500
-              });
+              res.data.code != 407 &&
+                this.$message({
+                  message: res.data.msg,
+                  type: "warning",
+                  duration: 1500
+                });
             }
           },
           err => {
@@ -498,16 +500,18 @@ export default {
           }
         })
         .filter(r => r);
-        this.$http.post(api.logCollection(),{
-                account:sessionStorage.getItem("userPhone"),
-                masterNo:'06',
-                sysNo:'PcReport',
-                modelNo:'003',
-                optionNo:'data_query',
-                params:[{
-                  rpt_report:this.reportInfo.reportCode
-                }],
-              });  
+      this.$http.post(api.logCollection(), {
+        account: sessionStorage.getItem("userPhone"),
+        masterNo: "06",
+        sysNo: "PcReport",
+        modelNo: "003",
+        optionNo: "data_query",
+        params: [
+          {
+            rpt_report: this.reportInfo.reportCode
+          }
+        ]
+      });
       this.$http
         .post(api.reportRptData(), {
           //筛选条件
@@ -585,7 +589,7 @@ export default {
       let ip = !this.collectFlag
         ? api.userCollectAdd()
         : api.userCollectRemove();
-        
+
       this.$http
         .post(ip, {
           //报表详情
@@ -616,32 +620,37 @@ export default {
             });
           }
         );
-        !this.collectFlag && this.$http.post(api.logCollection(),{
-                account:sessionStorage.getItem("userPhone"),
-                masterNo:'06',
-                sysNo:'PcReport',
-                modelNo:'003',
-                optionNo:'data_query',
-                params:[{
-                  rpt_report:this.reportInfo.reportCode
-                }],
-              }); 
+      !this.collectFlag &&
+        this.$http.post(api.logCollection(), {
+          account: sessionStorage.getItem("userPhone"),
+          masterNo: "06",
+          sysNo: "PcReport",
+          modelNo: "003",
+          optionNo: "data_query",
+          params: [
+            {
+              rpt_report: this.reportInfo.reportCode
+            }
+          ]
+        });
     },
     handClickDownload() {
-      this.$http.post(api.logCollection(),{
-                account:sessionStorage.getItem("userPhone"),
-                masterNo:'06',
-                sysNo:'PcReport',
-                modelNo:'003',
-                optionNo:'data_collect',
-                params:[{
-                  rpt_report:this.reportInfo.reportCode
-                }],
-              }); 
+      this.$http.post(api.logCollection(), {
+        account: sessionStorage.getItem("userPhone"),
+        masterNo: "06",
+        sysNo: "PcReport",
+        modelNo: "003",
+        optionNo: "data_collect",
+        params: [
+          {
+            rpt_report: this.reportInfo.reportCode
+          }
+        ]
+      });
       let filterList = [],
         fieldList = [];
       for (let item in this.form) {
-       filterList = this.screenList
+        filterList = this.screenList
           .map(data => {
             if (data.filterCode == item) {
               data.filterVal = this.form[item];
@@ -657,14 +666,12 @@ export default {
           }
         })
         .filter(r => r);
-     
-  
-     
+
       let paremData = `masterNo=${this.reportInfo.masterNo}&reportCode=${
         this.reportInfo.reportCode
-      }&fileType=${this.downloadFilterType}&filterList=${encodeURI(JSON.stringify(
-        filterList
-      ))}&token=${localStorage.getItem("userid")}&fieldList=${fieldList.join(
+      }&fileType=${this.downloadFilterType}&filterList=${encodeURI(
+        JSON.stringify(filterList)
+      )}&token=${localStorage.getItem("userid")}&fieldList=${fieldList.join(
         ","
       )}`;
       window.open(api.reportRptDataExport(paremData), "_blank");
