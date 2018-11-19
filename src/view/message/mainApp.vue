@@ -28,13 +28,12 @@
                       <div><img :src="Nodata" alt=""></div>
                       <p style="font-size:16px;color:#54657E;margin-left:48px;margin-top: 18px;letter-spacing: 3px;">暂无数据…</p>
                     </div>
-                    <!-- <div style="margin:0px auto;background:red;width:200px;height:200px;"></div> -->
                   </div>
                 </el-tab-pane>
               </el-tabs>
               <div class="AgencytaskshuA" v-show="TaskCount.length !== 0"></div>
               <div class="AgencytaskshuB" v-show="TaskCount.length !== 0"></div>
-              <div class="Agencytaskmore" @click="handleFullScreen">更多</div>
+              <div class="Agencytaskmore">更多</div>
             </div>
           </div>
         </el-col>
@@ -182,8 +181,7 @@ export default {
       xiaoxitongzhi: require("../../assets/images/icon-xiaoxitongzhi.png"),
       schedule: require("../../assets/images/schedule.png"),
       Nodata: require("../../assets/images/Nodata.png"),
-      Nocollection: require("../../assets/images/Nocollection.png"), //mailbox
-      // NocollectionA: require("../../assets/images/NocollectionA.png"),
+      Nocollection: require("../../assets/images/Nocollection.png"), 
       mailbox: require("../../assets/images/mailbox.png"),
       body: "",
       dataheader: "",
@@ -264,35 +262,6 @@ export default {
     this.Queryriqi();
   },
   methods: {
-    ...mapActions(["saveDatal"]),
-    handleFullScreen() {
-      let element = document.documentElement;
-      if (this.fullscreen) {
-        this.saveDatal(true);
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.webkitCancelFullScreen) {
-          document.webkitCancelFullScreen();
-        } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        }
-      } else {
-        this.saveDatal(false);
-        if (element.requestFullscreen) {
-          element.requestFullscreen();
-        } else if (element.webkitRequestFullScreen) {
-          element.webkitRequestFullScreen();
-        } else if (element.mozRequestFullScreen) {
-          element.mozRequestFullScreen();
-        } else if (element.msRequestFullscreen) {
-          // IE11
-          element.msRequestFullscreen();
-        }
-      }
-      this.fullscreen = !this.fullscreen;
-    }, //图标--全屏显示
     datasTime() {
       let date = new Date();
       let preDate = new Date(date.getTime());

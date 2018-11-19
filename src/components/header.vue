@@ -87,9 +87,6 @@
         <div style="margin-top:5px;"><span style="float:right;color:#4DA1FC;">更多...</span></div>
       </div>
     </div>
-
-    <!--<ivd style="width: 100%;height: 40px;background:#1f283a;position: fixed;bottom: 0px;z-index: 999;">asdf</div>-->
-    <!-- <bottoms></bottoms> -->
   </div>
 </template>
 
