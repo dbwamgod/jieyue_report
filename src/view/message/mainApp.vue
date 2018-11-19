@@ -617,9 +617,9 @@ export default {
   }
 };
 </script>
-
-<style>
-#mainApp .is-active {
+import '../../style/mainApp.css';
+<style >
+      #mainApp .is-active {
   background-color: #8bd0ff;
 }
 

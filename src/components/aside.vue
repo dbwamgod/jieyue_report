@@ -6,7 +6,7 @@
         <!-- <div class="baobiaogongneng"></div> -->
         <!--搜索框和收藏-->
         <div style="height: 100%;" v-show="val">
-          <el-menu :router="true" :default-active="defaultActive+''" :unique-opened="true" style="height:100%;" :style="{width:ths+'px'}" class="zyside">
+          <el-menu :router="true" :default-active="defaultActive+''" :unique-opened="true" :default-openeds="openeds" style="height:100%;" :style="{width:ths+'px'}" class="zyside">
             <!--第一层-->
             <el-submenu v-for="(item,index) in this.ArrayData" :index="item.id +''" :unique-opened="true" :key="index">
               <template slot="title">
@@ -96,6 +96,8 @@ export default {
       fanhuishouye: require("../assets/images/icon-fanhuishouye.png"), //小房子 icon-shouqizuocedaohang
       shouqizuocedaohang: require("../assets/images/icon-shouqizuocedaohang.png"), // icon-sousuo.png
       Deletenavigationbar: JSON.parse(localStorage.getItem("Deletenavigationbar")),
+      openeds:[],
+      uniqueOpened: false
     };
   },
   computed: {
@@ -110,21 +112,20 @@ export default {
       this.CollectionNameLis = this.CollectionNameLis.length;
     },
     $route(to, from) {
-      console.log(from.query.reportCode)
-      localStorage.setItem("aa", JSON.stringify(from.query.reportCode))
       this.editableTabsValue2 = to.name;
       if(this.editableTabsValue2 == 'mainApp'){
         localStorage.setItem("editableTabs2", JSON.stringify([]));
         this.Deletenavigationbar = false;
-        // alert('ddddddddddd')
+        localStorage.setItem("reportCode", JSON.stringify([]));
+        this.openeds = []
       }
     },
   },
   beforeUpdate() {
-    this.defaultActive = this.state_router;
+    // console.log(this.state_router)
+    // this.defaultActive = this.state_router;
      var srt = JSON.parse(localStorage.getItem("editableTabs2"));
      if (srt.length) {
-       this.addTab();
        this.Deletenavigationbar = true;
      }
   },
@@ -139,58 +140,20 @@ export default {
         JSON.parse(localStorage.getItem("editableTabs2")) || [];
       this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
     }, //刷新之前保存导航栏
-    aaa(){
-       this.Deletenavigationbar = false;
-    },
     tabsn(tab, event) {
-      console.log(tab)
-      console.log(event)
       this.$router.push({
         path: tab.name,
-         query: { reportCode: JSON.parse(localStorage.getItem("aa")) }
+         query: { reportCode: JSON.parse(localStorage.getItem("reportCode")) }
       });
     },
     aside() {
+      // console.log(this.state_router)
       // this.ArrayData = [
-      //   {
-      //     name: "菜单报表管理",
-      //     id: 1,
-      //     icon: "baobiaogongneng",
-      //     children: [
-      //       {
-      //         name: "借款明细表",
-      //         id: 4,
-      //         url: "reportIndex",
-      //         templateCode:'RPT_LN_LEND_DTL_RPT',
-      //         children: []
-      //       },
-      //       {
-      //         name: "借款明细表A",
-      //         id: 4,
-      //         url: "reportIndex",
-      //         templateCode:'RPT_LN_LEND_DTL_RPTA',
-      //         children: []
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     name: "菜单报表管理",
-      //     id: 2,
-      //     icon: "baobiaogongneng",
-      //     children: [
-      //       {
-      //         name: "菜单借款明细表B",
-      //         id: 6,
-      //         url: "demo"
-      //       },
-      //       {
-      //         name: "菜单借款明细表AAB",
-      //         id: 7,
-      //         url: "demo1"
-      //       }
-      //     ]
-      //   }
-      // ];
+      //   {"id":991,"name":"菜单报表管理","icon":"baobiaogongneng","templateCode":"","url":"",
+      //   "children":[
+      //     {"id":993,"name":"借款明细表","icon":null,"templateCode":"RPT_LN_LEND_DTL_RPT","url":"reportIndex","children":[]},
+      //     {"id":995,"name":"借款明细表A","icon":null,"templateCode":"RPT_LN_LEND_DTL_RPT","url":"reportIndex","children":[]}
+      //     ]}];
       this.$http
         .post(api.pdng(), {
           masterNo: "06"
@@ -205,6 +168,8 @@ export default {
         path: address,
         query: { reportCode: templateCode }
       });
+
+      localStorage.setItem("reportCode", JSON.stringify(templateCode));
       this.stateRouter(id);
       this.hackReset = false;
       this.$nextTick(() => {
@@ -225,7 +190,7 @@ export default {
       let d = a;
       if (d) {
         if (localStorage.getItem("Savearray")) {
-          if (localStorage.getItem("Savearray").indexOf(c) == -1) {
+          if (localStorage.getItem("Savearray").indexOf(f) == -1) {
             let newTabName = ++this.tabIndex + "";
             this.editableTabs2.push({
               title: b,
@@ -233,7 +198,7 @@ export default {
               content: d,
               reportCode:f
             });
-            this.tabName.push(c);
+            this.tabName.push(f);
             this.editableTabsValue2 = newTabName;
           } 
         } else {
@@ -245,15 +210,24 @@ export default {
               content: d,
               reportCode:f
             });
-            this.tabName.push(c);
+            this.tabName.push(f);
             this.editableTabsValue2 = newTabName;
+          }else{
+            return false;
           }
         }
+        
             this.Deletenavigationbar =
               localStorage.setItem("Deletenavigationbar", JSON.stringify("true")) ||
               JSON.parse(localStorage.getItem("Deletenavigationbar"));
-            this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
-            this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
+              if(this.tabName.length != 0){
+                  this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
+              }
+              if(this.editableTabs2.length != 0 ){
+                  this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
+              }
+            
+            
       }
     }, //点击侧边栏 添加在导航栏上
     removeTab(targetName) {
@@ -300,7 +274,6 @@ export default {
         });
       }
     }, //删除导航栏
-
   }
 };
 </script>

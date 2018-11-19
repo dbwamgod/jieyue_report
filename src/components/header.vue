@@ -238,8 +238,13 @@ export default {
           });
         }
       }
+      // if(this.tabName.length != 0){
+      //             this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
+      //         }
        localStorage.setItem("Deletenavigationbar", JSON.stringify("true"))
       this.$router.push({ path: url, query: { reportCode: reportCode } });
+      localStorage.setItem("Savearray", JSON.stringify(reportCode));
+      localStorage.setItem("reportCode", JSON.stringify(reportCode));
       this.Collectiondisplay = !this.Collectiondisplay;
       this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
     }, //收藏功能点击事件
