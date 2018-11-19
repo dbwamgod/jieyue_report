@@ -153,10 +153,6 @@ export default {
     }
     // 刷新之后重新赋值
     this.editableTabs2 = JSON.parse(localStorage.getItem("editableTabs2"));
-    // if (this.editableTabs2) {
-      // localStorage.setItem("Deletenavigationbar", "true");
-      // this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
-    // }
     this.shoucangAs();
     this.Frontpageclick();
   },

@@ -32,7 +32,8 @@
                   </div>
                 </el-tab-pane>
               </el-tabs>
-              <div class="Agencytaskshu"></div>
+              <div class="AgencytaskshuA" v-show="TaskCount.length !== 0"></div>
+              <div class="AgencytaskshuB" v-show="TaskCount.length !== 0"></div>
               <div class="Agencytaskmore" @click="handleFullScreen">更多</div>
             </div>
           </div>
@@ -100,8 +101,8 @@
                   <el-button type="primary" @click="dialogVisibleTextarea();Diurnalinterface()">保存</el-button>
                 </span>
               </el-dialog>
-              <div id="aaaa" style="width:200px;height:50px;font-size:16px;background:#000000;opacity: 0.5;color:rgb(255, 255, 255);box-shadow: 0 0 black;position:absolute;top:-48px;left:-210px;z-index: 100000;text-align: center;
-            " v-show="aaaa">保存成功</div>
+              <div id="Savesuccess" style="width:200px;height:50px;font-size:16px;background:#000000;opacity: 0.5;color:rgb(255, 255, 255);box-shadow: 0 0 black;position:absolute;top:-48px;left:-210px;z-index: 100000;text-align: center;
+            " v-show="Savesuccess">保存成功</div>
             </div>
             <!-- 日历部分 -->
             <div style="background:white;height: 409px;padding: 0 15px;">
@@ -129,9 +130,6 @@
                           :key='index'>
                           <span>{{item1.num}}</span>
                           <span :style=" [Memo_c.indexOf(item1.Memo_a) > -1? {background:'red'}: '' ]" style="width:3px;height:3px;position: absolute;left: 48%;bottom: 5px;"></span>
-                          <!-- {{Memo_c}} -->
-                          <!-- {{item1.Memo_a}} -->
-                          <!-- {{Memo_c.indexOf(item1.Memo_a)}} -->
                         </td>
                       </tr>
                     </table>
@@ -140,11 +138,10 @@
                     <p @click="backToday">回到今天</p>
                   </div> -->
                 </div>
-                <!-- {{Memo_c}} -->
               </div>
               <!-- 显示日历内容 -->
               <div style="padding-top: 12px;border-top: 1px dashed #ccc;">
-                <div style="height: 110px;overflow-y: auto;">
+                <div style="height: 110px;overflow-y: auto;position: relative;">
                   <ul v-show="Memo_e.length>0">
                     <!-- <li class="headlineLi" style="padding-left: 23px;padding-right: 29px;line-height: 48px;height: 48px;"
                       v-for="(item,index) in headlines" @click="headlineLiC(index)" :key='index'>
@@ -161,12 +158,8 @@
                         <img :src="Nocollection" alt="" style="vertical-align:middle;"> 暂无收藏
                       </div>
                     </div>
-                    <!-- <span style="position: absolute;bottom: 13%;left: 43%;">暂无消息</span> -->
                   </div>
                 </div>
-                <!-- <div style="float:left">
-                  b
-                </div> -->
               </div>
             </div>
           </div>
@@ -258,7 +251,8 @@ export default {
       editableTabs2: [],
       activeName: "first",
       currentdate: "",
-      aaaa: false
+      Savesuccess: false,
+      TaskCount:''
     };
   },
   computed: {
@@ -485,7 +479,7 @@ export default {
     }, //点击日期获取年月日--切換內容
     dialogVisibleTextarea(e) {
       var vm = this;
-      this.aaaa = true;
+      this.Savesuccess = true;
       this.setCalender(new Date());
       this.dialogVisible = false;
       this.textarea = this.textarea;
@@ -515,8 +509,8 @@ export default {
         this.firstday1 = "";
       }
       setTimeout(function() {
-        vm.aaaa = false;
-      },1000);
+        vm.Savesuccess = false;
+      },500);
     }, //控制点击确定之后状态
     headlineLiC(index) {
       console.log(index);
@@ -574,9 +568,6 @@ export default {
       // console.log(tab, event);
     },
     Diurnalinterface() {
-      console.log(this.firstday1)
-      console.log(this.textarea)
-      console.log(this.inputTitle)
       this.$http
         .post(api.notepadAdd(),
         {
@@ -646,6 +637,9 @@ export default {
         })
         .catch(() => {});
     },//查询日期内容
+    TaskInterface(){
+        this.TaskCount = 0
+    }, //任务接口留位子
     MessageFunction(){
       
     }//消息接口留位子
@@ -666,6 +660,7 @@ export default {
   text-overflow: ellipsis;
   width: 60%;
   display: inline-block;
+  position: absolute;
 }
 
 /* 日期功能区 */
@@ -737,12 +732,21 @@ export default {
 }
 
 /* 任务功能区 */
-#mainApp .Agencytaskshu {
+#mainApp .AgencytaskshuA {
   padding: 5px;
   background-color: red;
   position: absolute;
   top: 8px;
   left: 103px;
+  border-radius: 50%;
+  z-index: 999;
+}
+#mainApp .AgencytaskshuB {
+  padding: 5px;
+  background-color: red;
+  position: absolute;
+  top: 8px;
+  left: 199px;
   border-radius: 50%;
   z-index: 999;
 }
