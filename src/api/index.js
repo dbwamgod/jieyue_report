@@ -67,8 +67,11 @@ export default {
   },
   //下载文件
   reportRptDataExport(data) {
-    console.log('data',data)
     return _baseUrl + `saasbi/report/rpt/data/export?${data}`
+  },
+  //埋点 
+  logCollection() {
+    return _baseUrl + `/saasbi/event/log/collection`
   },
 
 
