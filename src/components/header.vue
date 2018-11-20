@@ -93,7 +93,6 @@
 <script>
 import asides from "@/components/aside";
 import api from "../api";
-// import bottoms from "@/components/footer";
 import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   data() {
@@ -190,8 +189,12 @@ export default {
     outLoginleave() {
       this.outLogins = false;
     },
-    HomePage(e) {
+    HomePage() {
       this.$router.push((name = "mainApp"));
+       if (localStorage.removeItem("Deletenavigationbar")) {
+          localStorage.removeItem("Deletenavigationbar");
+        }
+      // localStorage.setItem("Deletenavigationbar", JSON.stringify("false"))
     },
     HomePageenter() {
       this.HomePages = true;
@@ -233,10 +236,15 @@ export default {
             content: url,
             reportCode: reportCode
           });
-          localStorage.setItem("Deletenavigationbar", "true");
         }
       }
+      // if(this.tabName.length != 0){
+      //             this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
+      //         }
+       localStorage.setItem("Deletenavigationbar", JSON.stringify("true"))
       this.$router.push({ path: url, query: { reportCode: reportCode } });
+      localStorage.setItem("Savearray", JSON.stringify(reportCode));
+      localStorage.setItem("reportCode", JSON.stringify(reportCode));
       this.Collectiondisplay = !this.Collectiondisplay;
       this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
     }, //收藏功能点击事件
