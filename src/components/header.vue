@@ -224,7 +224,6 @@ export default {
         });
       } else {
         var a = [];
-        console.log(this.editableTabs2);
         this.editableTabs2.forEach(r => {
           a.push(r.content);
         });

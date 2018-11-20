@@ -188,18 +188,19 @@ export default {
     }, //点击 隐藏和打开侧边栏
     addTab(targetName, a, b, c, f) {
       // a 路径 b 名字  c id
-      console.log(a)
       let d = a;
       if (d) {
         if (localStorage.getItem("Savearray")) {
           if (localStorage.getItem("Savearray").indexOf(f) == -1) {
             let newTabName = ++this.tabIndex + "";
+            this.editableTabs2 = JSON.parse(localStorage.getItem("editableTabs2"));
             this.editableTabs2.push({
               title: b,
               name: c,
               content: d,
               reportCode:f
             });
+            // alert(1111)
             this.tabName.push(f);
             this.editableTabsValue2 = newTabName;
           } 
@@ -212,6 +213,7 @@ export default {
               content: d,
               reportCode:f
             });
+            //  alert(2222)
             this.tabName.push(f);
             this.editableTabsValue2 = newTabName;
           }
@@ -221,9 +223,11 @@ export default {
               localStorage.setItem("Deletenavigationbar", JSON.stringify("true")) ||
               JSON.parse(localStorage.getItem("Deletenavigationbar"));
               if(this.tabName.length != 0){
+                //  alert(3333)
                   this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
               }
               if(this.editableTabs2.length != 0 ){
+                //  alert(4444)
                   this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
               }
             
