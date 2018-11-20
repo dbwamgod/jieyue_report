@@ -44,14 +44,14 @@
         <el-row :gutter="10" style="padding-left:17px;border-size:border-box;">
           <el-col :span="20">
             <el-form :inline="true" :model="form" class="demo-form-inline">
-              <el-form-item v-for="(data, index) in screenList" :label="data.filterDescription+'：'" style="margin-right:30px;">
+              <el-form-item v-for="(data, index) in screenList" :label="data.filterText+'：'" style="margin-right:30px;">
                 <el-input v-model="form[data.filterCode]" placeholder="请输入内容" style="width:140px;" v-if="data.filterType=='srk'" @change='inpoutChange'></el-input>
                 <el-date-picker v-model="form[data.filterCode]" type="date" placeholder="选择日期" :value-format="'yyyy-MM-dd'" v-if="data.filterType=='riqi'" style="width:140px;">
                 </el-date-picker>
                 <el-date-picker v-model="form[data.filterCode]" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-if="data.filterType==''" :value-format="'yyyy-MM-dd'" style="width:240px;">
                 </el-date-picker>
                 <el-select v-model="form[data.filterCode]" placeholder="请选择" v-if="data.filterType=='xlx'">
-                  <el-option v-for="item in data.selectItemList || []" :key="item.code" :label="item.name" :value="item.code">
+                  <el-option v-for="item in data.selectItemList || []" :key="item.name" :label="item.name" :value="item.name">
                   </el-option>
                 </el-select>
               </el-form-item>
