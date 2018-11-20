@@ -117,6 +117,7 @@ export default {
         localStorage.setItem("editableTabs2", JSON.stringify([]));
         this.Deletenavigationbar = false;
         localStorage.setItem("reportCode", JSON.stringify([]));
+        localStorage.setItem("Savearray", JSON.stringify([]));
         this.openeds = []
       }
     },
@@ -187,6 +188,7 @@ export default {
     }, //点击 隐藏和打开侧边栏
     addTab(targetName, a, b, c, f) {
       // a 路径 b 名字  c id
+      console.log(a)
       let d = a;
       if (d) {
         if (localStorage.getItem("Savearray")) {
@@ -212,8 +214,6 @@ export default {
             });
             this.tabName.push(f);
             this.editableTabsValue2 = newTabName;
-          }else{
-            return false;
           }
         }
         
