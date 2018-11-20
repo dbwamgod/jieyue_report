@@ -74,7 +74,7 @@
     </div>
     <div class="report-content-table" v-if="initType">
 
-      <el-table :data="tableData" style="width: 100%">
+      <el-table  :data="tableData" style="width: 100%">
         <el-table-column label="序号" type="index" width="60" align="center">
         </el-table-column>
         <el-table-column v-for="item in checkListWordConfirm" :prop="item.reportFieldCode" :label="item.fieldText">
