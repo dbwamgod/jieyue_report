@@ -38,7 +38,7 @@
   }
   .toast .msg{color:#FFFFFF;font-size:0.8rem;}
   .toast.middle{
-    top:50%;
+    top:40%;
   }
   .toast.top{
     top:10%;

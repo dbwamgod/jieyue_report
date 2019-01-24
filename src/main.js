@@ -32,6 +32,7 @@ Vue.use(echarts);
 
 var routeList = [];
 router.beforeEach((to, from, next) => {
+  router.app.$store.state.hideheaderaside = true;
   var index = -1;
   for(var i = 0; i < routeList.length; i++) {
     if(routeList[i].name == to.name) {
@@ -46,6 +47,9 @@ router.beforeEach((to, from, next) => {
     routeList.push({"name":to.name,"path":to.fullPath,"index":index++});
   }
   to.meta.routeList = routeList;
+  if (to.meta.title) {
+    document.title = to.meta.title;
+  }
   next()
 });
 

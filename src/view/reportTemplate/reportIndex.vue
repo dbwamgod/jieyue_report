@@ -1,56 +1,58 @@
 <template>
-
-  <div id="report-index">
+  <div id="report-index" v-loading='isLoading'>
     <div class="report-index-header">
       <div class="screen-config-item">
         <div class="screen-left">
-          <div class="screen-left-item" @click="handClickScreen">
+          <div class="screen-left-item" @click="handClickScreen" v-show="$store.state.hideheaderaside">
             <span>筛选条件</span>
             <img :src="require('@/assets/images/tanchu.png')" alt="">
           </div>
-          <div class="screen-left-item" @click="handClickShowWord">
+          <div class="screen-left-item" @click="handClickShowWord" v-show="$store.state.hideheaderaside">
             <span>字段展示</span>
             <img :src="require('@/assets/images/tanchu.png')" alt="">
+          </div>
+          <div v-show="!$store.state.hideheaderaside" class="screen-left-isTitleText">
+            {{$route.query.titleName}}
           </div>
         </div>
         <div class="screen-right">
           <div class="screen-right-item">
             <el-popover popper-class="report-index-el-popover" placement="bottom" width="310" trigger="click" style="padding:0;">
               <div style="font-size: 14px; color: #333744; height:40px; line-height:40px;text-indent: 15px; background: #EDEDED;z-index:10;">
-                TABLE INFO
+                {{$route.query.titleName}}
               </div>
-              <div style="padding: 18px 15px 0; box-sizing:border-box;font-size: 12px; color: #333744;">
-                <p style="margin-bottom:15px;" v-for=" data in reportRptInfo ">{{data.text}}：{{data.value}}</p>
+              <div style="padding: 18px 15px 10px; box-sizing:border-box;font-size: 12px; color: #333744;">
+                <p style="margin-bottom:8px;" v-for=" data in reportRptInfo " v-if="data.text!='最近下载时间' && data.text !='近一个月下载次数'">{{data.text}}：{{data.value}}</p>
               </div>
               <img slot="reference" :src="require('@/assets/images/detail.png')" alt="">
             </el-popover>
           </div>
-          <div class="screen-right-item">
-            <img :src="require('@/assets/images/collectionIconhide.png')" alt="" @click="collectionClick" v-if="!collectFlag">
-            <img :src="require('@/assets/images/collectionIcon.png')" alt="" @click="collectionClick" v-if="collectFlag">
+          <div class="screen-right-item" v-if="$store.state.hideheaderaside">
+            <img :src="require('@/assets/images/collectionIconhide.png')" alt="" @click="collectionClick" v-if="!collectFlag ">
+            <img :src="require('@/assets/images/collectionIcon.png')" alt="" @click="collectionClick" v-if="collectFlag ">
           </div>
-          <div class="screen-right-item">
+          <!-- <div class="screen-right-item" v-if="$store.state.hideheaderaside">
             <img :src="require('@/assets/images/downloadIcon.png')" alt="" @click="downloadTypeClick">
-          </div>
+          </div> -->
           <div class="screen-right-item">
             <img :src="require('@/assets/images/quanping.png')" alt="" @click="handleFullScreen(false)" v-if="$store.state.hideheaderaside">
             <img :src="require('@/assets/images/biaoshouqi.png')" alt="" @click="handleFullScreen(true)" v-if="!$store.state.hideheaderaside">
           </div>
-          <!-- {{this.$route.query.reportCode}} -->
         </div>
       </div>
 
-      <div class="show-screen-list">
+      <div class="show-screen-list" v-if="$store.state.hideheaderaside">
         <el-row :gutter="10" style="padding-left:17px;border-size:border-box;">
-          <el-col :span="20">
+          <el-col :span="21">
             <el-form :inline="true" :model="form" class="demo-form-inline">
               <el-form-item v-for="(data, index) in screenList" :label="data.filterText+'：'" style="margin-right:30px;">
-                <el-input v-model="form[data.filterCode]" placeholder="请输入内容" style="width:140px;" v-if="data.filterType=='srk'" @change='inpoutChange'></el-input>
-                <el-date-picker v-model="form[data.filterCode]" type="date" placeholder="选择日期" :value-format="'yyyy-MM-dd'" v-if="data.filterType=='riqi'" style="width:140px;">
+                <el-input v-model="form[data.filterCode]" placeholder="请输入内容" style="width:140px;background:#FAFAFA;" v-if="data.filterType=='srk'" @change='inpoutChange'></el-input>
+                <el-date-picker v-model="form[data.filterCode]" type="date" placeholder="选择日期" :value-format="'yyyy-MM-dd'" v-if="data.filterType=='riqi' || data.filterType=='date_d'" style="width:140px;background:#FAFAFA;">
                 </el-date-picker>
                 <el-date-picker v-model="form[data.filterCode]" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-if="data.filterType==''" :value-format="'yyyy-MM-dd'" style="width:240px;">
                 </el-date-picker>
-                <el-select v-model="form[data.filterCode]" placeholder="请选择" v-if="data.filterType=='xlx'">
+                <el-select v-model="form[data.filterCode]" placeholder="请选择" v-if="data.filterType=='xlx'" style="width:140px; background:#FAFAFA;">
+                  <el-option key="请选择" label="请选择" value=""></el-option>
                   <el-option v-for="item in data.selectItemList || []" :key="item.name" :label="item.name" :value="item.name">
                   </el-option>
                 </el-select>
@@ -59,8 +61,8 @@
             </el-form>
 
           </el-col>
-          <el-col :span="4" style="text-align:right;">
-            <el-button type="primary" style="margin-right:12px;" @click="handSubmit">查询</el-button>
+          <el-col :span="3" style="text-align:right; height:40px;line-height:40px; margin-bottom:9px;">
+            <el-button type="primary" style="margin-right:12px; padding:9px 20px;" @click="clickQueryInfo">{{screenList.length==0?'刷新':'查询'}}</el-button>
           </el-col>
         </el-row>
       </div>
@@ -72,32 +74,31 @@
         <p>暂无数据...</p>
       </div>
     </div>
-    <div class="report-content-table" v-if="initType">
-
-      <el-table  :data="tableData" style="width: 100%">
-        <el-table-column label="序号" type="index" width="60" align="center">
+    <div class="report-content-table" v-if="initType" :style="!$store.state.hideheaderaside? {marginTop:'0'} : {marginTop:'10px'}">
+      <el-table :data="tableData" style="width: 100%;border-radius:5px;" :row-class-name="tableRowClassName">
+        <el-table-column label="序号" type="index" width="60" align="center"  :index="indexMethod">
         </el-table-column>
-        <el-table-column v-for="item in checkListWordConfirm" :prop="item.reportFieldCode" :label="item.fieldText">
+        <el-table-column v-for="item in checkListWordConfirm" :prop="item.reportFieldCode" :label="item.fieldText" align="center">
         </el-table-column>
       </el-table>
     </div>
     <div style="text-align: right; margin-top:13px;" v-if="!!page.currentPage && initType">
-      <el-pagination @current-change="handleCurrentChange" :current-page.sync="page.currentPage" :page-size="page.pageSize" layout="prev, pager, next, jumper" :total="page.totalRecords" :background="true">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="page.currentPage" :page-size="page.pageSize" :page-sizes="[15,30,50,100]" layout="total, sizes, prev, pager, next, jumper" :total="page.totalRecords" :background="true">
       </el-pagination>
     </div>
 
     <!-- 筛选条件弹框 -->
-    <el-dialog title="筛选条件" :visible.sync="dialogVisible" width="850px" :before-close="handleClose">
+    <el-dialog title="筛选条件" :visible.sync="dialogVisible" width="850px" :before-close="handleClose" :close-on-click-modal='false'>
       <div>
         <el-checkbox-group v-model="checkList">
           <span v-for=" ( data, index) in checkboxList" style="display:inline-block;margin-right:30px; margin-bottom:20px;" :key="index">
-            <el-checkbox :label="data.filterDescription" :key="index"></el-checkbox>
-            <el-input placeholder="审批人" style="width:140px;margin-left:10px;" disabled v-if="data.filterType=='srk'"></el-input>
-            <el-date-picker type="date" placeholder="选择日期" disabled v-if="data.filterType=='riqi'" style="width:140px;margin-left:10px;">
+            <el-checkbox :label="data.filterText" :key="index"></el-checkbox>
+            <el-input placeholder="审批人" style="width:140px; margin-left:10px;" disabled v-if="data.filterType=='srk'"></el-input>
+            <el-date-picker type="date" placeholder="选择日期" disabled v-if="data.filterType=='riqi' || data.filterType=='date_d'" style="width:140px;margin-left:10px;">
             </el-date-picker>
             <el-date-picker type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" disabled v-if="data.filterType==''" style="width:240px;margin-left:10px;">
             </el-date-picker>
-            <el-select v-model="form[data.filterCode]" placeholder="请选择" v-if="data.filterType=='xlx'" style="margin-left:10px;">
+            <el-select v-model="form[data.filterCode]" placeholder="请选择" v-if="data.filterType=='xlx'" style=" width:140px; margin-left:10px;" disabled>
               <el-option v-for="item in data.filterData || []" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
@@ -109,11 +110,11 @@
         <el-button type="primary" @click="handClick">确定</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="字段展示" :visible.sync="dialogVisibleWord" width="720px" :before-close="handleCloseWord">
+    <el-dialog title="字段展示" :visible.sync="dialogVisibleWord" width="720px" :before-close="handleCloseWord" :close-on-click-modal='false'>
       <div class="wordDialog-header">
         <span>选中状态：</span>
         <el-input placeholder="请输入中文" v-model="wordDialogScreen" style="width:280px;">
-          <img slot="suffix" class="el-input__icon el-icon-date" style="width:20px; height:20px; margin-top: 9px;" :src="require('@/assets/images/sousuo.png')" alt="">
+          <img slot="suffix" class="el-input__icon el-icon-date" style="width:20px; height:20px; margin-top: 9px; margin-right:8px;" :src="require('@/assets/images/sousuo.png')" alt="">
         </el-input>
       </div>
       <div style="padding-left:74px;padding-right:15px;box-sizing:border-box;margin-top:10px;">
@@ -126,13 +127,13 @@
           </div>
           <div class="wordDialog-content-check">
             <el-checkbox-group v-model="checkListWord">
-              <el-checkbox v-for="(data, index) in checkListWordShowF" :label="data.fieldText" :key="index" style="margin-left:14px;"></el-checkbox>
+              <el-checkbox v-for="(data, index) in checkListWordShowF" :label="data.fieldText" :key="index" style="margin-left:14px;margin-bottom:25px;font-size:14px; "></el-checkbox>
             </el-checkbox-group>
           </div>
         </div>
       </div>
       <div style="padding-left:74px;padding-right:15px;box-sizing:border-box;margin-top:10px;" v-if="!!checkListWord.length">
-        <div class="wordDialog-content" style="height:190px;padding-left:13px;padding-top:15px;box-sizing:border-box;">
+        <div class="wordDialog-content" style="height:190px;padding-left:13px;padding-top:15px;box-sizing:border-box;border-radius:5px; overflow: auto;">
           <el-row>
             <el-col :span="3">
               已选字段
@@ -152,7 +153,7 @@
         <el-button type="primary" @click="handClickWord">确定</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="下载为" :visible.sync="dialogVisibleDownload" width="720px" :before-close="handleCloseDownload">
+    <el-dialog title="下载为" :visible.sync="dialogVisibleDownload" width="720px" :before-close="handleCloseDownload" :close-on-click-modal='false'>
       <div style="margin-left:38px;">
         <el-radio v-model="downloadFilterType" label="1">PDF文件（.pdf）将文件保存为PDF文件</el-radio><br>
         <el-radio v-model="downloadFilterType" label="2" style="margin-top:32px;">Excel文件（.xlsx）将文件导出为Excel文件</el-radio>
@@ -178,7 +179,6 @@
   </div>
 </template>
  <script>
-
 import api from "@/api";
 import { mapState, mapActions, mapGetters } from "vuex";
 export default {
@@ -195,6 +195,7 @@ export default {
       form: {},
       collectFlag: false,
       initType: false,
+      isLoading: true,
       dialogVisibleDownload: false,
       screenList: [], //筛选条件页面展示集合
       checkList: [], //弹框筛选条件集合
@@ -206,7 +207,7 @@ export default {
         reportCode: this.$route.query.reportCode || "RPT_LN_LEND_DTL_RPT"
       },
       page: {
-        pageSize: 10,
+        pageSize: 15,
         currentPage: 1
       },
       checkListWordShow: [
@@ -252,10 +253,19 @@ export default {
       optionNo: "data_open",
       params: [
         {
-          rpt_report: this.reportInfo.reportCode
+          key: "rpt_report_code",
+          value: this.reportInfo.reportCode
         }
       ]
     });
+    // this.$http.get("http://192.168.73.23:8081/as", {
+    //   headers: {
+    //     Authorization: "content-type"
+    //   },
+    //   params: {
+    //     key: "rpt_report_code"
+    //   }
+    // });
   },
   computed: {
     checkListWordShowF() {
@@ -268,17 +278,48 @@ export default {
     ...mapGetters(["hideheaderaside"])
   },
   watch: {
+    '$route'() {
+      this.init();
+    },
     checkListWord(newData) {
       if (newData.length !== 0) {
-        if (newData.length === this.checkListWordShow.length) {
+        let isType = this.checkListWordShowF.filter(
+          item => newData.indexOf(item.fieldText) == -1
+        )[0];
+        if (!isType) {
           this.checkedAllScreen = true;
         } else {
           this.checkedAllScreen = false;
         }
+      } else {
+        this.checkedAllScreen = false;
+      }
+    },
+    wordDialogScreen(newText) {
+      if (
+        !newText &&
+        this.checkListWordShowF.length != this.checkListWord.length
+      ) {
+        this.checkedAllScreen = false;
       }
     }
   },
   methods: {
+       indexMethod(index) {
+      return index + 1 + (this.page.currentPage - 1) * this.page.pageSize;
+    },
+    isTitleText(name) {
+      let text = this.$store.state.editableTabs2.filter(
+        r => r.content === name
+      )[0].title;
+      return text;
+    },
+    tableRowClassName({ row, rowIndex }) {
+      if (rowIndex % 2 !== 0) {
+        return "warning-row";
+      }
+      return "";
+    },
     handleFullScreen(type) {
       this.$store.state.hideheaderaside = type;
     }, //图标--全屏显示
@@ -403,17 +444,18 @@ export default {
       });
     },
     handClick() {
+      console.log("this.checkList", this.checkList);
       this.screenList = this.checkList.map(r => {
         let info = {};
         this.checkboxList.forEach(item => {
-          if (item.filterDescription === r) {
+          if (item.filterText === r) {
             info = { ...item };
           }
         });
         return info;
       });
       let screenListKey = this.screenList.map(r => {
-        return r.filterDescription;
+        return r.filterText;
       });
       for (let item in this.form) {
         if (screenListKey.indexOf(item) == -1) {
@@ -426,7 +468,7 @@ export default {
       this.$http
         .post(api.reportRptFilterAdd(), {
           ...this.reportInfo,
-          ...filterCodeList
+          filterCodeList
         })
         .then(res => {
           if (res.data.code == 200) {
@@ -447,19 +489,20 @@ export default {
     },
     handClickWord() {
       if (this.checkListWord.length != 0) {
-        let filterCodeList = this.checkListWordShow.filter(data => {
+        let filterCodeItem = this.checkListWordShow.filter(data => {
           if (this.checkListWord.indexOf(data.fieldText) > -1) {
             return data;
           }
         });
+        let fieldCodeList = filterCodeItem.map(r => r.reportFieldCode);
         this.$http
           .post(api.reportFieldAdd(), {
             ...this.reportInfo,
-            ...filterCodeList
+            fieldCodeList
           })
           .then(res => {
             if (res.data.code == 200) {
-              this.checkListWordConfirm = filterCodeList;
+              this.checkListWordConfirm = filterCodeItem;
             } else {
               this.$message({
                 message: res.data.msg,
@@ -481,6 +524,7 @@ export default {
       this.dialogVisibleWord = false;
     },
     handSubmit() {
+      this.isLoading = true;
       let filterList = [],
         fieldList = [];
       for (let item in this.form) {
@@ -508,7 +552,8 @@ export default {
         optionNo: "data_query",
         params: [
           {
-            rpt_report: this.reportInfo.reportCode
+            key: "rpt_report_code",
+            value: this.reportInfo.reportCode
           }
         ]
       });
@@ -535,6 +580,7 @@ export default {
                 duration: 1500
               });
             }
+            this.isLoading = false;
           },
           err => {
             this.$message({
@@ -542,6 +588,7 @@ export default {
               type: "warning",
               duration: 1500
             });
+            this.isLoading = false;
           }
         );
     },
@@ -553,7 +600,7 @@ export default {
       this.checkList = [];
     },
     handClickScreen() {
-      this.checkList = this.screenList.map(item => item.filterDescription);
+      this.checkList = this.screenList.map(item => item.filterText);
       this.dialogVisible = true;
     },
     handleCloseWord() {
@@ -563,6 +610,7 @@ export default {
       this.dialogVisibleDownload = false;
     },
     handClickShowWord() {
+      this.wordDialogScreen = "";
       this.checkListWord = this.checkListWordConfirm.map(
         item => item.fieldText
       );
@@ -570,7 +618,7 @@ export default {
     },
     changeAllScreen(data) {
       if (data) {
-        this.checkListWord = this.checkListWordShow.map(item => {
+        this.checkListWord = this.checkListWordShowF.map(item => {
           return item.fieldText;
         });
       } else {
@@ -585,7 +633,17 @@ export default {
       this.page.currentPage = val;
       this.handSubmit();
     },
+    handleSizeChange(val) {
+      this.page.currentPage = 1;
+      this.page.pageSize = val;
+      this.handSubmit();
+    },
+    clickQueryInfo() {
+      this.page.currentPage = 1;
+      this.handSubmit();
+    },
     collectionClick(type) {
+      console.log(type,"ssss")
       let ip = !this.collectFlag
         ? api.userCollectAdd()
         : api.userCollectRemove();
@@ -600,7 +658,7 @@ export default {
             if (res.data.code == 200) {
               this.collectFlag = !this.collectFlag;
               this.$message({
-                message: res.data.msg,
+                message: this.collectFlag ? "收藏成功" : "取消收藏",
                 type: "warning",
                 duration: 1500
               });
@@ -626,15 +684,23 @@ export default {
           masterNo: "06",
           sysNo: "PcReport",
           modelNo: "003",
-          optionNo: "data_query",
+          optionNo: "data_collect",
           params: [
             {
-              rpt_report: this.reportInfo.reportCode
+              key: "rpt_report_code",
+              value: this.reportInfo.reportCode
             }
           ]
         });
     },
     handClickDownload() {
+      this.page.totalRecords >= 5e4 &&
+        this.$confirm("当前下载量数据超过5万条，请耐心等待。", "提示", {
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          closeOnClickModal: false,
+          type: "warning"
+        });
       this.$http.post(api.logCollection(), {
         account: sessionStorage.getItem("userPhone"),
         masterNo: "06",
@@ -643,7 +709,8 @@ export default {
         optionNo: "data_collect",
         params: [
           {
-            rpt_report: this.reportInfo.reportCode
+            key: "rpt_report_code",
+            value: this.reportInfo.reportCode
           }
         ]
       });
@@ -686,41 +753,74 @@ export default {
 .report-content-table .el-table__header th,
 .report-content-table .el-table__header tr {
   background-color: #ededed !important;
+  font-weight: 900;
 }
-.report-index-el-popover {
+.report-content-table .el-table td,
+.el-table th.is-leaf {
+  border-bottom: 0;
+}
+.report-content-table .el-table td,
+  .report-content-table .el-table th {
+    padding: 8px 0;
+  }
+.report-index-el-popover.el-popover {
   padding: 0;
   min-height: 270px;
+}
+.report-index-el-popover .popper__arrow {
+  display: none;
+  visibility: hidden;
+}
+#report-index .el-input__inner {
+  background-color: #fafafa;
+     height:30px;
+   line-height: 30px; 
+  /* height:34px; */
+}
+#report-index .el-form-item__content {
+  /* line-height:34px; */
+}
+#report-index .el-dialog__footer {
+  border-top: 0.5px solid #e1e1e1;
+  padding-top: 17px;
+  padding-bottom: 18px;
 }
 </style>
  
  <style lang="less" scoped>
 #report-index {
   & > .report-index-header {
-    min-height: 112px;
+    // min-height: 112px;
     background: #ffffff;
     box-shadow: 0 2px 4px 0 rgba(226, 226, 226, 0.5);
     border-radius: 5px;
+    position: relative;
+    top: -2px;
+    z-index: 22;
     & > .screen-config-item {
-      height: 55px;
+      height: 50px;
       border-bottom: 1px solid #e6e6e6;
       display: -webkit-flex;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-radius: 5px 0 0 0;
       .screen-left {
         display: -webkit-flex;
         display: flex;
+        align-items: center;
         height: 34px;
         .screen-left-item {
           text-align: center;
           width: 98px;
-          height: 32px;
-          line-height: 32px;
+          height: 30px;
+          line-height: 30px;
           background: #fafafa;
           border: 1px solid #d9d9d9;
           margin-left: 17px;
           cursor: pointer;
           transition: 0.5s;
+          border-radius: 5px;
           &:hover {
             border-color: #3a96f2;
           }
@@ -730,6 +830,23 @@ export default {
             margin-left: 10px;
             // background:url(../../assets/images/password.png) no-repeat ;
           }
+        }
+        .screen-left-isTitleText {
+          position: relative;
+          text-indent: 29px;
+          font-size: 16px;
+          color: #333744;
+          letter-spacing: -0.38px;
+          font-weight: 600;
+        }
+        .screen-left-isTitleText:before {
+          content: "";
+          width: 0;
+          height: 15px;
+          border: 1.5px solid #75afff;
+          position: absolute;
+          left: 18px;
+          top: 2px;
         }
       }
       .screen-right {
@@ -742,6 +859,7 @@ export default {
           background: #ececec;
           margin-right: 12px;
           cursor: pointer;
+          border-radius: 5px;
         }
       }
     }
@@ -752,15 +870,12 @@ export default {
       }
     }
   }
-
-  & > .report-content-table {
-    margin-top: 10px;
-  }
   .wordDialog-header {
     font-size: 14px;
   }
   .wordDialog-content {
     border: 1px solid #c9c9c9;
+    border-radius: 5px;
     height: 260px;
     .wordDialog-content-header {
       height: 38px;
@@ -792,11 +907,13 @@ export default {
       height: 34px;
       line-height: 34px;
       text-align: center;
-      border: 1px solid #3a96f2;
+      border: 0.5px solid #94bdea;
       font-size: 14px;
+      font-weight: 900;
       color: #008fff;
       letter-spacing: -0.34px;
       margin: 0 20px 20px 0;
+      border-radius: 5px;
       .wordDialog-selected-delete {
         position: absolute;
         top: -8px;
@@ -808,6 +925,13 @@ export default {
         cursor: pointer;
       }
     }
+  }
+  .el-button--default {
+    background: #ededed;
+    border: 1px solid #dedede;
+  }
+  .el-button {
+    padding: 8px 19px;
   }
 }
 </style>

@@ -1,7 +1,26 @@
-// const _baseUrl = "http://bi.jieyuechina.com/api/" //正式环境
-// const _baseUrl = 'http://172.18.101.112:10000/'//测试库
-const _baseUrl = 'http://172.18.101.118:10000/' //开发库
-//const _baseUrl = 'http://172.18.101.111:10000/'//内部正式环境
+//const _baseUrl = "http://bi.jieyuechina.com/api/" //正式环境
+// const _baseUrl = 'http://10.50.180.111:10000/' //测试库
+//const _baseUrl = 'http://172.18.101.118:10000/' //开发库
+let _baseUrl = urlType();
+// process.env.NODE_ENV === 'development' ?
+//  _baseUrl = 'http://172.18.101.118:10000/':
+//  process.env.NODE_ENV === 'test' ?
+//   _baseUrl = 'http://10.50.180.111:10000/':
+//   process.env.NODE_ENV === 'production' ?
+//    _baseUrl = 'http://bi.jieyuechina.com/api/':'';
+   function urlType() {
+     switch (process.env.NODE_ENV){
+       case 'development':
+       return 'http://172.18.101.118:10000/'
+       break;
+       case 'test':
+         return 'http://10.50.180.111:10000/'
+       break;
+       case 'production':
+         return 'http://bi.jieyuechina.com/api/'
+       break;
+     }
+   }
 
 
 export default {

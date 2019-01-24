@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import saas from '@/view/saasHT';
 import mainApp from '../view/message/mainApp'
 import reportIndex from '../view/reportTemplate/reportIndex'
+import reportTest from '../view/reportTemplate/ddd'
 
 import Messagenotification from '../view/message/Messagenotification'
 
@@ -39,7 +40,7 @@ export default new Router({
           component: mainApp,
           name: 'mainApp',
           meta: {
-            title: 'mainApp'
+            title: '报表系统'
           }
         },
         {
@@ -56,6 +57,16 @@ export default new Router({
           name: 'reportIndex',
           meta: {
             title: '报表系统',
+            key: '2-1',
+            isShowTabs:true,
+          }
+        },
+        {
+          path: 'reportTest',
+          component: reportTest,
+          name: 'reportTest',
+          meta: {
+            title: '报表系统aaa',
             key: '2-1',
             isShowTabs:true,
           }

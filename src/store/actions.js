@@ -21,6 +21,5 @@ export default {
   saveEditableTabs3({commit},params){
     commit(types.SAVE_EDITABLETABS3,{params})
   },
-  
 }
 

@@ -195,7 +195,7 @@ body,
   font-weight: 700;
 }
 .el-table thead {
-  color: #0a2e5c !important;
+  color: #2D323A !important; 
 }
 .el-table {
   color: #4e5e71 !important;
@@ -225,7 +225,7 @@ body,
   width: 85% !important;
 }
 .warning-row {
-  background: oldlace !important;
+  background:#f9f9f9 !important;
 }
 .tree {
   background: #fff;
@@ -266,15 +266,15 @@ tr:first-of-type td:first-of-type {
 }
 /*弹出框去掉x*/
 .el-icon-close:before {
-  display: none !important;
+  display: block !important;
 }
 .el-dialog__close {
   /* display: none!important; */
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 700!important;
 }
 .el-dialog__headerbtn {
-  top: 11px;
+  top: 11px!important;
 }
 .el-table td div {
   white-space: nowrap;
@@ -297,5 +297,23 @@ tr:first-of-type td:first-of-type {
   position: absolute;
   left: 0;
 }
+.el-button--primary{
+  background-color:#5D99EC !important;
+}
+.el-dialog__header{
+  border-radius: 5px 5px 0 0;
+}
+.el-dialog__footer{
+   border-radius: 0 0 5px 5px;
+}
 
+.el-pagination.is-background .btn-next, 
+.el-pagination.is-background .btn-prev, 
+.el-pagination.is-background .el-pager li{
+   background-color: #fafafa;
+   border: 1px solid #E3E3E3;
+}
+.el-table td, .el-table th{
+  padding-top:8px;
+}
 </style>

@@ -2,7 +2,7 @@
   <div class="login" :style="img">
     <div id="canvasName" style="position: absolute;z-index: 5;height:945px;top:300px;left:0;overflow: hidden;"></div>
     <div class="Title">
-      <img :src="imgsrc" alt="">
+      <img :src="imgsrc" alt="" style="width: 320px;height: 40px;">
     </div>
     <div class="starry-sky">
       <canvas  id="canvas"></canvas>
@@ -56,7 +56,9 @@ export default {
       animateTimer: null
     };
   },
-  computed: {},
+  computed: {
+    ...mapState(["state_router"]),
+  },
   created: function() {
     if (sessionStorage.getItem("userPhone")) {
       var numbers = sessionStorage.getItem("userPhone");
@@ -98,6 +100,7 @@ export default {
     clearInterval(this.animateTimer);
   },
   methods: {
+    ...mapActions(["stateRouter"]),
     loginBtn() {
       var vm = this;
       let phonenumber = this.phonenumber;
@@ -153,6 +156,8 @@ export default {
                 localStorage.removeItem("Deletenavigationbar"); //editableTabs2
               }
               localStorage.setItem("editableTabs2", JSON.stringify([]));
+               localStorage.removeItem("vuex",JSON.stringify([]));
+              this.stateRouter('');
               localStorage.setItem("Savearray", []);
             } else if (res.data.code == 407) {
               //被踢出登录，返回登录页

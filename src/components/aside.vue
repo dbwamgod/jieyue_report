@@ -2,28 +2,30 @@
   <div id="asideList" style="width:100%;height:100%;user-select:none;">
     <el-row style="width:100%;display: -webkit-box;display: flex;margin-top:50px;" :style="{marginTop:this.hideheaderaside?50+'px':'0'}">
       <!--侧边栏-->
-      <el-col :span="2" style="height:100%;position: fixed;z-index: 100;-box-flex:-webkit 1;flex:1;" class="aside" v-show="this.hideheaderaside">
+      <el-col :span="2" style="width:auto;height:100%;position: fixed;z-index: 100;-box-flex:-webkit 1;flex:1;" class="aside" v-show="this.hideheaderaside">
         <!-- <div class="baobiaogongneng"></div> -->
+        <div style="right: -3px;z-index: 999;width: 3px;height: 100%;background:rgba(0,0,0,.1);position: absolute;" id="DetectionHeight" @mousedown="drag"></div>
         <!--搜索框和收藏-->
         <div style="height: 100%;" v-show="val">
-          <el-menu :router="true" :default-active="defaultActive+''" :unique-opened="true" :default-openeds="openeds" style="height:100%;" :style="{width:ths+'px'}" class="zyside">
+          <el-menu @open="openHandler" @close="closeHandler" :router="true" :default-active="defaultActive+''" :unique-opened="true" :default-openeds="openeds" style="height:100%;" :style="{width:ths+'px'}" class="zyside"  id="draga">
             <!--第一层-->
-            <el-submenu v-for="(item,index) in this.ArrayData" :index="item.id +''" :unique-opened="true" :key="index">
+            <el-submenu v-for="(item,index) in this.ArrayData" :index="index+''" :unique-opened="true" :key="index">
               <template slot="title">
+                <img :src="isOpen[index] ? xiajiantou : shangjiantou"/>
                 <i :class=[item.icon]></i> {{item.name}}</template>
               <!--第二层-->
               <el-submenu v-for="(itema,index) in item.children" :index="itema.id +''" v-if="(!itema.children)" :key='index' >
                 <!--第三层-->
                 <template slot="title" v-show='itema.name'>{{itema.name}}{{itema.children == []}}</template>
-                <el-menu-item-group v-for="(itemb,index) in itema.children" :index="itemb.id +''" :key="index">
-                  <el-menu-item :index="itemb.id+''" @click="gotoPath(itemb.url,itemb.id,itemb.templateCode) ;addTab(editableTabsValue2,itemb.url,itemb.name,itemb.id,itemb.templateCode)">
+                <el-menu-item-group v-for="(itemb,index) in itema.children" :index="itemb.id+''" :key="index">
+                  <el-menu-item :index="itemb.id+''" @click="gotoPath(itemb.url, itemb.id, itemb.templateCode, itemb.name) ;addTab(editableTabsValue2,itemb.url,itemb.name,itemb.id,itemb.templateCode)">
                     <span class="activeAfte"></span>
                     {{itemb.name}}
                 </el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <!--第二层-->
-                <el-menu-item :index="itema.id+''" @click="gotoPath(itema.url,itema.id,itema.templateCode) ;addTab(editableTabsValue2,itema.url,itema.name,itema.id,itema.templateCode)" v-for="(itema,index) in item.children" v-if="(itema.children)" :key='index'>
+                <el-menu-item :index="itema.id+''" @click="gotoPath(itema.url,itema.id,itema.templateCode, itema.name) ;addTab(editableTabsValue2,itema.url,itema.name,itema.id,itema.templateCode)" v-for="(itema,index) in item.children" v-if="(itema.children)" :key='index'>
                   <span class="activeAfte"></span>
                   {{itema.name}}
                 </el-menu-item>
@@ -42,26 +44,27 @@
       </el-col>
 
       <!--页面的内容-->
-      <el-col :span="22" style="-webkit-box-flex: 1;width:87%;height:100%;flex:1;position: relative;background: #f1f2f6" :style="this.hideheaderaside?(this.val?{marginLeft:'160px'}:{marginLeft:'50px'}) :({marginLeft:0+'px'})">
-        <div style="width: 2px;height: 100%;background:rgba(0,0,0,.1);position: absolute;" id="DetectionHeight"></div>
+      <el-col :span="22" style="min-width:960px;-webkit-box-flex: 1;width:87%;height:100%;flex:1;position: relative;background: #f1f2f6" :style="this.hideheaderaside?({marginLeft:this.val?ths+'px':'50px'}) :({marginLeft:0+'px'})">
+          <!--拖拽区域-->
+          <!-- <div style="width: 3px;height: 100%;background:rgba(0,0,0,.1);position: absolute;" id="DetectionHeight" @mousedown="drag"></div> -->
 
-        <div style="cursor: pointer;z-index:999" @click="hideV" v-show="this.hideheaderaside" :class="{hv:hl,hh:!hl}" :style="{left:ths+'px'}" v-if="val">
-          <img :src="shouqizuocedaohang" alt="">
-        </div>
+          <div style="cursor: pointer;z-index:999" @click="hideV" v-show="this.hideheaderaside" :class="{hv:hl,hh:!hl}" :style="{left:ths+'px'}" v-if="val">
+            <img :src="shouqizuocedaohangB" alt="">
+          </div>
 
-        <div style="z-index: 999;cursor: pointer" @click="hideV" v-show="this.hideheaderaside" :class="{hv:hl,hh:!hl}" :style="{ left:this.val?ths+'px':'50px'}" v-else>
-          <img :src="shouqizuocedaohang" alt="">
-        </div>
+          <div style="z-index: 999;cursor: pointer" @click="hideV" v-show="this.hideheaderaside" :class="{hv:hl,hh:!hl}" :style="{ left:this.val?ths+'px':'50px'}" v-else>
+            <img :src="shouqizuocedaohang" alt="">
+          </div>
 
-        <!--整体导航-->
-        <div style="margin:21px 0 0 32px;" class="OverallNavigation">
-         <!--触发器-->
-          <el-tabs id="editableTabs" v-model="editableTabsValue2" type="card" @tab-click="tabsn" closable 
-                  @tab-remove="removeTab" style="z-index: 999;height: 32px;" v-show="Deletenavigationbar">
-            <el-tab-pane v-for="option in $store.state.editableTabs2" :label="option.title" :name="option.content" :key="option.name"></el-tab-pane>
-          </el-tabs>
-        </div>
-        <router-view style="margin: 0px 34px;"></router-view>
+          <!--整体导航-->
+          <div style="margin:21px 0 0 32px;" class="OverallNavigation">
+          <!--触发器-->
+            <el-tabs id="editableTabs" v-model="editableTabsValue2" type="card" @tab-click="tabsn" closable 
+                    @tab-remove="removeTab" style="z-index: 999;height: 32px;" v-show="Deletenavigationbar && $store.state.hideheaderaside">
+              <el-tab-pane v-for="option in $store.state.editableTabs2" :label="option.title" :name="option.name+''" :key="option.templateCode"></el-tab-pane>
+            </el-tabs>
+          </div>
+          <router-view style="margin: 0px 34px;"></router-view>
       </el-col>
     </el-row>
   </div>
@@ -92,12 +95,18 @@ export default {
       tabIndex: 1,
       tabName: [],
       indexCode: 0,
-      ths: "160",
+      ths:'160',
       fanhuishouye: require("../assets/images/icon-fanhuishouye.png"), //小房子 icon-shouqizuocedaohang
       shouqizuocedaohang: require("../assets/images/icon-shouqizuocedaohang.png"), // icon-sousuo.png
-      Deletenavigationbar: JSON.parse(localStorage.getItem("Deletenavigationbar")),
-      openeds:[],
-      uniqueOpened: false
+      shouqizuocedaohangB: require("../assets/images/icon-shouqizuocedaohangB.png"), // icon-sousuo.png
+      Deletenavigationbar: JSON.parse(
+        localStorage.getItem("Deletenavigationbar")
+      ),
+      shangjiantou: require("../assets/images/icon-shangjiantou.png"),
+      xiajiantou: require("../assets/images/icon-xiajiantou.png"),
+      openeds: [],
+      uniqueOpened: false,
+      isOpen: [false]
     };
   },
   computed: {
@@ -106,6 +115,7 @@ export default {
   },
   watch: {
     state_router() {
+      console.log(this.state_router,'----')
       this.defaultActive = this.state_router;
     },
     CollectionNameLis: function() {
@@ -113,48 +123,64 @@ export default {
     },
     $route(to, from) {
       this.editableTabsValue2 = to.name;
-      if(this.editableTabsValue2 == 'mainApp'){
+      if (this.editableTabsValue2 == "mainApp") {
         localStorage.setItem("editableTabs2", JSON.stringify([]));
         this.Deletenavigationbar = false;
         localStorage.setItem("reportCode", JSON.stringify([]));
         localStorage.setItem("Savearray", JSON.stringify([]));
-        this.openeds = []
+        this.stateRouter("");
+        this.openeds = [];
+        this.$set(this.isOpen, 0, false);
       }
-    },
+    }
   },
   beforeUpdate() {
-    // console.log(this.state_router)
-    // this.defaultActive = this.state_router;
-     var srt = JSON.parse(localStorage.getItem("editableTabs2"));
-     if (srt.length) {
-       this.Deletenavigationbar = true;
-     }
+    this.defaultActive = this.state_router;
+    var srt = JSON.parse(localStorage.getItem("editableTabs2"));
+    if (srt.length) {
+      this.Deletenavigationbar = true;
+    }
   },
   created() {
     this.aside();
     this.Navigationstate();
   },
+  mounted(){
+    this.editableTabsValue4("asideList");
+  },
   methods: {
     ...mapActions(["stateRouter", "saveData", "saveDatal"]),
+    editableTabsValue4(editableTabsValue4){
+        let _this = this;
+        document.getElementById(editableTabsValue4).onclick= function (event) {
+          _this.pageShow = false;
+        }
+    },
+    openHandler(index) {
+      this.$set(this.isOpen, index, true);
+    },
+    closeHandler(index) {
+      this.$set(this.isOpen, index, false);
+    },
     Navigationstate() {
       this.editableTabs2 =
         JSON.parse(localStorage.getItem("editableTabs2")) || [];
       this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
     }, //刷新之前保存导航栏
     tabsn(tab, event) {
+      let titleName = this.$store.state.editableTabs2.filter(
+        item => item.name == this.editableTabsValue2
+      )[0].title;
+      this.$store.state.state_router=tab.name;
       this.$router.push({
-        path: tab.name,
-         query: { reportCode: JSON.parse(localStorage.getItem("reportCode")) }
+        path: tab.content,
+        query: {
+          reportCode: JSON.parse(localStorage.getItem("reportCode")),
+          titleName
+        }
       });
     },
     aside() {
-      // console.log(this.state_router)
-      // this.ArrayData = [
-      //   {"id":991,"name":"菜单报表管理","icon":"baobiaogongneng","templateCode":"","url":"",
-      //   "children":[
-      //     {"id":993,"name":"借款明细表","icon":null,"templateCode":"RPT_LN_LEND_DTL_RPT","url":"reportIndex","children":[]},
-      //     {"id":995,"name":"借款明细表A","icon":null,"templateCode":"RPT_LN_LEND_DTL_RPT","url":"reportIndex","children":[]}
-      //     ]}];
       this.$http
         .post(api.pdng(), {
           masterNo: "06"
@@ -164,12 +190,13 @@ export default {
         })
         .catch(() => {});
     }, //调接口渲染侧边栏接口--跳转主页--存储侧边栏name
-    gotoPath(address, id, templateCode) {
+    gotoPath(address, id, templateCode, titleName) {
+      console.log(address, id, templateCode, titleName)
       this.$router.push({
         path: address,
-        query: { reportCode: templateCode }
+        query: { reportCode: templateCode, titleName }
       });
-
+      
       localStorage.setItem("reportCode", JSON.stringify(templateCode));
       this.stateRouter(id);
       this.hackReset = false;
@@ -193,17 +220,18 @@ export default {
         if (localStorage.getItem("Savearray")) {
           if (localStorage.getItem("Savearray").indexOf(f) == -1) {
             let newTabName = ++this.tabIndex + "";
-            this.editableTabs2 = JSON.parse(localStorage.getItem("editableTabs2"));
+            this.editableTabs2 = JSON.parse(
+              localStorage.getItem("editableTabs2")
+            );
             this.editableTabs2.push({
               title: b,
               name: c,
               content: d,
-              reportCode:f
+              reportCode: f
             });
-            // alert(1111)
             this.tabName.push(f);
             this.editableTabsValue2 = newTabName;
-          } 
+          }
         } else {
           if (this.tabName.indexOf(c) == -1) {
             let newTabName = ++this.tabIndex + "";
@@ -211,27 +239,22 @@ export default {
               title: b,
               name: c,
               content: d,
-              reportCode:f
+              reportCode: f
             });
-            //  alert(2222)
             this.tabName.push(f);
             this.editableTabsValue2 = newTabName;
           }
         }
-        
-            this.Deletenavigationbar =
-              localStorage.setItem("Deletenavigationbar", JSON.stringify("true")) ||
-              JSON.parse(localStorage.getItem("Deletenavigationbar"));
-              if(this.tabName.length != 0){
-                //  alert(3333)
-                  this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
-              }
-              if(this.editableTabs2.length != 0 ){
-                //  alert(4444)
-                  this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
-              }
-            
-            
+
+        this.Deletenavigationbar =
+          localStorage.setItem("Deletenavigationbar", JSON.stringify("true")) ||
+          JSON.parse(localStorage.getItem("Deletenavigationbar"));
+        if (this.tabName.length != 0) {
+          this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
+        }
+        if (this.editableTabs2.length != 0) {
+          this.$store.commit("SAVE_EDITABLETABS2", this.editableTabs2);
+        }
       }
     }, //点击侧边栏 添加在导航栏上
     removeTab(targetName) {
@@ -248,14 +271,17 @@ export default {
         });
       }
       this.editableTabsValue2 = activeName;
+      console.log(this.$store.state.editableTabs2.length)
       if (this.$store.state.editableTabs2.length == 1) {
-        this.editableTabs2 = tabs.filter(tab => tab.content !== targetName);
+        console.log(this.$store.state.editableTabs2,"======")
+        this.editableTabs2 = tabs.filter(tab => tab.name !== targetName);
         this.tabName = [];
         // this.$store.commit("this.editableTabs2", this.editableTabs2);
         localStorage.setItem(
           "editableTabs2",
           JSON.stringify(this.editableTabs2)
         );
+       
         if (localStorage.removeItem("Deletenavigationbar")) {
           localStorage.removeItem("Deletenavigationbar");
         }
@@ -265,23 +291,82 @@ export default {
         return this.$router.push((name = "mainApp"));
       } else {
         if (tabs) {
-          this.editableTabs2 = tabs.filter(tab => tab.content !== targetName);
+          this.editableTabs2 = tabs.filter(tab => tab.name != targetName);
         }
+        localStorage.setItem(
+          "editableTabs2",
+          JSON.stringify(this.editableTabs2)
+        );
+        this.$store.state.editableTabs2=this.editableTabs2;
+        //$store.state.editableTabs2
         //遍历editableTabs2 找到id 添加进去
-        // this.$store.commit("this.editableTabs2", this.editableTabs2);
         this.tabName = this.editableTabs2.map(r => r.name);
-        console.log(this.editableTabs2);
+        let titleName = this.editableTabs2[this.editableTabs2.length - 1]
+          .title;
+        console.log(this.editableTabs2[this.editableTabs2.length - 1],"#######")
+        localStorage.setItem("reportCode",JSON.stringify(this.editableTabs2[this.editableTabs2.length - 1]
+          .reportCode));
         let pathInfo = this.editableTabs2[this.editableTabs2.length - 1]
           .content;
         this.$router.push({
-          path: pathInfo
+            path: pathInfo,
+            query: {
+              reportCode: JSON.parse(localStorage.getItem("reportCode")),
+              titleName
+            }
         });
+        
+        this.$store.state.state_router=this.editableTabs2[this.editableTabs2.length - 1]
+          .name;
       }
-    }, //删除导航栏
+    },//拖拽侧边栏
+    drag(e,index){
+        let evt = e || window.e;
+        // console.log(evt.target);
+        // console.log(evt.target.parentNode);
+        //
+        // // if(evt.path[1].value !== 0 && evt.path[0].value !== 0){
+          var div1 = evt.target, // 得到div1对象
+            _this = this,
+            leftW = div1.offsetWidth;
+        let disX = evt.clientX ;   // 鼠标横坐标 - div1的left
+
+        // 鼠标移动时
+          document.onmousemove = function(e) {
+
+            var evnt = e || window.e;
+            var x = evnt.clientX - disX;
+            //console.log(evnt.clientX);
+            //console.log(disX);
+            // console.log(x);
+            // console.log(leftW);
+            evnt.preventDefault()
+            // div1.style.width=disX+x+leftW+'px';  || parseInt(evnt.clientX) >=368
+            _this.ths =disX+x+leftW;
+            if(evnt.clientX <= 160 ){
+              _this.ths = '160' ;
+              x = 160 +  'px';
+              document.onmousemove=null;
+            }else if(evnt.clientX >= 550 ){
+              _this.ths = '550' ;
+              x = 550 +  'px';
+            }
+
+          };
+          // 鼠标抬起时
+          document.onmouseup = function() {
+            document.onmousemove =null;
+          };
+        // }
+
+        },
   }
 };
 </script>
 <style>
+#DetectionHeight{
+    cursor: w-resize;
+  }
 #asideList .marginLeft0 {
   margin-left: 0px;
 }
@@ -336,6 +421,17 @@ export default {
 #asideList .aside .el-menu-item:hover {
   background-color: #2d65ad !important;
 }
+#asideList .aside .el-submenu .el-submenu__icon-arrow {
+  display: none;
+}
+#asideList .aside .el-submenu {
+  position: relative;
+}
+#asideList .aside .el-submenu img {
+  position: absolute;
+  top: 18px;
+  right: 3px;
+}
 
 #asideList .el-menu {
   position: relative;
@@ -343,14 +439,13 @@ export default {
   padding-left: 0;
   background-color: rgba(0, 0, 0, 0);
   border: 0px;
-  border-radius: 1px;
 }
 
 #asideList .zyside {
   background: #3c404c;
 }
 
-#asideList .el-icon-close:before {
+#asideList .OverallNavigation .el-icon-close:before {
   display: block !important;
 }
 
@@ -365,10 +460,6 @@ export default {
 #asideList .OverallNavigation .el-tabs__item {
   height: 32px;
   line-height: 32px;
-}
-
-#asideList .el-tabs__nav-wrap {
-  margin-left: 1px;
 }
 
 #asideList #editableTabs {
@@ -408,7 +499,6 @@ export default {
   line-height: 50px;
   padding: 0 33px !important;
   min-width: 200px;
-  /* background: #2d65ad; */
 }
 #asideList .el-submenu .is-active {
   background: #2d65ad;

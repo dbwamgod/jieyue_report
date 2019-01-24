@@ -3,12 +3,12 @@
     <div>
       <el-row>
         <el-col :span="24">
-          <div class="grid-content bg-purple-dark" style="width:100%;height:359px;background:#EDEDED;">
+          <div class="grid-content bg-purple-dark" style="width:100%;height:359px;background:#EDEDED;border-radius: 10px;">
 
             <div class="Agencytask">
               <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="待处理" name="first">
-                  <div style="background:white;height:317px;">
+                <el-tab-pane label="待处理" name="first" >
+                  <div style="background:white;height:317px;border-radius: 0 0 10px 10px;">
                     <div style="margin-left: 42%;padding-top: 45px;">
                       <div><img :src="Nodata" alt=""></div>
                       <p style="font-size:16px;color:#54657E;margin-left:48px;margin-top: 18px;letter-spacing: 3px;">暂无数据…</p>
@@ -33,22 +33,22 @@
               </el-tabs>
               <div class="AgencytaskshuA" v-show="TaskCount.length !== 0"></div>
               <div class="AgencytaskshuB" v-show="TaskCount.length !== 0"></div>
-              <div class="Agencytaskmore">更多</div>
+              <div class="Agencytaskmore" v-show="TaskCount.length !== 0">更多<span style="vertical-align: super;">...</span></div>
             </div>
           </div>
         </el-col>
       </el-row>
-      <el-row style="margin-top:20px;">
+      <el-row style="margin-top:14px;">
         <!-- 消息 -->
         <el-col :span="12">
           <div class="grid-content bg-purple" style="padding-right: 7px; position: relative;">
             <div style="background:#EDEDED;width:100%;height:465px;border-radius: 10px;">
-              <div style="line-height:50px;padding:0 20px;">
+              <div style="line-height:44px;padding:0 20px;">
                 <span><img :src="xiaoxitongzhi" alt="" style="vertical-align: sub;;margin-right:10px;"></span><span
                   style="font-size:18px;font-weight: 700;">消息通知</span>
-                <span style="float:right;font-size:12px;color:#4DA1FC;" @click="MoreManagementTasks">更多...</span>
+                <span style="float:right;font-size:14px;color:#4DA1FC;cursor: pointer;" @click="MoreManagementTasks" v-show="this.MessageFunctionLength != 0">更多</span>
               </div>
-              <div style="background:white;height:408px;" v-show="tableData.length == 0">
+              <div style="background:white;height:416px;border-radius: 0 0 10px 10px;" v-show="tableData.length == 0">
                 <el-table :data="tableData" style="width: 100%" stripe>
 
                   <el-table-column prop="address" :label="'内容'"></el-table-column>
@@ -58,10 +58,10 @@
                 <div style="color:#BDBDBD;line-height:46px;font-size: 14px;"> <img :src="mailbox" alt="" style="margin-left: 12px;margin-right:3px;vertical-align: middle;"><span>共12条信息</span></div>
               </div>
 
-              <div style="background:white;height:408px;" v-show="tableData.length !== 0">
+              <div style="background:white;height:416px;border-radius: 0 0 10px 10px;" v-show="tableData.length !== 0">
                  <div style="width: 200px;height: 200px;margin: 0px auto;">
-                   <div style="position: absolute;top: 50%;left: 40%;">
-                     <img :src="Nocollection" alt="" style="vertical-align: bottom;"> <span style="font-size: 16px;color: #54657E;letter-spacing: 1px;">暂无消息</span>
+                   <div style="position: absolute;top: 50%;left: 40%;width: 100%;">
+                     <img :src="Nocollection40" alt="" style="vertical-align: middle;"> <span style="font-size: 16px;color: rgb(84, 101, 126);letter-spacing: 1px;position: absolute; top: 10px;left: 43px;">暂无消息</span>
                    </div>
                  </div>
               </div>
@@ -72,39 +72,46 @@
         <el-col :span="12">
           <div class="grid-content bg-purple" style="width:100%;height:465px;background:#EDEDED;border-radius: 10px;margin-left: 7px;position: relative;">
             <!-- 头部 -->
-            <div style="line-height:50px;padding:0 20px;position: relative;">
+            <div style="line-height:44px;padding:0 20px;position: relative;">
               <span><img :src="schedule" alt="" style="vertical-align: sub;margin-right:10px;"></span><span style="font-size:18px;font-weight: 700;">我的日程</span>
               <span style="float:right;font-size:12px;color:#4DA1FC;">
-                <el-button type="text" @click="dialogVisible = true">新建</el-button>
+                <el-button type="text" @click="dialogVisible = true;dialogVisiblereste()">新建</el-button>
               </span>
-              <el-dialog title="新建事件" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-                <div style="position: absolute;top: 1px;right: 30px;width: 30px;height: 30px;color: #ccc;font-size: 20px;"
-                  @click="dialogVisible = false"></div>
-                <div class="demo-input-suffix">
-                  <div class="block valueDate">
-                    <div class="demonstration">日期：</div>
-                    <!-- <el-date-picker v-model="valueDate" type="date" placeholder="选择日期"></el-date-picker> -->
-                    <el-date-picker v-model="valueDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
-                  </div>
-                  <div>
-                    <div style="float: left">标题：</div>
-                    <el-input placeholder="字数不能超过20个字符" v-model="inputTitle" clearable></el-input>
+              <el-dialog title="新建事件" :visible.sync="dialogVisible" width="30%" :before-close="handleClose" :show-close='false' :close-on-click-modal="false">
+                <div style="position: absolute;top: -3px;right: 1px;width: 30px;height: 30px;color: #ccc;font-size: 20px;"
+                  @click="dialogVisible = false;dialogVisibleCancel()">
+                  <img :src="guanbitanchuang" alt="">
                   </div>
 
-                  <div style="float: left">内容：</div>
+                <div class="demo-input-suffix" >
+                  <div class="block valueDate" style="line-height: 30px;margin-bottom: 10px;">
+                    <div class="demonstration"><span style="color:red;">*</span>日期：</div>
+                    <!-- <el-date-picker v-model="valueDate" type="date" placeholder="选择日期"></el-date-picker> -->
+                    <el-date-picker v-model="valueDate" type="datetime" placeholder="选择日期时间" :picker-options="pickerOptions0" @focus='datetimeA' @blur="datetimeB"></el-date-picker>
+                  </div>
+                  <div class="datacontent" style="margin-bottom: 10px;">
+                    <div style="float: left"><span style="color:red;">*</span>标题：</div>
+                    <el-input placeholder="字数不能超过20个字符" v-model="inputTitle" ></el-input>
+                  </div>
+                  <div class="datacontent">
+                  <div style="float: left"><span style="color:red;">*</span>内容：</div>
                   <el-input type="textarea" :rows="2" placeholder="字数不能超过100个字符" v-model="textarea"></el-input>
+                  </div>
+                 
                 </div>
 
                 <span slot="footer" class="dialog-footer">
-                  <el-button @click="dialogVisible = false">取 消</el-button>
-                  <el-button type="primary" @click="dialogVisibleTextarea();Diurnalinterface()">保存</el-button>
+                  <el-button @click="dialogVisible = false;dialogVisibleCancel()">取 消</el-button>
+                  <el-button type="primary" @click="dialogVisibleTextarea()">保存</el-button>
                 </span>
               </el-dialog>
               <div id="Savesuccess" style="width:200px;height:50px;font-size:16px;background:#000000;opacity: 0.5;color:rgb(255, 255, 255);box-shadow: 0 0 black;position:absolute;top:-48px;left:-210px;z-index: 100000;text-align: center;
             " v-show="Savesuccess">保存成功</div>
+            <div id="SavesuccessB" style="width:200px;height:50px;font-size:16px;background:#000000;opacity: 0.5;color:rgb(255, 255, 255);box-shadow: 0 0 black;position:absolute;top:-48px;left:-210px;z-index: 100000;text-align: center;
+            " v-show="SavesuccessB">保存失败</div>
             </div>
             <!-- 日历部分 -->
-            <div style="background:white;height: 409px;padding: 0 15px;">
+            <div style="background:white;height:416px;padding: 0 15px;border-radius: 0 0 10px 10px;">
               <div style="height: 280px;background-color: rgb(255,255,255);padding-top: 17px;">
                 <div id="calender">
                   <div id="celender_head">
@@ -123,12 +130,13 @@
                       <tr class='head' style="color: #707070">
                         <td v-for="(head,index) in heads" :key='index'>{{head}}</td>
                       </tr>
-                      <tr v-for="(item,index) in this.show" :key='index'>
-                        <td :class="{now: item1.now, last_month:item1.attr == 'last_month',next_month:item1.attr == 'next_month'}"
-                          v-for="(item1,index) in item " @click="showDate(item1,$event);" style="height: 28px;width: 28px;position: relative"
-                          :key='index'>
-                          <span>{{item1.num}}</span>
-                          <span :style=" [Memo_c.indexOf(item1.Memo_a) > -1? {background:'red'}: '' ]" style="width:3px;height:3px;position: absolute;left: 48%;bottom: 5px;"></span>
+                      <!-- border-radius: 50%;left: 50%;transform: translate(-50%);  ,item1.Memo_a == Memo_aindex?'Resolvingpower13':'Resolvingpower19' -->
+                      <tr v-for="(item,index) in this.show" :key='index'  style=" position: relative;">  
+                        <td :class="[{now: item1.now, last_month:item1.attr == 'last_month',next_month:item1.attr == 'next_month'}]"
+                          v-for="(item1,index) in item " @click="showDate(item1,$event);" style="height: 32px;width: 32px;position: relative;"
+                          :key='index' >
+                          <span :style="item1.Memo_a == Memo_aindex?'border: 1px solid #5594eb;border-radius: 50%;':''" style="width: 29px;display: inline-block;line-height: 26px;">{{item1.num}}</span>
+                          <span :style=" [Memo_c.indexOf(item1.Memo_a) > -1? {background:'red',position: 'absolute',left: '48%',bottom: '0px'}: '' ]" style="width:3px;height:3px;position: absolute;left: 48%;bottom: 10px;"></span>
                         </td>
                       </tr>
                     </table>
@@ -139,14 +147,14 @@
                 </div>
               </div>
               <!-- 显示日历内容 -->
-              <div style="padding-top: 12px;border-top: 1px dashed #ccc;">
-                <div style="height: 110px;overflow-y: auto;position: relative;">
+              <div style="margin-top: 10px;border-top: 1px dashed #ccc;">
+                <div style="height: 100px;overflow-y: auto;position: relative;">
                   <ul v-show="Memo_e.length>0">
                     <!-- <li class="headlineLi" style="padding-left: 23px;padding-right: 29px;line-height: 48px;height: 48px;"
                       v-for="(item,index) in headlines" @click="headlineLiC(index)" :key='index'>
                       <div class="headline" style="font-size: 16px;color: #333744;width: 100%;">{{item.name}}111</div>
                     </li> -->
-                    <li style="list-style: inside;" v-for="(item,index) in this.Memo_e" :key="index">
+                    <li style="list-style: inside;margin: 10px 15px;font-size: 14px;color: #c0c0c0;" v-for="(item,index) in this.Memo_e" :key="index">
                       <span class="newslimit">{{item.content}}</span>
                       <span style="float:right;">{{item.datas}}</span>
                     </li>
@@ -154,7 +162,7 @@
                   <div v-show="Memo_e.length === 0">
                     <div>
                       <div style="padding-top: 30px;margin-left: 38%;">
-                        <img :src="Nocollection" alt="" style="vertical-align:middle;"> 暂无收藏
+                        <img :src="Nocollection40" alt=""> <span style="position: absolute;top: 42px;font-size: 16px;color: #54657E;">暂无工作事项</span> 
                       </div>
                     </div>
                   </div>
@@ -169,6 +177,7 @@
 </template>
 <script>
 import api from "../../api";
+import Toast from "../../toast/toast.js";
 let moment = require("moment");
 import { mapState, mapActions, mapGetters } from "vuex";
 export default {
@@ -181,8 +190,11 @@ export default {
       xiaoxitongzhi: require("../../assets/images/icon-xiaoxitongzhi.png"),
       schedule: require("../../assets/images/schedule.png"),
       Nodata: require("../../assets/images/Nodata.png"),
-      Nocollection: require("../../assets/images/Nocollection.png"), 
-      mailbox: require("../../assets/images/mailbox.png"),
+      Nocollection: require("../../assets/images/Nocollection.png"),
+      NocollectionB: require("../../assets/images/NocollectionB.png"),
+      Nocollection40: require("../../assets/images/Nocollection40.png"),
+      mailbox: require("../../assets/images/mailbox.png"), //guanbitanchuang
+      guanbitanchuang: require("../../assets/images/guanbitanchuang.png"),
       body: "",
       dataheader: "",
       dataheaders: "",
@@ -190,6 +202,11 @@ export default {
       currentMonth: "",
       currentDay: "",
       heads: ["日", "一", "二", "三", "四", "五", "六"],
+      pickerOptions0: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7;
+        }
+      },
       datas: [],
       show: [],
       dialogVisible: false,
@@ -203,6 +220,7 @@ export default {
       Memo_c: [],
       Memo_d: [],
       Memo_e: [],
+      Memo_aindex: "",
       firstday1: "",
       tabsName: [
         {
@@ -250,18 +268,29 @@ export default {
       activeName: "first",
       currentdate: "",
       Savesuccess: false,
-      TaskCount:''
+      SavesuccessB: false,
+      TaskCount: "",
+      search: "",
+      MessageFunctionLength: ""
     };
   },
   computed: {
     ...mapGetters(["hideheaderaside"])
   },
-  mounted() {},
+  watch: {},
   created() {
     this.setCalender(new Date());
     this.Queryriqi();
   },
   methods: {
+    datetimeA() {
+      document.getElementsByClassName("el-input__inner")[0].style.border =
+        "1px solid #3A96F2";
+    },
+    datetimeB() {
+      document.getElementsByClassName("el-input__inner")[0].style.border =
+        "1px solid ";
+    },
     datasTime() {
       let date = new Date();
       let preDate = new Date(date.getTime());
@@ -318,8 +347,8 @@ export default {
       this.initline();
       var yy = this.currentYear;
       var mm = this.currentMonth;
-      console.log(this.currentYear)
-      console.log(this.currentMonth)
+      console.log(this.currentYear);
+      console.log(this.currentMonth);
       var dd = 1;
       if (yy == new Date().getFullYear() && mm == new Date().getMonth() + 1) {
         dd = new Date().getDate();
@@ -330,12 +359,12 @@ export default {
         this.currentMonth = mm;
         this.currentYear = yy;
       }
-      var calenderrDate = yy + "-" + (mm)  + "-" + dd;
+      var calenderrDate = yy + "-" + mm + "-" + dd;
       var calenderrDates = yy + "-" + (mm > 9 ? mm : "0" + mm);
       this.dataheaders = calenderrDate;
       this.setCalender(new Date(calenderrDate));
-      console.log(this.dataheaders )
-      this.Queryriqi()
+      console.log(this.dataheaders);
+      this.Queryriqi();
     },
     right() {
       this.initline();
@@ -356,8 +385,8 @@ export default {
 
       this.dataheaders = calender__Dates;
       this.setCalender(new Date(calender__Date));
-      console.log(this.dataheaders )
-      this.Queryriqi()
+      console.log(this.dataheaders);
+      this.Queryriqi();
     },
     setCalender(dateNow) {
       //显示日历部分
@@ -398,7 +427,8 @@ export default {
       for (var i = 1; i <= cur_days; i++) {
         var date = new Object();
         date.num = i;
-        date.Memo_a = yy + "-" + (mm>9?mm:'0'+mm) + "-" + (i > 9 ? i : "0" + i);
+        date.Memo_a =
+          yy + "-" + (mm > 9 ? mm : "0" + mm) + "-" + (i > 9 ? i : "0" + i);
         date.attr = "this_month";
         if (
           i == this.currentDay &&
@@ -431,8 +461,6 @@ export default {
         }
         this.show.push(line);
       }
-
-      // console.log(this.show);
     },
     showDate(index, e) {
       this.currentDay = index.num;
@@ -445,42 +473,110 @@ export default {
           });
         }
       }
+      this.Memo_aindex = index.Memo_a;
     }, //点击日期获取年月日--切換內容
     dialogVisibleTextarea(e) {
+      var a = new RegExp("[\\u4E00-\\u9FFF]+", "g");
+      var b = /[0-9a-z]/i;
+      var c = /^(?!(\s+$))/;
       var vm = this;
-      this.Savesuccess = true;
-      this.setCalender(new Date());
-      this.dialogVisible = false;
-      this.textarea = this.textarea;
-      this.inputTitle = this.inputTitle;
-      this.headlines.push({
-        name: this.inputTitle
-      });
-      //先获取日期 然后转一手 之后 赋值给Memo_b
-      if (this.valueDate) {
-        var d = new Date(this.valueDate);
-        this.firstday1 =
-          d.getFullYear() +
-          "-" +
-          (d.getMonth() + 1) +
-          "-" +
-          d.getDate() +
-          " " +
-          (d.getHours() > 9 ? d.getHours() : "0" + d.getHours()) +
-          ":" +
-          (d.getMinutes() > 9 ? d.getMinutes() : "0" + d.getMinutes()) +
-          ":" +
-          (d.getSeconds() > 9 ? d.getSeconds() : "0" + d.getSeconds());
-        var firstday =
-          d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
-        // this.Memo_b.push(firstday);
+      if (this.inputTitle.length > 20) {
+        Toast({
+          message: "标题不能超过20个字符",
+          duration: 2000
+        });
+      } else if (this.valueDate == null|| this.valueDate == ""  ) {
+        Toast({
+          message: "日期不能为空",
+          duration: 2000
+        });
+      } else if (this.inputTitle.length == 0) {
+        Toast({
+          message: "标题不能位空",
+          duration: 2000
+        });
+      } else if (this.textarea.length > 100) {
+        Toast({
+          message: "内容不能超过100个字符",
+          duration: 2000
+        });
+        // this.textarea = "";
+
+        // this.dialogVisible = true;
+      } else if (this.textarea.length == 0) {
+        Toast({
+          message: "内容不能为空",
+          duration: 2000
+        });
+      } else if (!c.test(this.textarea) || !c.test(this.inputTitle)) {
+        Toast({
+          message: "内容不能为空格或标题不能为空格",
+          duration: 2000
+        });
+        if (!c.test(this.textarea) && !c.test(this.inputTitle)) {
+          this.textarea = "";
+          this.inputTitle = "";
+        } else if (!c.test(this.inputTitle)) {
+          this.inputTitle = "";
+        } else if (!c.test(this.textarea)) {
+          this.textarea = "";
+        }
       } else {
-        this.firstday1 = "";
+        this.Savesuccess = true;
+        this.setCalender(new Date());
+        this.dialogVisible = false;
+        this.inputTitle = this.inputTitle;
+        this.textarea = this.textarea;
+        this.headlines.push({
+          name: this.inputTitle
+        });
+        //先获取日期 然后转一手 之后 赋值给Memo_b
+        if (this.valueDate) {
+          var d = new Date(this.valueDate);
+          this.firstday1 =
+            d.getFullYear() +
+            "-" +
+            (d.getMonth() + 1) +
+            "-" +
+            d.getDate() +
+            " " +
+            (d.getHours() > 9 ? d.getHours() : "0" + d.getHours()) +
+            ":" +
+            (d.getMinutes() > 9 ? d.getMinutes() : "0" + d.getMinutes()) +
+            ":" +
+            (d.getSeconds() > 9 ? d.getSeconds() : "0" + d.getSeconds());
+          var firstday =
+            d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+        } else {
+          this.firstday1 = "";
+        }
+        this.$http
+          .post(api.notepadAdd(), {
+            content: this.textarea,
+            eventData: this.firstday1,
+            masterNo: "01",
+            title: this.inputTitle
+          })
+          .then(res => {
+            this.ArrayData = res.data.data;
+            this.Queryriqi();
+          })
+          .catch(() => {});
+        this.textarea = "";
+        this.inputTitle = "";
+        setTimeout(function() {
+          vm.Savesuccess = false;
+        }, 1000);
       }
-      setTimeout(function() {
-        vm.Savesuccess = false;
-      },500);
     }, //控制点击确定之后状态
+    dialogVisiblereste() {
+      this.valueDate = "";
+    },
+    dialogVisibleCancel() {
+      this.inputTitle = "";
+      this.textarea = "";
+      this.valueDate = "";
+    },
     headlineLiC(index) {
       console.log(index);
     },
@@ -534,31 +630,18 @@ export default {
       // this.$store.commit("SAVE_EDITABLETABS2", result);
     }, //任务的跳转
     handleClick(tab, event) {
-      // console.log(tab, event);
+      if (event.srcElement.id == "tab-first") {
+        document.getElementById("tab-first").style.fontWeight = "700";
+        document.getElementById("tab-second").style.fontWeight = "100";
+      } else if (event.srcElement.id == "tab-second") {
+        document.getElementById("tab-second").style.fontWeight = "700";
+        document.getElementById("tab-first").style.fontWeight = "100";
+      }
     },
-    Diurnalinterface() {
-      this.$http
-        .post(api.notepadAdd(),
-        {
-          content: this.textarea,
-          eventData: this.firstday1,
-          masterNo: "01",
-          title: this.inputTitle
-        }
-        )
-        .then(res => {
-          this.ArrayData = res.data.data;
-          console.log(this.ArrayData)
-        })
-        .catch(() => {});
-      this.textarea = "";
-      this.inputTitle = "";
-    }, //日期保存数据接口
     Queryriqi() {
-      // console.log('重新刷新',this.dataheaders)
-      this.Memo_c = []
-      this.Memo_d = []
-      this.Memo_e = []
+      this.Memo_c = [];
+      this.Memo_d = [];
+      this.Memo_e = [];
       this.$http
         .post(api.notepadList(), {
           form: {
@@ -569,57 +652,48 @@ export default {
         .then(res => {
           this.ArrayData = res.data.data;
           // console.log(this.ArrayData)
-          if(this.ArrayData.length != 0){
-            
+          if (this.ArrayData.length != 0) {
             this.ArrayData.forEach(r => {
-            if (r.eventData) {
-              this.Memo_c.push(r.eventData.substring(0, 10));
-              this.Memo_d.push({
-                data: r.eventData.substring(0, 10),
-                content: r.content,
-                datas: r.eventData
-              });
-            }
-          });
-           this.Memo_d.push({
-            data: "2029-09-09",
-            content: "11",
-            datas: "2019-09-09 00::00:00"
-          });
-          
-          this.currentdate = moment().format("YYYY-MM-DD");
-          // console.log(this.currentdate)
-          // console.log(this.Memo_d)
-          for (var i = 0; i < this.Memo_d.length; i++) {
-            if (this.currentdate == this.Memo_d[i].data) {
-              this.bbb = false;
-              this.Memo_e.push({
-                datas: this.Memo_d[i].datas,
-                content: this.Memo_d[i].content
-              });
+              if (r.eventData) {
+                this.Memo_c.push(r.eventData.substring(0, 10));
+                this.Memo_d.push({
+                  data: r.eventData.substring(0, 10),
+                  content: r.content,
+                  datas: r.eventData
+                });
+              }
+            });
+            this.Memo_d.push({
+              data: "2029-09-09",
+              content: "11",
+              datas: "2019-09-09 00::00:00"
+            });
+
+            this.currentdate = moment().format("YYYY-MM-DD");
+            for (var i = 0; i < this.Memo_d.length; i++) {
+              if (this.currentdate == this.Memo_d[i].data) {
+                this.bbb = false;
+                this.Memo_e.push({
+                  datas: this.Memo_d[i].datas,
+                  content: this.Memo_d[i].content
+                });
+              }
             }
           }
-          }
-          // console.log(this.Memo_c)
-     
-          // console.log(this.Memo_e.length)
         })
         .catch(() => {});
-    },//查询日期内容
-    TaskInterface(){
-        this.TaskCount = 0
+    }, //查询日期内容
+    TaskInterface() {
+      this.TaskCount = 0;
     }, //任务接口留位子
-    MessageFunction(){
-      
-    }//消息接口留位子
-
-
+    MessageFunction() {
+      this.MessageFunctionLength = 0;
+    } //消息接口留位子
   }
 };
 </script>
-import '../../style/mainApp.css';
-<style >
-      #mainApp .is-active {
+<style>
+#mainApp .is-active {
   background-color: #8bd0ff;
 }
 
@@ -630,12 +704,14 @@ import '../../style/mainApp.css';
   width: 60%;
   display: inline-block;
   position: absolute;
+  font-size: 14px;
 }
 
 /* 日期功能区 */
 .grid-content .el-dialog__header {
   background-color: #ededed !important;
   padding: 0px 23px 0px !important;
+  border-radius: 5px 5px 0 0;
 }
 
 .grid-content .el-dialog {
@@ -647,6 +723,7 @@ import '../../style/mainApp.css';
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
   width: 60% !important;
+  border-radius: 5px;
 }
 
 .grid-content .el-input {
@@ -664,17 +741,121 @@ import '../../style/mainApp.css';
 }
 
 .grid-content .el-dialog__footer {
-  padding: 10px 56px 20px;
+  padding: 10px 40px 6px;
   text-align: right;
   box-sizing: border-box;
-  border-top: 1px solid #cdc;
+  border-top: 0.5px solid #e1e1e1;
 }
-
 .grid-content textarea {
   height: 200px;
 }
-.grid-content #calender_body tr{
+.grid-content #calender_body tr {
   height: 35px;
+}
+.grid-content .el-input__inner {
+  -webkit-appearance: none;
+  background-color: #fff;
+  background-image: none;
+  border-radius: 4px;
+  border: 1px solid #dcdfe6;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #cccccc;
+  display: inline-block;
+  font-size: 14px;
+  height: 30px;
+  line-height: 30px;
+  outline: 0;
+  padding: 0 9px;
+  -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  width: 100%;
+  background: #fafafa;
+}
+.grid-content .el-textarea__inner {
+  display: block;
+  resize: vertical;
+  padding: 5px 9px;
+  line-height: 1.5;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  font-size: 14px;
+  color: #cccccc;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.grid-content .datacontent .el-textarea__inner {
+  background: #fafafa;
+}
+.grid-content .el-input__icon {
+  height: 100%;
+  width: 25px;
+  text-align: center;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  line-height: 31px;
+}
+.grid-content .el-icon-circle-close {
+  padding-left: 0px;
+  position: absolute;
+  left: 10px;
+}
+.grid-content .dialog-footer .el-button {
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #ededed;
+  border: 1px solid #dcdfe6;
+  color: #606266;
+  -webkit-appearance: none;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: 0;
+  margin: 0;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  padding: 8px 13px;
+  font-size: 16px;
+  border-radius: 4px;
+  width: 67px;
+  height: 32px;
+}
+.grid-content .el-button--primary {
+  color: #fff !important;
+  background: #5d99ec !important;
+  border-color: #5d99ec;
+}
+.grid-content .el-dialog__body {
+  padding: 18px 20px;
+  color: #606266;
+  font-size: 14px;
+}
+.grid-content .el-dialog {
+  width: 700px !important;
+}
+.grid-content
+  button.el-button.el-picker-panel__link-btn.el-button--default.el-button--mini.is-plain {
+  margin-right: 8px;
+}
+.grid-content .el-picker-panel__footer {
+  padding: 10px 0;
+}
+.grid-content .el-date-picker .el-picker-panel__content {
+  width: 292px;
+}
+.grid-content  .el-dialog__wrapper {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
 
 /* 消息功能区 */
@@ -739,6 +920,7 @@ import '../../style/mainApp.css';
   color: #008fff;
   background: white;
   border-radius: 10px 10px 0 0;
+  border: 0 !important;
 }
 
 #mainApp .Agencytask .el-tabs__nav-scroll {
@@ -761,8 +943,11 @@ import '../../style/mainApp.css';
   position: absolute;
   left: 0;
   bottom: 0;
-  height: 2px;
+  height: 0px;
   z-index: 1;
+}
+#mainApp .Agencytask .grid-content.bg-purple-dark {
+  border-radius: 10px !important;
 }
 
 #mainApp #tab-first {
@@ -779,20 +964,16 @@ import '../../style/mainApp.css';
 
 #calender {
   overflow: auto;
-  width: 90%;
   margin: 0 auto;
 }
 
 #celender_head {
   height: 40px;
-  width: 100%;
+  width: 61%;
+  min-width: 500px;
+  line-height: 44px;
   cursor: pointer;
-}
-
-.celender_head {
-  line-height: 40px;
-  text-align: center;
-  height: 40px;
+  margin: 0 auto;
 }
 
 #left {
@@ -806,7 +987,7 @@ import '../../style/mainApp.css';
   height: 40px;
   width: 98px;
   float: left;
-  margin-left: 60px;
+  margin-left: 39px;
   line-height: 40px;
 }
 
@@ -829,14 +1010,14 @@ import '../../style/mainApp.css';
   line-height: 28px;
 }
 
-#calender_body td span:hover {
+/* #calender_body td span:hover {
   color: white;
   background: #5594eb;
   width: 28px;
   height: 28px;
   display: inline-block;
   border-radius: 50%;
-}
+} */
 
 #calender_body td.now {
   color: white;
@@ -927,13 +1108,15 @@ import '../../style/mainApp.css';
   box-sizing: border-box;
   color: #cccccc;
   display: inline-block;
-  font-size: inherit;
+  font-size: 14px;
   height: 30px;
   line-height: 30px;
   padding: 0 28px;
   width: 200px !important;
   background: white;
-  border: 1px solid;
+  border: 1px solid #dcdfe6;
+  border-radius: 5px;
+  background: #fafafa;
 }
 
 #mainApp .valueDate .demonstration {
@@ -1002,5 +1185,7 @@ import '../../style/mainApp.css';
   position: absolute;
   top: 6px;
   right: 10px;
+  cursor: pointer;
+  color: #409eff;
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div style="width:100%;line-height: 50px;">
-      <span style="width: 3px;height: 12px;background: #75AFFF;display: inline-block;"></span>
-      <span style="font-size: 16px;color: #333744;">消息通知</span>
+    <div style="width:100%;line-height: 35px;position: relative;">
+      <span style="width: 3px;height: 16px;background: #75AFFF;display: inline-block;"></span>
+      <span style="font-size: 16px;color: #333744;position: absolute;top: -3px;left: 9px;">消息通知</span>
       <span style="float:right;font-size: 16px;color: #5594EB;" @click="Messagebacks"><img :src="Messageback" alt=""
           style="vertical-align: sub;margin-right:10px;">返回</span>
     </div>
@@ -34,7 +34,7 @@
       </el-pagination>
     </div>
 
-    <div style="width: 100%;height: 500px;background: white;position: relative;">
+    <div style="width: 100%;height: 500px;background: white;position: relative;border-radius: 6px;">
       <div style="position: absolute;top: 23%; left: 40%;">
         <div><img :src="Nodata" alt=""></div>
         <p style="font-size: 18px;color: #54657E;letter-spacing: 1px;margin-top: 15px;margin-left: 50px;">暂无数据</p>
