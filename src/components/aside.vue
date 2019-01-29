@@ -59,7 +59,7 @@
           <!--整体导航-->
           <div style="margin:21px 0 0 32px;" class="OverallNavigation">
           <!--触发器-->
-            <el-tabs id="editableTabs" v-model="editableTabsValue2" type="card" @tab-click="tabsn" closable 
+            <el-tabs id="editableTabs" v-model="tabIndex" type="card" @tab-click="tabsn" closable 
                     @tab-remove="removeTab" style="z-index: 999;height: 32px;" v-show="Deletenavigationbar && $store.state.hideheaderaside">
               <el-tab-pane v-for="option in $store.state.editableTabs2" :label="option.title" :name="option.name+''" :key="option.templateCode"></el-tab-pane>
             </el-tabs>
@@ -92,7 +92,7 @@ export default {
       serchDatalist: [],
       editableTabsValue2: "1",
       editableTabs2: [],
-      tabIndex: 1,
+      tabIndex: this.state_router+'',
       tabName: [],
       indexCode: 0,
       ths:'160',
@@ -115,8 +115,9 @@ export default {
   },
   watch: {
     state_router() {
-      console.log(this.state_router,'----')
+      //console.log(this.state_router,'----')
       this.defaultActive = this.state_router;
+      this.tabIndex = this.state_router+'';
     },
     CollectionNameLis: function() {
       this.CollectionNameLis = this.CollectionNameLis.length;
@@ -136,6 +137,8 @@ export default {
   },
   beforeUpdate() {
     this.defaultActive = this.state_router;
+    console.log(this.defaultActive)
+    this.tabIndex = this.state_router+'';
     var srt = JSON.parse(localStorage.getItem("editableTabs2"));
     if (srt.length) {
       this.Deletenavigationbar = true;
@@ -169,7 +172,7 @@ export default {
     }, //刷新之前保存导航栏
     tabsn(tab, event) {
       let titleName = this.$store.state.editableTabs2.filter(
-        item => item.name == this.editableTabsValue2
+        item => item.name == this.tabIndex
       )[0].title;
       this.$store.state.state_router=tab.name;
       this.$router.push({
@@ -179,6 +182,7 @@ export default {
           titleName
         }
       });
+      
     },
     aside() {
       this.$http
@@ -191,7 +195,6 @@ export default {
         .catch(() => {});
     }, //调接口渲染侧边栏接口--跳转主页--存储侧边栏name
     gotoPath(address, id, templateCode, titleName) {
-      console.log(address, id, templateCode, titleName)
       this.$router.push({
         path: address,
         query: { reportCode: templateCode, titleName }
@@ -219,7 +222,7 @@ export default {
       if (d) {
         if (localStorage.getItem("Savearray")) {
           if (localStorage.getItem("Savearray").indexOf(f) == -1) {
-            let newTabName = ++this.tabIndex + "";
+            this.tabIndex=c+"";
             this.editableTabs2 = JSON.parse(
               localStorage.getItem("editableTabs2")
             );
@@ -230,11 +233,12 @@ export default {
               reportCode: f
             });
             this.tabName.push(f);
-            this.editableTabsValue2 = newTabName;
+            //this.editableTabsValue2 = this.tabIndex;
+            console.log(this.editableTabsValue2 +'******')
           }
         } else {
           if (this.tabName.indexOf(c) == -1) {
-            let newTabName = ++this.tabIndex + "";
+            this.tabIndex=c+"";
             this.editableTabs2.push({
               title: b,
               name: c,
@@ -242,10 +246,10 @@ export default {
               reportCode: f
             });
             this.tabName.push(f);
-            this.editableTabsValue2 = newTabName;
+            this.editableTabsValue2 = this.tabIndex;
           }
         }
-
+        //this.$store.state.Savearray =this.editableTabs2.map(r => r.reportCode)
         this.Deletenavigationbar =
           localStorage.setItem("Deletenavigationbar", JSON.stringify("true")) ||
           JSON.parse(localStorage.getItem("Deletenavigationbar"));
@@ -271,9 +275,9 @@ export default {
         });
       }
       this.editableTabsValue2 = activeName;
-      console.log(this.$store.state.editableTabs2.length)
+      //console.log(this.$store.state.editableTabs2.length)
       if (this.$store.state.editableTabs2.length == 1) {
-        console.log(this.$store.state.editableTabs2,"======")
+        //console.log(this.$store.state.editableTabs2,"======")
         this.editableTabs2 = tabs.filter(tab => tab.name !== targetName);
         this.tabName = [];
         // this.$store.commit("this.editableTabs2", this.editableTabs2);
@@ -297,13 +301,17 @@ export default {
           "editableTabs2",
           JSON.stringify(this.editableTabs2)
         );
+        this.$store.state.Savearray =this.editableTabs2.map(r => r.reportCode)
         this.$store.state.editableTabs2=this.editableTabs2;
+        this.$store.state.state_router= this.editableTabs2[this.editableTabs2.length - 1]
+          .name;
         //$store.state.editableTabs2
         //遍历editableTabs2 找到id 添加进去
-        this.tabName = this.editableTabs2.map(r => r.name);
+        this.tabName = this.editableTabs2.map(r => r.reportCode);
+        this.$store.commit("SAVE_EDITABLETABS3", this.tabName);
         let titleName = this.editableTabs2[this.editableTabs2.length - 1]
           .title;
-        console.log(this.editableTabs2[this.editableTabs2.length - 1],"#######")
+        //console.log(this.editableTabs2[this.editableTabs2.length - 1],"#######")
         localStorage.setItem("reportCode",JSON.stringify(this.editableTabs2[this.editableTabs2.length - 1]
           .reportCode));
         let pathInfo = this.editableTabs2[this.editableTabs2.length - 1]
@@ -478,7 +486,7 @@ export default {
   border-radius: 15px 15px 0 0;
 }
 #editableTabs > .el-tabs__header .el-tabs__item.is-active {
-  border-bottom-color: transparent;
+  background: #2d65ad;
 }
 #editableTabs > .el-tabs__header .el-tabs__item {
   border-bottom-color: transparent;
